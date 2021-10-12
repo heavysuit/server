@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@chakra-ui/react": "^1.6.9",
+    "@drizzle/store": "^1.5.3",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "framer-motion": "^4.1.17"
+  }
+}
