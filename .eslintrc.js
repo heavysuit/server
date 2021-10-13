@@ -19,6 +19,7 @@ module.exports = {
   },
   ignorePatterns: [
     "/lib/**/*", // Ignore built files.
+    "/build/**/*",
     ".eslintrc.js",
     "/src/generated/**/*",
     "babel.config.js"
