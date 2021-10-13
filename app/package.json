@@ -1,5 +1,5 @@
 {
-  "name": "heavy-suit",
+  "name": "@hs/main-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
