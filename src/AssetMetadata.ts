@@ -1,24 +1,22 @@
-export enum Trait {
-  Mobility = 'Mobility',
-  Armor = 'Armor',
-  Firepower = 'Firepower',
-  ECM = 'ECM',
-  Efficiency = 'Efficiency',
-  Weight = 'Weight',
-
+export enum Slot {
   Legs = 'Legs',
   LeftArm = 'Left Arm',
   RightArm = 'Right Arm',
   Torso = 'Torso',
   Head = 'Head',
-  Paint = 'Paint',
-  POM = 'Place of Manufacture',
   Equipment = 'Equipment',
+}
 
-  DOM = 'Date of Manufacture',
+export enum Stat {
+  Mobility = 'Mobility',
+  Armor = 'Armor',
+  Firepower = 'Firepower',
+  ECM = 'ECM',
+  EnergyDemand = 'Energy Demand',
+  Weight = 'Weight',
+}
 
-  Generation = 'Generation',
-
+export enum Boost {
   Stealth = 'Stealth',
   Recon = 'Recon',
   FirstStrike = 'First Strike',
@@ -27,9 +25,16 @@ export enum Trait {
   ReactiveArmor = 'Reactive Armor',
 }
 
+export enum Trait {
+  Paint = 'Paint',
+  POM = 'Place of Manufacture',
+  DOM = 'Date of Manufacture',
+  Generation = 'Generation',
+}
+
 export interface BaseAttribute {
   display_type?: 'boost_number' | 'boost_percentage' | 'number' | 'date';
-  trait_type?: Trait;
+  trait_type?: Trait | Slot | Stat | Boost;
   value: string | number;
 }
 
@@ -40,25 +45,12 @@ export interface DateAttribute extends BaseAttribute {
 }
 
 export interface TextAttribute extends BaseAttribute {
-  trait_type:
-    | Trait.Legs
-    | Trait.LeftArm
-    | Trait.RightArm
-    | Trait.Torso
-    | Trait.Head
-    | Trait.POM
-    | Trait.Paint;
+  trait_type: Slot | Trait.POM | Trait.Paint;
   value: string;
 }
 
 export interface RankAttribute extends BaseAttribute {
-  trait_type:
-    | Trait.Mobility
-    | Trait.Efficiency
-    | Trait.Firepower
-    | Trait.Armor
-    | Trait.ECM
-    | Trait.Weight;
+  trait_type: Stat;
   value: number;
 }
 
@@ -70,13 +62,7 @@ export interface NumberAttribute extends BaseAttribute {
 
 export interface BoostAttribute extends BaseAttribute {
   display_type: 'boost_number';
-  trait_type:
-    | Trait.ReactiveArmor
-    | Trait.ReflectiveArmor
-    | Trait.Stealth
-    | Trait.Recon
-    | Trait.FirstStrike
-    | Trait.CloseQuarters;
+  trait_type: Boost;
   value: number;
 }
 
