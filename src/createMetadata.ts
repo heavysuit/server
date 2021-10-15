@@ -10,8 +10,8 @@ export async function createMetadata(
     name,
     description: 'This is a Heavy Suit.',
     external_url: `http://heavysuit.com/suit/${tokenId}`,
-    image: `https://storage.googleapis.com/hs-metadata/thumbnails/${filename}.png`,
-    animation_url: `https://storage.googleapis.com/hs-metadata/gltf/${filename}.gltf`,
+    image: `https://meta.heavysuit.com/thumbnails/${filename}.png`,
+    animation_url: `https://meta.heavysuit.com/gltf/${filename}.gltf`,
     attributes: [
       {
         trait_type: Trait.Head,
