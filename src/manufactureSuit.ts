@@ -12,7 +12,7 @@ export const manufactureSuit = functions
     const { address } = request.body;
     const fee = await hs.orderFee();
     const deposits = await hs.depositOf(address);
-    logger.info({
+    logger.info(address, {
       address,
       fee: ethers.utils.formatEther(fee),
       deposits: ethers.utils.formatEther(deposits),
