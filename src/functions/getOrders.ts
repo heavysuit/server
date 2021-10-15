@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import * as functions from 'firebase-functions';
-import { hs } from './HeavySuit';
+import { hs } from '../HeavySuit';
 
 export const getOrders = functions
   .runWith({

@@ -1,4 +1,5 @@
-import { getOrders } from './getOrders';
-import { manufactureSuit } from './manufactureSuit';
+import { getOrders } from './functions/getOrders';
+import { joinWaitlist } from './functions/joinWaitlist';
+import { manufactureSuit } from './functions/manufactureSuit';
 
-export { manufactureSuit, getOrders };
+export { manufactureSuit, getOrders, joinWaitlist };

@@ -1,10 +1,10 @@
 import { Storage } from '@google-cloud/storage';
 import { ethers } from 'ethers';
 import * as functions from 'firebase-functions';
-import { createMetadata } from './createMetadata';
-import { firebase } from './firebase';
-import { hs } from './HeavySuit';
-import { logger } from './utils/logger';
+import { createMetadata } from '../createMetadata';
+import { firebase } from '../firebase';
+import { hs } from '../HeavySuit';
+import { logger } from '../utils/logger';
 
 const db = firebase.firestore();
 const storage = new Storage();
