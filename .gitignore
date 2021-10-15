@@ -66,6 +66,7 @@ node_modules/
 .env
 
 /build
+/lib
 
 # Compiled JavaScript files
 lib/**/*.js
@@ -76,3 +77,6 @@ typings/
 
 # Node.js dependency directory
 node_modules/
+
+remoteconfig.json
+.runtimeconfig.json
