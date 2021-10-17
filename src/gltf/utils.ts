@@ -1,7 +1,12 @@
 import { Document, Node } from '@gltf-transform/core';
+import { File } from '@google-cloud/storage';
 import { strict as assert } from 'assert';
+import crypto from 'crypto';
+import fs from 'fs';
 import { vec3 } from 'gl-matrix';
 import path from 'path';
+import { hsBucket } from '../GCP';
+import { logger } from '../utils/logger';
 import { BodyNode } from './ModelManifest';
 
 export interface Joints {
@@ -95,11 +100,60 @@ export function shouldUploadToBucket(uri: string): boolean {
   return !ignore;
 }
 
-export const binDir = 'bin';
-export const textureDir = 'textures';
+export const gltfDir = 'gltf';
+export const bufferDir = 'gltf/buffers';
+export const textureDir = 'gltf/textures';
 
-export function getTextureBucketPath(modelName: string, uri: string): string {
+export function getTextureBucketPath(uri: string): string {
   assert(shouldUploadToBucket(uri), 'URI is not a local file');
   const filename = path.basename(uri);
-  return `${textureDir}/${modelName}/${filename}`;
+  return `${textureDir}/${filename}`;
+}
+
+export function getBufferBucketPath(uri: string): string {
+  assert(shouldUploadToBucket(uri), 'URI is not a local file');
+  const filename = path.basename(uri);
+  return `${bufferDir}/${filename}`;
+}
+
+export function getGLTFBucketPath(modelName: string): string {
+  return `${gltfDir}/${modelName}.gltf`;
+}
+
+export function getRelativePath(resourcePath: string) {
+  return path.relative(gltfDir, resourcePath);
+}
+
+export async function uploadResourceFile(
+  localPath: string,
+  bucketPath: string,
+): Promise<File> {
+  const file = hsBucket.file(bucketPath);
+  logger.info(`Uploading ${localPath} to ${bucketPath}`);
+
+  const localHash = crypto
+    .createHash('md5')
+    .update(Buffer.from(fs.readFileSync(localPath).buffer))
+    .digest('base64');
+  logger.info(`localHash: ${localHash}`);
+
+  const exists = await file.exists();
+  if (exists[0]) {
+    const response = await file.getMetadata();
+    const metadata = response[0];
+    const remoteHash = metadata.md5Hash;
+
+    logger.info(`remoteHash: ${remoteHash}`);
+
+    if (remoteHash === localHash) {
+      logger.info('Skipping duplicate hash');
+    } else {
+      logger.warn('Overwriting previous version');
+      await hsBucket.upload(localPath, { destination: file });
+    }
+  } else {
+    await hsBucket.upload(localPath, { destination: file });
+  }
+
+  return file;
 }
