@@ -1,14 +1,13 @@
-import { Storage } from '@google-cloud/storage';
 import { ethers } from 'ethers';
 import * as functions from 'firebase-functions';
 import { cors } from '../cors';
 import { createMetadata } from '../createMetadata';
 import { firebase } from '../firebase';
+import { hsBucket } from '../GCP';
 import { hs } from '../HeavySuit';
 import { logger } from '../utils/logger';
 
 const db = firebase.firestore();
-const storage = new Storage();
 
 export const manufactureSuit = functions
   .runWith({
@@ -62,14 +61,14 @@ export const manufactureSuit = functions
       const metadata = await createMetadata(name, tokenId.toString());
       logger.info('Uploading metadata', { tokenId, metadata });
 
-      const bucketName = 'hs-metadata';
-      const bucket = storage.bucket(bucketName);
-
-      const blob = bucket.file(`versions/${tokenId}.json`);
+      const blob = hsBucket.file(`versions/${tokenId}.json`);
       const blobStream = blob.createWriteStream();
 
       const promise = new Promise((resolve, reject) => {
-        blobStream.on('error', reject);
+        blobStream.on('error', (error) => {
+          logger.error(error);
+          reject(error);
+        });
         blobStream.on('finish', () => resolve(true));
         blobStream.end(Buffer.from(JSON.stringify(metadata)));
       });

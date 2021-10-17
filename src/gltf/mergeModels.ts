@@ -3,16 +3,16 @@ import { dedup, prune } from '@gltf-transform/functions';
 import { strict as assert } from 'assert';
 import { vec3 } from 'gl-matrix';
 import path from 'path';
-import { BodyNode, getJoints, getNode, Joints, pruneNodes, renameChildren } from './utils';
+import { BodyNode, ModelManifest } from './ModelManifest';
+import {
+  getJoints,
+  getNode,
+  Joints,
+  pruneNodes,
+  renameChildren
+} from './utils';
 
-export interface ModelMetadata {
-  path: string;
-  nodes: BodyNode[];
-}
-
-export type Manifest = Record<string, ModelMetadata>;
-
-export async function mergeModels(manifest: Manifest): Promise<void> {
+export async function mergeModels(manifests: ModelManifest[]): Promise<void> {
   const io = new NodeIO();
   const outputDoc = new Document();
 
@@ -21,13 +21,10 @@ export async function mergeModels(manifest: Manifest): Promise<void> {
   let joints: Joints | null = null;
   let mainModelName: string = '';
 
-  for (const modelName in manifest) {
-    const { path, nodes } = manifest[modelName];
-    const doc = io.read(path);
+  for (const model of manifests) {
+    const { localPath, nodes, modelName } = model;
+    const doc = io.read(localPath);
     docs[modelName] = doc;
-
-    const skin = doc.getRoot().listSkins()[0];
-    console.log(skin.listJoints());
 
     if (nodes.includes(BodyNode.Torso)) {
       joints = getJoints(doc);
@@ -47,8 +44,8 @@ export async function mergeModels(manifest: Manifest): Promise<void> {
 
   const j1 = joints;
 
-  for (const modelName in manifest) {
-    const { nodes } = manifest[modelName];
+  for (const model of manifests) {
+    const { nodes, modelName } = model;
     const doc = docs[modelName];
     const j2 = getJoints(doc);
 

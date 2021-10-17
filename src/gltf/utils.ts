@@ -1,13 +1,8 @@
 import { Document, Node } from '@gltf-transform/core';
+import { strict as assert } from 'assert';
 import { vec3 } from 'gl-matrix';
-
-export enum BodyNode {
-  Torso = 'Torso',
-  ArmL = 'Arm_L',
-  ArmR = 'Arm_R',
-  Head = 'Head',
-  Legs = 'Legs',
-}
+import path from 'path';
+import { BodyNode } from './ModelManifest';
 
 export interface Joints {
   top: vec3 | null;
@@ -92,4 +87,19 @@ export function getNode(doc: Document, nodeName: string): Node | null {
   );
 }
 
+export function shouldUploadToBucket(uri: string): boolean {
+  const ignore =
+    uri.includes('http://') ||
+    uri.includes('https://') ||
+    uri.includes('data:');
+  return !ignore;
+}
 
+export const binDir = 'bin';
+export const textureDir = 'textures';
+
+export function getTextureBucketPath(modelName: string, uri: string): string {
+  assert(shouldUploadToBucket(uri), 'URI is not a local file');
+  const filename = path.basename(uri);
+  return `${textureDir}/${modelName}/${filename}`;
+}
