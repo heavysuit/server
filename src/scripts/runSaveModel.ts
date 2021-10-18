@@ -12,7 +12,7 @@ export async function runSaveModel(): Promise<void> {
 
   console.log('Saving', modelName, 'from', filePath);
 
-  await saveModel('M1', './assets/M1/M1.gltf');
+  await saveModel(modelName, filePath);
 
   process.exit(0);
 }

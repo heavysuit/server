@@ -6,7 +6,6 @@ import { logger } from '../utils/logger';
 import {
   getBufferBucketPath,
   getGLTFBucketPath,
-  getRelativePath,
   getTextureBucketPath,
   shouldUploadToBucket,
   uploadResourceFile
@@ -38,7 +37,7 @@ export async function saveModel(
     const file = await uploadResourceFile(imagePath, bucketPath);
     logger.info(`${file.publicUrl()}\n`);
 
-    t.setURI(getRelativePath(bucketPath));
+    t.setURI(file.publicUrl());
   }
 
   for (const b of doc.getRoot().listBuffers()) {
@@ -54,7 +53,7 @@ export async function saveModel(
     const file = await uploadResourceFile(bufferPath, bucketPath);
     logger.info(`${file.publicUrl()}\n`);
 
-    b.setURI(getRelativePath(bucketPath));
+    b.setURI(file.publicUrl());
   }
 
   const { json } = io.writeJSON(doc);
@@ -64,7 +63,9 @@ export async function saveModel(
   const file = fs.openSync(gltfPath, 'w');
   fs.writeFileSync(file, JSON.stringify(json, null, 2));
 
+  const destination = getGLTFBucketPath(modelName);
+  logger.info(`Uploading GLTF to: ${destination}`);
   await hsBucket.upload(gltfPath, {
-    destination: hsBucket.file(getGLTFBucketPath(modelName)),
+    destination: hsBucket.file(destination),
   });
 }
