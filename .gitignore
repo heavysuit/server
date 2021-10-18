@@ -81,3 +81,5 @@ node_modules/
 
 remoteconfig.json
 .runtimeconfig.json
+
+.DS_Store
