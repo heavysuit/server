@@ -10,7 +10,7 @@ export async function createMetadata(
     name,
     description: 'This is a Heavy Suit.',
     external_url: `http://heavysuit.com/suit/${tokenId}`,
-    image: `https://meta.heavysuit.com/thumbnails/${filename}.png`,
+    image: `https://meta.heavysuit.com/gltf/thumbnails/${filename}.png`,
     animation_url: `https://meta.heavysuit.com/gltf/${filename}.gltf`,
     attributes: [
       {

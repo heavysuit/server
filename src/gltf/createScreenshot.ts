@@ -1,8 +1,48 @@
 import { performance } from 'perf_hooks';
 import puppeteer from 'puppeteer';
 
+const WIDTH = 350;
+const HEIGHT = 350;
+const DEVICE_PIXEL_RATIO = 1.0;
+
 const timeDelta = (start: number, end: number) => {
   return ((end - start) / 1000).toPrecision(3);
+};
+
+const htmlTemplate = (modelURL: string) => {
+  return `
+    <html>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale="${DEVICE_PIXEL_RATIO}">
+        <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+        <style>
+          body {
+            margin: 0;
+          }
+          model-viewer {
+            --progress-bar-color: transparent;
+            width: ${WIDTH};
+            height: ${HEIGHT};
+          }
+        </style>
+      </head>
+      <body>
+        <model-viewer
+          background-color=""
+          camera-orbit="-30deg 75deg 105%"
+          environment-image="neutral"
+          exposure="0.75"
+          id="gltf-viewer"
+          interaction-prompt="none"
+          seamless-poster
+          shadow-intensity="1.0"
+          shadow-softness="1"
+          src="${modelURL}"
+          style="background-color: #ffffff;"
+        />
+      </body>
+    </html>
+  `;
 };
 
 export async function createScreenshot(
@@ -14,8 +54,9 @@ export async function createScreenshot(
   const browser = await puppeteer.launch({
     args: ['--no-sandbox'],
     defaultViewport: {
-      width: 600,
-      height: 600,
+      width: WIDTH,
+      height: HEIGHT,
+      deviceScaleFactor: DEVICE_PIXEL_RATIO,
     },
     headless: true,
   });
@@ -42,7 +83,9 @@ export async function createScreenshot(
 
   const contentT0 = performance.now();
 
-  await page.goto('https://modelviewer.dev/');
+  await page.setContent(htmlTemplate(modelURL), {
+    waitUntil: 'domcontentloaded',
+  });
 
   const contentT1 = performance.now();
 
@@ -68,7 +111,7 @@ export async function createScreenshot(
         }, maxTimeInSec * 1000);
       }
 
-      const modelViewer = document.getElementsByTagName('model-viewer')[0];
+      const modelViewer = document.getElementById('gltf-viewer');
       if (!modelViewer) {
         reject(new Error('Missing model-viewer'));
         return;
