@@ -3,19 +3,10 @@ import { File } from '@google-cloud/storage';
 import { strict as assert } from 'assert';
 import crypto from 'crypto';
 import fs from 'fs';
-import { vec3 } from 'gl-matrix';
 import path from 'path';
 import { hsBucket } from '../GCP';
 import { logger } from '../utils/logger';
-import { BodyNode } from './ModelManifest';
-
-export interface Joints {
-  top: vec3 | null;
-  bottom: vec3 | null;
-  left: vec3 | null;
-  right: vec3 | null;
-  back: vec3 | null;
-}
+import { BodyNode, JointNode } from './ModelManifest';
 
 export function renameChildren(doc: Document, prefix: string): void {
   for (const n of doc.getRoot().listNodes()) {
@@ -26,46 +17,22 @@ export function renameChildren(doc: Document, prefix: string): void {
   }
 }
 
-export function getJoints(doc: Document): Joints {
-  let top: vec3 | null = null;
-  let bottom: vec3 | null = null;
-  let left: vec3 | null = null;
-  let right: vec3 | null = null;
-  let back: vec3 | null = null;
+export function copyTransform(from: Node, to: Node): void {
+}
 
-  const root = doc.getRoot();
-  for (const n of root.listNodes()) {
-    switch (n.getName()) {
-      case 'Torso_BackJoint': {
-        back = vec3.clone(n.getTranslation());
-        break;
-      }
-      case 'Torso_BotJoint': {
-        bottom = vec3.clone(n.getTranslation());
-        break;
-      }
-      case 'Torso_HeadJoint': {
-        top = vec3.clone(n.getTranslation());
-        break;
-      }
-      case 'Torso_LeftJoint': {
-        left = vec3.clone(n.getTranslation());
-        break;
-      }
-      case 'Torso_RightJoint': {
-        right = vec3.clone(n.getTranslation());
-        break;
-      }
-    }
+export function getJointNodeForBodyNode(bodyNode: BodyNode): JointNode | null {
+  switch (bodyNode) {
+    case BodyNode.ArmL:
+      return JointNode.ShoulderL;
+    case BodyNode.ArmR:
+      return JointNode.ShoulderR;
+    case BodyNode.Head:
+      return JointNode.Neck;
+    case BodyNode.Torso:
+      return JointNode.Hip;
+    default:
+      return null;
   }
-
-  return {
-    top,
-    bottom,
-    left,
-    right,
-    back,
-  };
 }
 
 export function pruneNodes(

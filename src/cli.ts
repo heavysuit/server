@@ -1,5 +1,6 @@
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
+import { uploadMetadata } from './functions/manufactureSuit';
 import { mergeModels } from './gltf/mergeModels';
 import { BodyNode, ModelManifest } from './gltf/ModelManifest';
 import { uploadModel } from './gltf/uploadModel';
@@ -38,11 +39,32 @@ export async function run(): Promise<void> {
           });
       },
     )
+    .command(
+      'meta [tokenId] [mechaName]',
+      'upload metadata to Google Storage',
+      (yargs) => {
+        return yargs
+          .positional('tokenId', {
+            type: 'string',
+          })
+          .positional('mechaName', {
+            type: 'string',
+          });
+      },
+    )
     .parse();
 
   const command = args._[0];
 
   switch (command) {
+    case 'meta': {
+      if (!args.mechaName || !args.tokenId) {
+        console.log('Missing required positional options');
+        process.exit(-1);
+      }
+      await uploadMetadata(args.mechaName, args.tokenId);
+      break;
+    }
     case 'upload': {
       if (!args.modelName || !args.gltf) {
         console.log('Missing required positional options');

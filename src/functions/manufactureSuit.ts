@@ -9,6 +9,28 @@ import { logger } from '../utils/logger';
 
 const db = firebase.firestore();
 
+export async function uploadMetadata(
+  name: string,
+  tokenId: string,
+): Promise<void> {
+  const metadata = await createMetadata(name, tokenId);
+  logger.info('Uploading metadata', { tokenId, metadata });
+
+  const blob = hsBucket.file(`versions/${tokenId}.json`);
+  const blobStream = blob.createWriteStream();
+
+  const promise = new Promise((resolve, reject) => {
+    blobStream.on('error', (error) => {
+      logger.error(error);
+      reject(error);
+    });
+    blobStream.on('finish', () => resolve(true));
+    blobStream.end(Buffer.from(JSON.stringify(metadata)));
+  });
+
+  await promise;
+}
+
 export const manufactureSuit = functions
   .runWith({
     timeoutSeconds: 540,
@@ -58,22 +80,7 @@ export const manufactureSuit = functions
         tokenBalance.sub(1),
       );
 
-      const metadata = await createMetadata(name, tokenId.toString());
-      logger.info('Uploading metadata', { tokenId, metadata });
-
-      const blob = hsBucket.file(`versions/${tokenId}.json`);
-      const blobStream = blob.createWriteStream();
-
-      const promise = new Promise((resolve, reject) => {
-        blobStream.on('error', (error) => {
-          logger.error(error);
-          reject(error);
-        });
-        blobStream.on('finish', () => resolve(true));
-        blobStream.end(Buffer.from(JSON.stringify(metadata)));
-      });
-
-      await promise;
+      await uploadMetadata(name, tokenId.toString());
 
       response.json({ tokenId: tokenId.toNumber() });
     });

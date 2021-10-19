@@ -1,9 +1,16 @@
 export enum BodyNode {
-  Torso = 'Torso',
-  ArmL = 'Arm_L',
-  ArmR = 'Arm_R',
-  Head = 'Head',
-  Legs = 'Legs',
+  Torso = 'TORSO',
+  ArmL = 'ARM_L',
+  ArmR = 'ARM_R',
+  Head = 'HEAD',
+  Legs = 'LEGS',
+}
+
+export enum JointNode {
+  Neck = 'Neck',
+  ShoulderL = 'Shoulder_L',
+  ShoulderR = 'Shoulder_R',
+  Hip = 'Hip',
 }
 
 export type AssetMap = Record<string, string>;

@@ -1,71 +1,74 @@
 import { Document, NodeIO } from '@gltf-transform/core';
 import { dedup, prune } from '@gltf-transform/functions';
 import { strict as assert } from 'assert';
-import { vec3 } from 'gl-matrix';
 import path from 'path';
-import { BodyNode, ModelManifest } from './ModelManifest';
+import { BodyNode, JointNode, ModelManifest } from './ModelManifest';
 import {
-  getJoints,
+  copyTransform,
+  getJointNodeForBodyNode,
   getNode,
-  Joints,
   pruneNodes,
   renameChildren
 } from './utils';
 
+const REQUIRED_NODES = [BodyNode.Legs, BodyNode.Torso];
+
 export async function mergeModels(manifests: ModelManifest[]): Promise<void> {
   const io = new NodeIO();
-  const outputDoc = new Document();
+  const mainModel = manifests[0];
 
   const docs: Record<string, Document> = {};
-
-  let joints: Joints | null = null;
-  let mainModelName: string = '';
+  const nodeSet = new Set<BodyNode>();
 
   for (const model of manifests) {
     const { localPath, nodes, modelName } = model;
     const doc = io.read(localPath);
     docs[modelName] = doc;
 
-    if (nodes.includes(BodyNode.Torso)) {
-      joints = getJoints(doc);
-      mainModelName = modelName;
-    }
+    nodes.forEach((n) => {
+      assert(!nodeSet.has(n), `Duplicated nodes defined in manifest: ${n}`);
+      nodeSet.add(n);
+    });
 
     const rig = getNode(doc, 'Rig');
-    if (!rig) {
-      throw new Error(`${modelName} is missing Rig node`);
-    }
+    assert(rig, `${modelName} is missing Rig node`);
+
+    // Remove Mesh nodes that are not marked as required from this model
     pruneNodes(modelName, rig, nodes);
   }
 
-  if (!joints || !mainModelName) {
-    throw new Error('No torso defined');
-  }
+  const mainDoc = docs[mainModel.modelName];
 
-  const j1 = joints;
+  // Check that the union of preserved Mesh nodes satisfies the minimal requirement for a model
+  REQUIRED_NODES.forEach((n) => {
+    assert(nodeSet.has(n), `Missing required node: ${n}`);
+  });
+
+  assert(getNode(mainDoc, JointNode.Hip), 'No hips defined on the main model');
+
+  const outputDoc = mainDoc.clone();
 
   for (const model of manifests) {
+    if (model === mainModel) {
+      continue;
+    }
+
     const { nodes, modelName } = model;
     const doc = docs[modelName];
-    const j2 = getJoints(doc);
 
-    if (mainModelName !== modelName) {
-      for (const nodeName of nodes) {
-        const n = getNode(doc, nodeName);
-        if (!n) {
-          throw new Error(`${modelName} is missing node ${nodeName}`);
-        }
-        const v = n.getTranslation();
+    for (const nodeName of nodes) {
+      const n = getNode(doc, nodeName);
+      assert(n, `${modelName} is missing node ${nodeName}`);
 
-        switch (nodeName) {
-          case BodyNode.ArmL: {
-            assert(j1.left && j2.left);
-            vec3.sub(v, j1.left, j2.left);
-            break;
-          }
-        }
-        n.setTranslation(v);
+      const targetJoint = getJointNodeForBodyNode(nodeName);
+      if (!targetJoint) {
+        continue;
       }
+
+      const from = getNode(mainDoc, targetJoint);
+      const to = getNode(doc, targetJoint);
+      assert(from && to, `Joint Nodes are missing: ${targetJoint}`);
+      copyTransform(from, to);
     }
 
     renameChildren(doc, modelName);
