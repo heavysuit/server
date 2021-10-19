@@ -101,6 +101,7 @@ export function shouldUploadToBucket(uri: string): boolean {
 }
 
 export const gltfDir = 'gltf';
+export const thumbnailDir = 'gltf/thumbnails';
 export const bufferDir = 'gltf/buffers';
 export const textureDir = 'gltf/textures';
 
@@ -120,8 +121,8 @@ export function getGLTFBucketPath(modelName: string): string {
   return `${gltfDir}/${modelName}.gltf`;
 }
 
-export function getRelativePath(resourcePath: string) {
-  return path.relative(gltfDir, resourcePath);
+export function getThumbnailBucketPath(modelName: string): string {
+  return `${thumbnailDir}/${modelName}.png`;
 }
 
 export async function uploadResourceFile(

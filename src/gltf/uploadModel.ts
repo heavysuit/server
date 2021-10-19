@@ -3,10 +3,12 @@ import fs from 'fs';
 import path from 'path';
 import { hsBucket } from '../GCP';
 import { logger } from '../utils/logger';
+import { createScreenshot } from './createScreenshot';
 import {
   getBufferBucketPath,
   getGLTFBucketPath,
   getTextureBucketPath,
+  getThumbnailBucketPath,
   shouldUploadToBucket,
   uploadResourceFile
 } from './utils';
@@ -14,7 +16,7 @@ import {
 export const binDir = 'bin';
 export const textureDir = 'textures';
 
-export async function saveModel(
+export async function uploadModel(
   modelName: string,
   localPath: string,
 ): Promise<void> {
@@ -60,12 +62,21 @@ export async function saveModel(
   const tmpDir = fs.mkdtempSync('/tmp/');
   const gltfPath = `${tmpDir}/${modelName}.gltf`;
 
-  const file = fs.openSync(gltfPath, 'w');
-  fs.writeFileSync(file, JSON.stringify(json, null, 2));
+  const fd = fs.openSync(gltfPath, 'w');
+  fs.writeFileSync(fd, JSON.stringify(json, null, 2));
+  fs.close(fd);
 
   const destination = getGLTFBucketPath(modelName);
   logger.info(`Uploading GLTF to: ${destination}`);
-  await hsBucket.upload(gltfPath, {
+  const [file] = await hsBucket.upload(gltfPath, {
     destination: hsBucket.file(destination),
+  });
+
+  const screenshotPath = `${tmpDir}/screenshot.png`;
+  await createScreenshot(file.publicUrl(), screenshotPath);
+  const thumbnail = hsBucket.file(getThumbnailBucketPath(modelName));
+  logger.info(`Uploading thumbnail to: ${thumbnail.publicUrl()}`);
+  await hsBucket.upload(screenshotPath, {
+    destination: thumbnail,
   });
 }

@@ -2,7 +2,7 @@ import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 import { mergeModels } from './gltf/mergeModels';
 import { BodyNode, ModelManifest } from './gltf/ModelManifest';
-import { saveModel } from './gltf/saveModel';
+import { uploadModel } from './gltf/uploadModel';
 
 async function runMergeModels(): Promise<void> {
   const manifests: ModelManifest[] = [
@@ -24,7 +24,7 @@ async function runMergeModels(): Promise<void> {
 export async function run(): Promise<void> {
   const args = await yargs(hideBin(process.argv))
     .command(
-      'save [modelName] [gltf]',
+      'upload [modelName] [gltf]',
       'upload a model to Google Storage',
       (yargs) => {
         return yargs
@@ -43,12 +43,12 @@ export async function run(): Promise<void> {
   const command = args._[0];
 
   switch (command) {
-    case 'save': {
+    case 'upload': {
       if (!args.modelName || !args.gltf) {
         console.log('Missing required positional options');
         process.exit(-1);
       }
-      await saveModel(args.modelName, args.gltf);
+      await uploadModel(args.modelName, args.gltf);
       break;
     }
     case 'merge': {
