@@ -4,6 +4,7 @@ import { strict as assert } from 'assert';
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
+import { Object3D } from 'three';
 import { hsBucket } from '../GCP';
 import { logger } from '../utils/logger';
 import { BodyNode, JointNode } from './ModelManifest';
@@ -18,6 +19,23 @@ export function renameChildren(doc: Document, prefix: string): void {
 }
 
 export function copyTransform(from: Node, to: Node): void {
+  const a = new Object3D();
+  a.position.fromArray(from.getWorldTranslation());
+  a.quaternion.fromArray(from.getWorldRotation());
+  a.scale.fromArray(from.getWorldScale());
+  a.updateMatrixWorld();
+
+  const parent = to.getParent();
+  if (parent instanceof Node) {
+    const b = new Object3D();
+    b.position.fromArray(parent.getWorldTranslation());
+    b.quaternion.fromArray(parent.getWorldRotation());
+    b.scale.fromArray(parent.getWorldScale());
+
+    b.attach(a);
+    a.updateMatrix();
+    to.setMatrix(a.matrix.toArray());
+  }
 }
 
 export function getJointNodeForBodyNode(bodyNode: BodyNode): JointNode | null {

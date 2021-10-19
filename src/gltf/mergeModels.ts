@@ -2,7 +2,7 @@ import { Document, NodeIO } from '@gltf-transform/core';
 import { dedup, prune } from '@gltf-transform/functions';
 import { strict as assert } from 'assert';
 import path from 'path';
-import { BodyNode, JointNode, ModelManifest } from './ModelManifest';
+import { BodyNode, ModelManifest } from './ModelManifest';
 import {
   copyTransform,
   getJointNodeForBodyNode,
@@ -44,7 +44,14 @@ export async function mergeModels(manifests: ModelManifest[]): Promise<void> {
     assert(nodeSet.has(n), `Missing required node: ${n}`);
   });
 
-  assert(getNode(mainDoc, JointNode.Hip), 'No hips defined on the main model');
+  assert(
+    getNode(mainDoc, BodyNode.Torso),
+    'No torso defined on the main model',
+  );
+  assert(
+    mainModel.nodes.includes(BodyNode.Torso),
+    'Main model must provide torso',
+  );
 
   const outputDoc = mainDoc.clone();
 
