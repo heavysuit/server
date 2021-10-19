@@ -19,14 +19,14 @@ export function renameChildren(doc: Document, prefix: string): void {
 }
 
 export function copyTransform(from: Node, to: Node): void {
-  const a = new Object3D();
-  a.position.fromArray(from.getWorldTranslation());
-  a.quaternion.fromArray(from.getWorldRotation());
-  a.scale.fromArray(from.getWorldScale());
-  a.updateMatrixWorld();
-
   const parent = to.getParent();
   if (parent instanceof Node) {
+    const a = new Object3D();
+    a.position.fromArray(from.getWorldTranslation());
+    a.quaternion.fromArray(from.getWorldRotation());
+    a.scale.fromArray(from.getWorldScale());
+    a.updateMatrixWorld();
+
     const b = new Object3D();
     b.position.fromArray(parent.getWorldTranslation());
     b.quaternion.fromArray(parent.getWorldRotation());
@@ -35,6 +35,8 @@ export function copyTransform(from: Node, to: Node): void {
     b.attach(a);
     a.updateMatrix();
     to.setMatrix(a.matrix.toArray());
+  } else {
+    to.setMatrix(from.getWorldMatrix());
   }
 }
 
