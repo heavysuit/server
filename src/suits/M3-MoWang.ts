@@ -1,0 +1,70 @@
+import { Boost, Slot, Stat } from '../AssetMetadata';
+import { Suit, SuitPart } from './Suit';
+
+const totalWeight = 34.1;
+const headRatio = 0.04;
+const torsoRatio = 0.43;
+const leftArmRatio = 0.08;
+const rightArmRatio = 0.08;
+const legsRatio = 1 - headRatio - torsoRatio - leftArmRatio - rightArmRatio;
+
+const head: SuitPart = {
+  name: 'Primary Sensor Array',
+  slot: Slot.Head,
+  stats: {
+    [Stat.ECM]: { min: 10, max: 40 },
+    [Stat.EnergyDemand]: 10,
+    [Stat.Weight]: headRatio * totalWeight,
+  },
+  boosts: {
+    [Boost.Recon]: { min: 10, max: 20, probability: 0.4 },
+  },
+};
+
+const torso: SuitPart = {
+  name: 'Pilot Core Reactor',
+  slot: Slot.Torso,
+  stats: {
+    [Stat.Armor]: { min: 10, max: 40 },
+    [Stat.EnergyDemand]: { min: -50, max: -20 },
+    [Stat.Weight]: torsoRatio * totalWeight,
+  },
+  boosts: {
+    [Boost.ReactiveArmor]: { min: 10, max: 20, probability: 0.1 },
+  },
+};
+
+const legs: SuitPart = {
+  name: 'Long March Shock Absorber',
+  slot: Slot.Legs,
+  stats: {
+    [Stat.EnergyDemand]: { min: 30, max: 50 },
+    [Stat.Mobility]: { min: 30, max: 50 },
+    [Stat.Weight]: legsRatio * totalWeight,
+  },
+};
+
+const leftArm: SuitPart = {
+  name: 'Left Manipulator',
+  slot: Slot.LeftArm,
+  stats: {
+    [Stat.EnergyDemand]: 5,
+    [Stat.Weight]: leftArmRatio * totalWeight,
+  },
+};
+
+const rightArm: SuitPart = {
+  name: 'Right Manipulator',
+  slot: Slot.RightArm,
+  stats: {
+    [Stat.EnergyDemand]: 5,
+    [Stat.Weight]: rightArmRatio * totalWeight,
+  },
+};
+
+export const MoWang: Suit = {
+  name: 'Mo Wang',
+  parts: [head, torso, legs, leftArm, rightArm],
+  height: 8.71,
+  asset: 'M3',
+};
