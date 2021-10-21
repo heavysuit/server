@@ -1,5 +1,5 @@
-import { Boost, Slot, Stat } from '../AssetMetadata';
 import { Suit, SuitPart } from './Suit';
+import { Boost, Slot, Stat } from './Trait';
 
 const totalWeight = 27.2;
 const torsoRatio = 0.4;
@@ -8,7 +8,7 @@ const rightArmRatio = 0.2;
 const legsRatio = 1 - torsoRatio - leftArmRatio - rightArmRatio;
 
 const torso: SuitPart = {
-  name: 'Pilot Pit',
+  name: 'Valiant Pilot Pit',
   slot: Slot.Torso,
   stats: {
     [Stat.Armor]: { min: 5, max: 15 },
@@ -20,7 +20,7 @@ const torso: SuitPart = {
 };
 
 const legs: SuitPart = {
-  name: 'Bipedal Actuator',
+  name: 'Valiant Bipedal Actuator',
   slot: Slot.Legs,
   stats: {
     [Stat.EnergyDemand]: 20,
@@ -30,7 +30,7 @@ const legs: SuitPart = {
 };
 
 const leftArm: SuitPart = {
-  name: 'Dual Ordnance VT 76 mm',
+  name: 'Valiant Dual Ordnance VT 76 mm',
   slot: Slot.LeftArm,
   stats: {
     [Stat.Firepower]: 30,
@@ -40,7 +40,7 @@ const leftArm: SuitPart = {
 };
 
 const rightArm: SuitPart = {
-  name: 'Hypersonic SSM T-12',
+  name: 'Valiant Hypersonic SSM T-12',
   slot: Slot.RightArm,
   stats: {
     [Stat.Firepower]: 25,
@@ -52,9 +52,14 @@ const rightArm: SuitPart = {
   },
 };
 
-export const Valiant: Suit = {
+export const Valiant = new Suit({
   name: 'Valiant',
   parts: [torso, legs, leftArm, rightArm],
   height: 9.37,
-  asset: 'M1',
-};
+  assetId: 'M1',
+  dom: {
+    min: new Date('2185/01/12').getTime(),
+    max: new Date('2202/05/23').getTime(),
+  },
+  pom: ['Old New York, Continental States', 'Toronto, Canada'],
+});

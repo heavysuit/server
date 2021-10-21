@@ -1,19 +1,26 @@
 import { ethers } from 'ethers';
 import * as functions from 'firebase-functions';
 import { cors } from '../cors';
-import { createMetadata } from '../createMetadata';
 import { firebase } from '../firebase';
 import { hsBucket } from '../GCP';
 import { hs } from '../HeavySuit';
+import { createTokenMetadata } from '../nft/createTokenMetadata';
+import { Valiant } from '../suits/M1-Valiant';
 import { logger } from '../utils/logger';
 
 const db = firebase.firestore();
 
 export async function uploadMetadata(
-  name: string,
+  mechaName: string,
   tokenId: string,
 ): Promise<void> {
-  const metadata = await createMetadata(name, tokenId);
+  const metadata = await createTokenMetadata({
+    name: mechaName,
+    tokenId,
+    suit: Valiant,
+    thumbnailUrl: '',
+    url: '',
+  });
   logger.info('Uploading metadata', { tokenId, metadata });
 
   const blob = hsBucket.file(`versions/${tokenId}.json`);
@@ -79,8 +86,6 @@ export const manufactureSuit = functions
         address,
         tokenBalance.sub(1),
       );
-
-      await uploadMetadata(name, tokenId.toString());
 
       response.json({ tokenId: tokenId.toNumber() });
     });

@@ -1,5 +1,5 @@
-import { Boost, Slot, Stat } from '../AssetMetadata';
 import { Suit, SuitPart } from './Suit';
+import { Boost, Slot, Stat } from './Trait';
 
 const totalWeight = 30.2;
 const headRatio = 0.1;
@@ -9,7 +9,7 @@ const rightArmRatio = 0.1;
 const legsRatio = 1 - headRatio - torsoRatio - leftArmRatio - rightArmRatio;
 
 const head: SuitPart = {
-  name: 'Head',
+  name: 'Haganenoken Head',
   slot: Slot.Head,
   stats: {
     [Stat.ECM]: { min: 0, max: 20 },
@@ -19,7 +19,7 @@ const head: SuitPart = {
 };
 
 const torso: SuitPart = {
-  name: 'Core Fighter',
+  name: 'Haganenoken Core Fighter',
   slot: Slot.Torso,
   stats: {
     [Stat.Armor]: { min: 0, max: 30 },
@@ -32,7 +32,7 @@ const torso: SuitPart = {
 };
 
 const legs: SuitPart = {
-  name: 'Shinpuu Runners V4',
+  name: 'Haganenoken Shinpuu Runners V4',
   slot: Slot.Legs,
   stats: {
     [Stat.EnergyDemand]: 20,
@@ -42,7 +42,7 @@ const legs: SuitPart = {
 };
 
 const leftArm: SuitPart = {
-  name: 'Left Fist',
+  name: 'Haganenoken Left Fist',
   slot: Slot.LeftArm,
   stats: {
     [Stat.Firepower]: 20,
@@ -55,7 +55,7 @@ const leftArm: SuitPart = {
 };
 
 const rightArm: SuitPart = {
-  name: 'Right Fist',
+  name: 'Haganenoken Right Fist',
   slot: Slot.RightArm,
   stats: {
     [Stat.Firepower]: 20,
@@ -67,9 +67,14 @@ const rightArm: SuitPart = {
   },
 };
 
-export const Haganenoken: Suit = {
+export const Haganenoken = new Suit({
   name: 'Haganenoken',
   parts: [head, torso, legs, leftArm, rightArm],
   height: 12.51,
-  asset: 'M2',
-};
+  assetId: 'M2',
+  dom: {
+    min: new Date('2191/02/04').getTime(),
+    max: new Date('2224/07/20').getTime(),
+  },
+  pom: ['Yokohama, Japan', 'Tokyo, Japan', 'Nagoya, Japan'],
+});

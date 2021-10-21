@@ -1,6 +1,7 @@
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 import { uploadMetadata } from './functions/manufactureSuit';
+import { AssetID, AssetLibrary } from './gltf/AssetLibrary';
 import { mergeModels } from './gltf/mergeModels';
 import { BodyNode, ModelManifest } from './gltf/ModelManifest';
 import { uploadModel } from './gltf/uploadModel';
@@ -8,13 +9,11 @@ import { uploadModel } from './gltf/uploadModel';
 async function runMergeModels(): Promise<void> {
   const manifests: ModelManifest[] = [
     {
-      modelName: 'M1',
-      localPath: './assets/M1/M1.gltf',
+      assetId: 'M1',
       nodes: [BodyNode.Torso, BodyNode.Legs],
     },
     {
-      modelName: 'M2',
-      localPath: './assets/M2/M2.gltf',
+      assetId: 'M2',
       nodes: [BodyNode.ArmL, BodyNode.ArmR],
     },
   ];
@@ -25,16 +24,16 @@ async function runMergeModels(): Promise<void> {
 export async function run(): Promise<void> {
   const args = await yargs(hideBin(process.argv))
     .command(
-      'upload [modelName] [gltf]',
+      'upload [assetId] [filename]',
       'upload a model to Google Storage',
       (yargs) => {
         return yargs
-          .positional('modelName', {
-            describe: 'Save model as this name in the bucket',
+          .positional('assetId', {
+            describe: 'ID of GLTF model',
             type: 'string',
           })
-          .positional('gltf', {
-            describe: 'local path to GLTF',
+          .positional('filename', {
+            describe: 'Save model as this name in the bucket',
             type: 'string',
           });
       },
@@ -66,11 +65,15 @@ export async function run(): Promise<void> {
       break;
     }
     case 'upload': {
-      if (!args.modelName || !args.gltf) {
+      if (!args.filename || !args.assetId) {
         console.log('Missing required positional options');
         process.exit(-1);
       }
-      await uploadModel(args.modelName, args.gltf);
+      if (!(args.assetId in AssetLibrary)) {
+        console.log('Invalid asset ID');
+        process.exit(-1);
+      }
+      await uploadModel(args.assetId as AssetID, args.filename);
       break;
     }
     case 'merge': {

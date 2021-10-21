@@ -1,7 +1,7 @@
 import { Document, NodeIO } from '@gltf-transform/core';
 import { dedup, prune } from '@gltf-transform/functions';
 import { strict as assert } from 'assert';
-import path from 'path';
+import { AssetID, AssetLibrary } from './AssetLibrary';
 import { BodyNode, ModelManifest } from './ModelManifest';
 import {
   copyTransform,
@@ -13,7 +13,7 @@ import {
 
 const REQUIRED_NODES = [BodyNode.Legs, BodyNode.Torso];
 
-export async function mergeModels(manifests: ModelManifest[]): Promise<void> {
+export async function mergeModels(manifests: ModelManifest[]): Promise<AssetID> {
   const io = new NodeIO();
   const mainModel = manifests[0];
 
@@ -21,9 +21,9 @@ export async function mergeModels(manifests: ModelManifest[]): Promise<void> {
   const nodeSet = new Set<BodyNode>();
 
   for (const model of manifests) {
-    const { localPath, nodes, modelName } = model;
-    const doc = io.read(localPath);
-    docs[modelName] = doc;
+    const { assetId, nodes } = model;
+    const doc = io.read(AssetLibrary[assetId]);
+    docs[assetId] = doc;
 
     nodes.forEach((n) => {
       assert(!nodeSet.has(n), `Duplicated nodes defined in manifest: ${n}`);
@@ -31,13 +31,13 @@ export async function mergeModels(manifests: ModelManifest[]): Promise<void> {
     });
 
     const rig = getNode(doc, 'Rig');
-    assert(rig, `${modelName} is missing Rig node`);
+    assert(rig, `${assetId} is missing Rig node`);
 
     // Remove Mesh nodes that are not marked as required from this model
-    pruneNodes(modelName, rig, nodes);
+    pruneNodes(assetId, rig, nodes);
   }
 
-  const mainDoc = docs[mainModel.modelName];
+  const mainDoc = docs[mainModel.assetId];
 
   // Check that the union of preserved Mesh nodes satisfies the minimal requirement for a model
   REQUIRED_NODES.forEach((n) => {
@@ -60,12 +60,12 @@ export async function mergeModels(manifests: ModelManifest[]): Promise<void> {
       continue;
     }
 
-    const { nodes, modelName } = model;
-    const doc = docs[modelName];
+    const { nodes, assetId } = model;
+    const doc = docs[assetId];
 
     for (const nodeName of nodes) {
       const n = getNode(doc, nodeName);
-      assert(n, `${modelName} is missing node ${nodeName}`);
+      assert(n, `${assetId} is missing node ${nodeName}`);
 
       const targetJoint = getJointNodeForBodyNode(nodeName);
       if (!targetJoint) {
@@ -78,7 +78,7 @@ export async function mergeModels(manifests: ModelManifest[]): Promise<void> {
       copyTransform(from, to);
     }
 
-    renameChildren(doc, modelName);
+    renameChildren(doc, assetId);
     outputDoc.merge(doc);
   }
 
@@ -100,6 +100,7 @@ export async function mergeModels(manifests: ModelManifest[]): Promise<void> {
 
   await outputDoc.transform(dedup(), prune());
 
-  const outputPath = path.join('./assets/output/output.gltf');
-  io.write(outputPath, outputDoc);
+  io.write(AssetLibrary['Generated'], outputDoc);
+
+  return 'Generated';
 }

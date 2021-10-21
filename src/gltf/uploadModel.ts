@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { hsBucket } from '../GCP';
 import { logger } from '../utils/logger';
+import { AssetID, AssetLibrary } from './AssetLibrary';
 import { createScreenshot } from './createScreenshot';
 import {
   getBufferBucketPath,
@@ -17,10 +18,14 @@ export const binDir = 'bin';
 export const textureDir = 'textures';
 
 export async function uploadModel(
-  modelName: string,
-  localPath: string,
-): Promise<void> {
+  assetId: AssetID,
+  targetName: string,
+): Promise<{
+  url: string;
+  thumbnailUrl: string;
+}> {
   const io = new NodeIO();
+  const localPath = AssetLibrary[assetId];
   const doc = io.read(localPath);
 
   // Reformat the file and buffers to match @gltf-transform's expectations
@@ -60,13 +65,13 @@ export async function uploadModel(
 
   const { json } = io.writeJSON(doc);
   const tmpDir = fs.mkdtempSync('/tmp/');
-  const gltfPath = `${tmpDir}/${modelName}.gltf`;
+  const gltfPath = `${tmpDir}/${targetName}.gltf`;
 
   const fd = fs.openSync(gltfPath, 'w');
   fs.writeFileSync(fd, JSON.stringify(json, null, 2));
   fs.close(fd);
 
-  const destination = getGLTFBucketPath(modelName);
+  const destination = getGLTFBucketPath(targetName);
   logger.info(`Uploading GLTF to: ${destination}`);
   const [file] = await hsBucket.upload(gltfPath, {
     destination: hsBucket.file(destination),
@@ -74,9 +79,14 @@ export async function uploadModel(
 
   const screenshotPath = `${tmpDir}/screenshot.png`;
   await createScreenshot(file.publicUrl(), screenshotPath);
-  const thumbnail = hsBucket.file(getThumbnailBucketPath(modelName));
+  const thumbnail = hsBucket.file(getThumbnailBucketPath(targetName));
   logger.info(`Uploading thumbnail to: ${thumbnail.publicUrl()}`);
-  await hsBucket.upload(screenshotPath, {
+  const [thumbnailFile] = await hsBucket.upload(screenshotPath, {
     destination: thumbnail,
   });
+
+  return {
+    url: file.publicUrl(),
+    thumbnailUrl: thumbnailFile.publicUrl(),
+  };
 }

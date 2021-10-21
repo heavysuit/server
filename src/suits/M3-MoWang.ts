@@ -1,5 +1,5 @@
-import { Boost, Slot, Stat } from '../AssetMetadata';
 import { Suit, SuitPart } from './Suit';
+import { Boost, Slot, Stat } from './Trait';
 
 const totalWeight = 34.1;
 const headRatio = 0.04;
@@ -9,7 +9,7 @@ const rightArmRatio = 0.08;
 const legsRatio = 1 - headRatio - torsoRatio - leftArmRatio - rightArmRatio;
 
 const head: SuitPart = {
-  name: 'Primary Sensor Array',
+  name: 'Mo Wang Primary Sensor Array',
   slot: Slot.Head,
   stats: {
     [Stat.ECM]: { min: 10, max: 40 },
@@ -22,7 +22,7 @@ const head: SuitPart = {
 };
 
 const torso: SuitPart = {
-  name: 'Pilot Core Reactor',
+  name: 'Mo Wang Pilot Core Reactor',
   slot: Slot.Torso,
   stats: {
     [Stat.Armor]: { min: 10, max: 40 },
@@ -35,7 +35,7 @@ const torso: SuitPart = {
 };
 
 const legs: SuitPart = {
-  name: 'Long March Shock Absorber',
+  name: 'Mo Wang Long March Shock Absorber',
   slot: Slot.Legs,
   stats: {
     [Stat.EnergyDemand]: { min: 30, max: 50 },
@@ -45,7 +45,7 @@ const legs: SuitPart = {
 };
 
 const leftArm: SuitPart = {
-  name: 'Left Manipulator',
+  name: 'Mo Wang Left Manipulator',
   slot: Slot.LeftArm,
   stats: {
     [Stat.EnergyDemand]: 5,
@@ -54,7 +54,7 @@ const leftArm: SuitPart = {
 };
 
 const rightArm: SuitPart = {
-  name: 'Right Manipulator',
+  name: 'Mo Wang Right Manipulator',
   slot: Slot.RightArm,
   stats: {
     [Stat.EnergyDemand]: 5,
@@ -62,9 +62,14 @@ const rightArm: SuitPart = {
   },
 };
 
-export const MoWang: Suit = {
+export const MoWang = new Suit({
   name: 'Mo Wang',
   parts: [head, torso, legs, leftArm, rightArm],
   height: 8.71,
-  asset: 'M3',
-};
+  assetId: 'M3',
+  dom: {
+    min: new Date('2212/02/01').getTime(),
+    max: new Date('2227/02/01').getTime(),
+  },
+  pom: ['Hanzhou, China', 'Shanghai, China'],
+});
