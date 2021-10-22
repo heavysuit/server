@@ -85,6 +85,7 @@ export async function run(): Promise<void> {
       const suit = generateRandomSuit(SuitLibrary);
       const attributes = createTokenAttributes(suit);
       console.log(attributes);
+      console.log(suit.toManifests());
       break;
     }
   }

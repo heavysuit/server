@@ -13,7 +13,9 @@ import {
 
 const REQUIRED_NODES = [BodyNode.Legs, BodyNode.Torso];
 
-export async function mergeModels(manifests: ModelManifest[]): Promise<AssetID> {
+export async function mergeModels(
+  manifests: ModelManifest[],
+): Promise<AssetID> {
   const io = new NodeIO();
   const mainModel = manifests[0];
 

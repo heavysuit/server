@@ -1,4 +1,4 @@
-import { AssetID } from "./AssetLibrary";
+import { AssetID } from './AssetLibrary';
 
 export enum BodyNode {
   Torso = 'TORSO',
@@ -14,8 +14,6 @@ export enum JointNode {
   ShoulderR = 'Shoulder_R',
   Hip = 'Hip',
 }
-
-export type AssetMap = Record<string, string>;
 
 export interface ModelManifest {
   assetId: AssetID;

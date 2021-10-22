@@ -1,10 +1,11 @@
+import { BodyNode } from '../gltf/ModelManifest';
+
 export enum Slot {
   Legs = 'Legs',
   LeftArm = 'Left Arm',
   RightArm = 'Right Arm',
   Torso = 'Torso',
   Head = 'Head',
-  Equipment = 'Equipment',
 }
 
 export enum Stat {
@@ -40,3 +41,20 @@ export const Trait = {
   ...Boost,
   ...OtherTrait,
 };
+
+export function slotToNode(slot: Slot): BodyNode {
+  switch (slot) {
+    case Slot.Head:
+      return BodyNode.Head;
+    case Slot.LeftArm:
+      return BodyNode.ArmL;
+    case Slot.RightArm:
+      return BodyNode.ArmR;
+    case Slot.Legs:
+      return BodyNode.Legs;
+    case Slot.Torso:
+      return BodyNode.Torso;
+    default:
+      throw new Error();
+  }
+}

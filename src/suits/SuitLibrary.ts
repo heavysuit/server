@@ -80,7 +80,6 @@ export function generateRandomSuit(
     [Slot.LeftArm]: sampler.sample(),
     [Slot.RightArm]: sampler.sample(),
     [Slot.Legs]: sampler.sample(),
-    [Slot.Equipment]: null,
   };
 
   const height =

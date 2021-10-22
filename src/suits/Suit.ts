@@ -1,9 +1,10 @@
 import { strict as assert } from 'assert';
 import { sample } from 'lodash';
 import { AssetID } from '../gltf/AssetLibrary';
+import { ModelManifest } from '../gltf/ModelManifest';
 import { gaussianRand } from '../utils/gaussianRand';
 import { randomDate } from '../utils/randomDate';
-import { Boost, Slot, Stat } from './Trait';
+import { Boost, Slot, slotToNode, Stat } from './Trait';
 
 export class StatGenerator {
   min: number;
@@ -110,5 +111,28 @@ export class Suit implements SuitProps {
     }
 
     return boosts;
+  }
+
+  toManifests(): ModelManifest[] {
+    let raw = this.parts.map((p) => {
+      return {
+        assetId: p.assetId,
+        nodes: [slotToNode(p.slot)],
+      };
+    });
+
+    const processed: ModelManifest[] = [];
+
+    while (raw.length > 0) {
+      const curr = raw.pop()!;
+      for (const other of raw) {
+        if (other.assetId === curr.assetId) {
+          curr.nodes.push(...other.nodes);
+        }
+      }
+      processed.push(curr);
+      raw = raw.filter((m) => m.assetId !== curr.assetId);
+    }
+    return processed;
   }
 }
