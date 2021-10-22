@@ -1,3 +1,4 @@
+import { strict as assert } from 'assert';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 import { uploadMetadata } from './functions/manufactureSuit';
@@ -5,6 +6,8 @@ import { AssetID, AssetLibrary } from './gltf/AssetLibrary';
 import { mergeModels } from './gltf/mergeModels';
 import { BodyNode, ModelManifest } from './gltf/ModelManifest';
 import { uploadModel } from './gltf/uploadModel';
+import { createTokenAttributes } from './nft/createTokenMetadata';
+import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 
 async function runMergeModels(): Promise<void> {
   const manifests: ModelManifest[] = [
@@ -51,16 +54,14 @@ export async function run(): Promise<void> {
           });
       },
     )
+    .command('suit', 'Generate random suit')
     .parse();
 
   const command = args._[0];
 
   switch (command) {
     case 'meta': {
-      if (!args.mechaName || !args.tokenId) {
-        console.log('Missing required positional options');
-        process.exit(-1);
-      }
+      assert(args.mechaName && args.tokenId);
       await uploadMetadata(args.mechaName, args.tokenId);
       break;
     }
@@ -78,6 +79,12 @@ export async function run(): Promise<void> {
     }
     case 'merge': {
       await runMergeModels();
+      break;
+    }
+    case 'suit': {
+      const suit = generateRandomSuit(SuitLibrary);
+      const attributes = createTokenAttributes(suit);
+      console.log(attributes);
       break;
     }
   }

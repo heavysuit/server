@@ -1,4 +1,4 @@
-import { Suit, SuitPart } from './Suit';
+import { createStatGenerator as _, Suit, SuitPart } from './Suit';
 import { Boost, Slot, Stat } from './Trait';
 
 const totalWeight = 27.2;
@@ -11,55 +11,62 @@ const torso: SuitPart = {
   name: 'Valiant Pilot Pit',
   slot: Slot.Torso,
   stats: {
-    [Stat.Armor]: { min: 5, max: 15 },
-    [Stat.Weight]: torsoRatio * totalWeight,
+    [Stat.Armor]: _(5, 15),
+    [Stat.Weight]: _(torsoRatio * totalWeight),
   },
   boosts: {
-    [Boost.ReflectiveArmor]: { min: 10, max: 10, probability: 0.4 },
+    [Boost.ReflectiveArmor]: _(10, 10, 0.4),
   },
+  assetId: 'M1',
 };
 
 const legs: SuitPart = {
   name: 'Valiant Bipedal Actuator',
   slot: Slot.Legs,
   stats: {
-    [Stat.EnergyDemand]: 20,
-    [Stat.Mobility]: { min: -30, max: -20 },
-    [Stat.Weight]: legsRatio * totalWeight,
+    [Stat.EnergyDemand]: _(20),
+    [Stat.Mobility]: _(-30, -20),
+    [Stat.Weight]: _(legsRatio * totalWeight),
   },
+  assetId: 'M1',
 };
 
 const leftArm: SuitPart = {
   name: 'Valiant Dual Ordnance VT 76 mm',
   slot: Slot.LeftArm,
   stats: {
-    [Stat.Firepower]: 30,
-    [Stat.EnergyDemand]: 5,
-    [Stat.Weight]: leftArmRatio * totalWeight,
+    [Stat.Firepower]: _(30),
+    [Stat.EnergyDemand]: _(5),
+    [Stat.Weight]: _(leftArmRatio * totalWeight),
   },
+  assetId: 'M1',
 };
 
 const rightArm: SuitPart = {
   name: 'Valiant Hypersonic SSM T-12',
   slot: Slot.RightArm,
   stats: {
-    [Stat.Firepower]: 25,
-    [Stat.EnergyDemand]: 5,
-    [Stat.Weight]: rightArmRatio * totalWeight,
+    [Stat.Firepower]: _(25),
+    [Stat.EnergyDemand]: _(5),
+    [Stat.Weight]: _(rightArmRatio * totalWeight),
   },
   boosts: {
-    [Boost.FirstStrike]: { min: 10, max: 15, probability: 0.1 },
+    [Boost.FirstStrike]: _(10, 15, 0.1),
   },
+  assetId: 'M1',
 };
 
 export const Valiant = new Suit({
   name: 'Valiant',
   parts: [torso, legs, leftArm, rightArm],
   height: 9.37,
-  assetId: 'M1',
-  dom: {
-    min: new Date('2185/01/12').getTime(),
-    max: new Date('2202/05/23').getTime(),
-  },
-  pom: ['Old New York, Continental States', 'Toronto, Canada'],
+  dom: _(new Date('2185/01/12').getTime(), new Date('2202/05/23').getTime()),
+  pom: [
+    'Old New York, Free States',
+    'Toronto, Canada',
+    'San Francisco, New California',
+    'San Diego, New California',
+    'Detroit, Continental Republic',
+    'Seattle, New California',
+  ],
 });

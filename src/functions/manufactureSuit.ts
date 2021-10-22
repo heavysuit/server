@@ -14,8 +14,7 @@ export async function uploadMetadata(
   mechaName: string,
   tokenId: string,
 ): Promise<void> {
-  const metadata = await createTokenMetadata({
-    name: mechaName,
+  const metadata = createTokenMetadata({
     tokenId,
     suit: Valiant,
     thumbnailUrl: '',

@@ -9,7 +9,6 @@ import {
 } from './TokenMetadata';
 
 interface CreateTokenMetadataInputs {
-  name: string;
   description?: string;
   tokenId: string;
   suit: Suit;
@@ -19,16 +18,7 @@ interface CreateTokenMetadataInputs {
   generation?: number;
 }
 
-export async function createTokenMetadata({
-  name,
-  description = 'This is a Heavy Suit.',
-  tokenId,
-  suit,
-  thumbnailUrl,
-  url,
-  mark = 1,
-  generation = 1,
-}: CreateTokenMetadataInputs): Promise<TokenMetadata> {
+export function createTokenAttributes(suit: Suit): Attribute[] {
   const slotAttributes = suit.parts.map(
     (p): TextAttribute => ({
       trait_type: p.slot,
@@ -37,7 +27,7 @@ export async function createTokenMetadata({
   );
 
   const boosts = suit.getBoosts();
-  const boostAttributes = Object.keys(Boost)
+  const boostAttributes = Object.values(Boost)
     .map((b) => b as Boost)
     .map(
       (b): BoostAttribute => ({
@@ -45,10 +35,11 @@ export async function createTokenMetadata({
         trait_type: b,
         value: boosts[b] || 0,
       }),
-    );
+    )
+    .filter((attr) => attr.value > 0);
 
   const stats = suit.getStats();
-  const rankAttributes = Object.keys(Stat)
+  const rankAttributes = Object.values(Stat)
     .map((s) => s as Stat)
     .map(
       (s): RankAttribute => ({
@@ -58,16 +49,6 @@ export async function createTokenMetadata({
     );
 
   const attributes: Attribute[] = [
-    {
-      display_type: 'number',
-      trait_type: Trait.Generation,
-      value: generation,
-    },
-    {
-      display_type: 'number',
-      trait_type: Trait.Mark,
-      value: mark,
-    },
     {
       display_type: 'date',
       trait_type: Trait.DOM,
@@ -82,8 +63,34 @@ export async function createTokenMetadata({
     ...boostAttributes,
   ];
 
+  return attributes;
+}
+
+export function createTokenMetadata({
+  description = 'This is a Heavy Suit.',
+  tokenId,
+  suit,
+  thumbnailUrl,
+  url,
+  mark = 1,
+  generation = 1,
+}: CreateTokenMetadataInputs): TokenMetadata {
+  const attributes: Attribute[] = [
+    {
+      display_type: 'number',
+      trait_type: Trait.Generation,
+      value: generation,
+    },
+    {
+      display_type: 'number',
+      trait_type: Trait.Mark,
+      value: mark,
+    },
+    ...createTokenAttributes(suit),
+  ];
+
   return {
-    name,
+    name: suit.name,
     description,
     external_url: `http://heavysuit.com/suit/${tokenId}`,
     image: thumbnailUrl,
