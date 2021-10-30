@@ -31,7 +31,7 @@ const htmlTemplate = (modelURL: string) => {
           background-color=""
           camera-orbit="-30deg 75deg 105%"
           environment-image="neutral"
-          exposure="0.75"
+          exposure="1.0"
           id="gltf-viewer"
           interaction-prompt="none"
           seamless-poster
