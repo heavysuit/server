@@ -3,10 +3,11 @@ import { sample as fairSample } from 'lodash';
 import { Valiant } from './M1-Valiant';
 import { Haganenoken } from './M2-Haganenoken';
 import { MoWang } from './M3-MoWang';
+import { Inferno } from './M4-Inferno';
 import { Suit } from './Suit';
 import { Slot } from './Trait';
 
-export const SuitLibrary: Suit[] = [Valiant, Haganenoken, MoWang];
+export const SuitLibrary: Suit[] = [Valiant, Haganenoken, MoWang, Inferno];
 
 class UnfairDie {
   chances: number[];

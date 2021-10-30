@@ -13,11 +13,15 @@ async function runMergeModels(): Promise<void> {
   const manifests: ModelManifest[] = [
     {
       assetId: 'M1',
-      nodes: [BodyNode.Torso, BodyNode.Legs],
+      nodes: [BodyNode.Torso, BodyNode.ArmR],
     },
     {
       assetId: 'M2',
-      nodes: [BodyNode.ArmL, BodyNode.ArmR],
+      nodes: [BodyNode.ArmL],
+    },
+    {
+      assetId: 'M4',
+      nodes: [BodyNode.Legs],
     },
   ];
 
