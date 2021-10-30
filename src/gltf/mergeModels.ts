@@ -1,7 +1,9 @@
 import { Document, NodeIO } from '@gltf-transform/core';
 import { dedup, prune } from '@gltf-transform/functions';
 import { strict as assert } from 'assert';
-import { AssetID, AssetLibrary } from './AssetLibrary';
+import fs from 'fs';
+import path from 'path';
+import { AssetLibrary, AssetName, getLocalPath } from './AssetLibrary';
 import { BodyNode, ModelManifest } from './ModelManifest';
 import {
   copyTransform,
@@ -14,8 +16,9 @@ import {
 const REQUIRED_NODES = [BodyNode.Legs, BodyNode.Torso];
 
 export async function mergeModels(
+  assetName: AssetName,
   manifests: ModelManifest[],
-): Promise<AssetID> {
+): Promise<string> {
   const io = new NodeIO();
   const mainModel = manifests[0];
 
@@ -98,13 +101,22 @@ export async function mergeModels(
   }
 
   // // Optional: Merge binary resources to a single buffer.
-  // const buffer = doc.getRoot().listBuffers()[0];
-  // doc.getRoot().listAccessors().forEach((a) => a.setBuffer(buffer));
-  // doc.getRoot().listBuffers().forEach((b, index) => index > 0 ? b.dispose() : null);
+  const buffer = outputDoc.getRoot().listBuffers()[0];
+  outputDoc
+    .getRoot()
+    .listAccessors()
+    .forEach((a) => a.setBuffer(buffer));
+  outputDoc
+    .getRoot()
+    .listBuffers()
+    .forEach((b, index) => (index > 0 ? b.dispose() : null));
+  outputDoc.getRoot().listBuffers()[0].setURI(`${assetName}.bin`);
 
   await outputDoc.transform(dedup(), prune());
 
-  io.write(AssetLibrary['Generated'], outputDoc);
+  const outputPath = getLocalPath(assetName);
+  await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
+  io.write(outputPath, outputDoc);
 
-  return 'Generated';
+  return outputPath;
 }

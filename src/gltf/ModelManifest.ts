@@ -1,4 +1,4 @@
-import { AssetID } from './AssetLibrary';
+import { AssetLibraryID } from './AssetLibrary';
 
 export enum BodyNode {
   Torso = 'TORSO',
@@ -16,6 +16,6 @@ export enum JointNode {
 }
 
 export interface ModelManifest {
-  assetId: AssetID;
+  assetId: AssetLibraryID;
   nodes: BodyNode[];
 }

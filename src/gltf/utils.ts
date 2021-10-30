@@ -122,7 +122,7 @@ export async function uploadResourceFile(
 
   const localHash = crypto
     .createHash('md5')
-    .update(Buffer.from(fs.readFileSync(localPath).buffer))
+    .update(Buffer.from((await fs.promises.readFile(localPath)).buffer))
     .digest('base64');
   logger.info(`localHash: ${localHash}`);
 

@@ -1,11 +1,16 @@
 import path from 'path';
 
+export type AssetName = string;
+
+export function getLocalPath(assetName: AssetName) {
+  return path.join(__dirname, `../../assets/${assetName}/${assetName}.gltf`);
+}
+
 export const AssetLibrary = {
-  M1: path.join(__dirname, '../../assets/M1/M1.gltf'),
-  M2: path.join(__dirname, '../../assets/M2/M2.gltf'),
-  M3: path.join(__dirname, '../../assets/M3/M3.gltf'),
-  M4: path.join(__dirname, '../../assets/M4/M4.gltf'),
-  Generated: path.join(__dirname, '../../assets/Generated/Generated.gltf'),
+  M1: getLocalPath('M1'),
+  M2: getLocalPath('M2'),
+  M3: getLocalPath('M3'),
+  M4: getLocalPath('M4'),
 };
 
-export type AssetID = keyof typeof AssetLibrary;
+export type AssetLibraryID = keyof typeof AssetLibrary;

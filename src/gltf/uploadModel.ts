@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { hsBucket } from '../GCP';
 import { logger } from '../utils/logger';
-import { AssetID, AssetLibrary } from './AssetLibrary';
+import { AssetName, getLocalPath } from './AssetLibrary';
 import { createScreenshot } from './createScreenshot';
 import {
   getBufferBucketPath,
@@ -18,14 +18,13 @@ export const binDir = 'bin';
 export const textureDir = 'textures';
 
 export async function uploadModel(
-  assetId: AssetID,
-  targetName: string,
+  assetName: AssetName,
 ): Promise<{
   url: string;
   thumbnailUrl: string;
 }> {
   const io = new NodeIO();
-  const localPath = AssetLibrary[assetId];
+  const localPath = getLocalPath(assetName);
   const doc = io.read(localPath);
 
   // Reformat the file and buffers to match @gltf-transform's expectations
@@ -64,14 +63,12 @@ export async function uploadModel(
   }
 
   const { json } = io.writeJSON(doc);
-  const tmpDir = fs.mkdtempSync('/tmp/');
-  const gltfPath = `${tmpDir}/${targetName}.gltf`;
+  const tmpDir = await fs.promises.mkdtemp('/tmp/');
+  const gltfPath = `${tmpDir}/${assetName}.gltf`;
 
-  const fd = fs.openSync(gltfPath, 'w');
-  fs.writeFileSync(fd, JSON.stringify(json, null, 2));
-  fs.close(fd);
+  await fs.promises.writeFile(gltfPath, JSON.stringify(json, null, 2));
 
-  const destination = getGLTFBucketPath(targetName);
+  const destination = getGLTFBucketPath(assetName);
   logger.info(`Uploading GLTF to: ${destination}`);
   const [file] = await hsBucket.upload(gltfPath, {
     destination: hsBucket.file(destination),
@@ -79,7 +76,7 @@ export async function uploadModel(
 
   const screenshotPath = `${tmpDir}/screenshot.png`;
   await createScreenshot(file.publicUrl(), screenshotPath);
-  const thumbnail = hsBucket.file(getThumbnailBucketPath(targetName));
+  const thumbnail = hsBucket.file(getThumbnailBucketPath(assetName));
   logger.info(`Uploading thumbnail to: ${thumbnail.publicUrl()}`);
   const [thumbnailFile] = await hsBucket.upload(screenshotPath, {
     destination: thumbnail,

@@ -2,14 +2,13 @@ import { strict as assert } from 'assert';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 import { uploadMetadata } from './functions/manufactureSuit';
-import { AssetID, AssetLibrary } from './gltf/AssetLibrary';
 import { mergeModels } from './gltf/mergeModels';
 import { BodyNode, ModelManifest } from './gltf/ModelManifest';
 import { uploadModel } from './gltf/uploadModel';
 import { createTokenAttributes } from './nft/createTokenMetadata';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 
-async function runMergeModels(): Promise<void> {
+async function runMergeModels(assetName: string): Promise<void> {
   const manifests: ModelManifest[] = [
     {
       assetId: 'M1',
@@ -20,29 +19,23 @@ async function runMergeModels(): Promise<void> {
       nodes: [BodyNode.ArmL],
     },
     {
-      assetId: 'M4',
+      assetId: 'M3',
       nodes: [BodyNode.Legs],
     },
   ];
 
-  await mergeModels(manifests);
+  await mergeModels(assetName, manifests);
 }
 
 export async function run(): Promise<void> {
   const args = await yargs(hideBin(process.argv))
     .command(
-      'upload [assetId] [filename]',
+      'upload [assetName]',
       'upload a model to Google Storage',
       (yargs) => {
-        return yargs
-          .positional('assetId', {
-            describe: 'ID of GLTF model',
-            type: 'string',
-          })
-          .positional('filename', {
-            describe: 'Save model as this name in the bucket',
-            type: 'string',
-          });
+        return yargs.positional('assetName', {
+          type: 'string',
+        });
       },
     )
     .command(
@@ -58,6 +51,11 @@ export async function run(): Promise<void> {
           });
       },
     )
+    .command('merge [assetName]', 'merge multiple mecha assets', (yargs) => {
+      return yargs.positional('assetName', {
+        type: 'string',
+      });
+    })
     .command('suit', 'Generate random suit')
     .parse();
 
@@ -70,19 +68,13 @@ export async function run(): Promise<void> {
       break;
     }
     case 'upload': {
-      if (!args.filename || !args.assetId) {
-        console.log('Missing required positional options');
-        process.exit(-1);
-      }
-      if (!(args.assetId in AssetLibrary)) {
-        console.log('Invalid asset ID');
-        process.exit(-1);
-      }
-      await uploadModel(args.assetId as AssetID, args.filename);
+      assert(args.assetName);
+      await uploadModel(args.assetName);
       break;
     }
     case 'merge': {
-      await runMergeModels();
+      assert(args.assetName);
+      await runMergeModels(args.assetName);
       break;
     }
     case 'suit': {

@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
 import { sample } from 'lodash';
-import { AssetID } from '../gltf/AssetLibrary';
+import { AssetLibraryID } from '../gltf/AssetLibrary';
 import { ModelManifest } from '../gltf/ModelManifest';
 import { gaussianRand } from '../utils/gaussianRand';
 import { randomDate } from '../utils/randomDate';
@@ -37,7 +37,7 @@ export interface SuitPart {
   slot: Slot;
   stats?: { [key in Stat]?: StatGenerator };
   boosts?: { [key in Boost]?: StatGenerator };
-  assetId: AssetID;
+  assetId: AssetLibraryID;
 }
 
 export interface SuitProps {
