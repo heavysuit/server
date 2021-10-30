@@ -1,17 +1,17 @@
-import { Suit } from '../suits/Suit';
-import { Boost, Stat, Trait } from '../suits/Trait';
 import {
   Attribute,
   BoostAttribute,
   RankAttribute,
   TextAttribute,
   TokenMetadata
-} from './TokenMetadata';
+} from '../shared/TokenMetadata';
+import { Boost, Stat, Trait } from '../shared/Trait';
+import { Suit } from '../suits/Suit';
 
 interface CreateTokenMetadataInputs {
   description?: string;
-  tokenId: string;
   suit: Suit;
+  externalUrl: string;
   thumbnailUrl: string;
   url: string;
   mark?: number;
@@ -68,8 +68,8 @@ export function createTokenAttributes(suit: Suit): Attribute[] {
 
 export function createTokenMetadata({
   description = 'This is a Heavy Suit.',
-  tokenId,
   suit,
+  externalUrl,
   thumbnailUrl,
   url,
   mark = 1,
@@ -92,7 +92,7 @@ export function createTokenMetadata({
   return {
     name: suit.name,
     description,
-    external_url: `http://heavysuit.com/suit/${tokenId}`,
+    external_url: externalUrl,
     image: thumbnailUrl,
     animation_url: url,
     attributes,

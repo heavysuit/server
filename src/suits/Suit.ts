@@ -2,9 +2,9 @@ import { strict as assert } from 'assert';
 import { sample } from 'lodash';
 import { AssetLibraryID } from '../gltf/AssetLibrary';
 import { ModelManifest } from '../gltf/ModelManifest';
+import { Boost, Slot, slotToNode, Stat } from '../shared/Trait';
 import { gaussianRand } from '../utils/gaussianRand';
 import { randomDate } from '../utils/randomDate';
-import { Boost, Slot, slotToNode, Stat } from './Trait';
 
 export class StatGenerator {
   min: number;

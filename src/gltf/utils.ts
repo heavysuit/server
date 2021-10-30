@@ -6,8 +6,9 @@ import fs from 'fs';
 import path from 'path';
 import { Object3D } from 'three';
 import { hsBucket } from '../GCP';
+import { BodyNode } from '../shared/BodyNode';
+import { JointNode } from '../shared/JointNode';
 import { logger } from '../utils/logger';
-import { BodyNode, JointNode } from './ModelManifest';
 
 export function renameChildren(doc: Document, prefix: string): void {
   for (const n of doc.getRoot().listNodes()) {

@@ -1,5 +1,5 @@
+import { Boost, Slot, Stat } from '../shared/Trait';
 import { createStatGenerator as _, Suit, SuitPart } from './Suit';
-import { Boost, Slot, Stat } from './Trait';
 
 const totalWeight = 30.2;
 const headRatio = 0.1;

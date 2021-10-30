@@ -1,4 +1,4 @@
-import { BodyNode } from '../gltf/ModelManifest';
+import { BodyNode } from "./BodyNode";
 
 export enum Slot {
   Legs = 'Legs',

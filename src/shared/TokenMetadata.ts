@@ -1,4 +1,4 @@
-import { Boost, OtherTrait, Slot, Stat } from '../suits/Trait';
+import { Boost, OtherTrait, Slot, Stat } from './Trait';
 
 export interface BaseAttribute {
   display_type?: 'boost_number' | 'boost_percentage' | 'number' | 'date';

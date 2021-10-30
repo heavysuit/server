@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import * as functions from 'firebase-functions';
-import artifact from './artifacts/contracts/HeavySuit.sol/HeavySuit.json';
-import { HeavySuit } from './typechain';
+import artifact from './shared/artifacts/contracts/HeavySuit.sol/HeavySuit.json';
+import { HeavySuit } from './shared/typechain';
 
 const rpcURL = functions.config().ethereum.rpc;
 if (!rpcURL) {

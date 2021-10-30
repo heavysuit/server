@@ -3,8 +3,9 @@ import { dedup, prune } from '@gltf-transform/functions';
 import { strict as assert } from 'assert';
 import fs from 'fs';
 import path from 'path';
+import { BodyNode } from '../shared/BodyNode';
 import { AssetLibrary, AssetName, getLocalPath } from './AssetLibrary';
-import { BodyNode, ModelManifest } from './ModelManifest';
+import { ModelManifest } from './ModelManifest';
 import {
   copyTransform,
   getJointNodeForBodyNode,
@@ -20,7 +21,8 @@ export async function mergeModels(
   manifests: ModelManifest[],
 ): Promise<string> {
   const io = new NodeIO();
-  const mainModel = manifests[0];
+  const mainModel = manifests.find((m) => m.nodes.includes(BodyNode.Torso));
+  assert(mainModel, 'No main model found');
 
   const docs: Record<string, Document> = {};
   const nodeSet = new Set<BodyNode>();

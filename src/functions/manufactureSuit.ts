@@ -2,40 +2,10 @@ import { ethers } from 'ethers';
 import * as functions from 'firebase-functions';
 import { cors } from '../cors';
 import { firebase } from '../firebase';
-import { hsBucket } from '../GCP';
 import { hs } from '../HeavySuit';
-import { createTokenMetadata } from '../nft/createTokenMetadata';
-import { Valiant } from '../suits/M1-Valiant';
 import { logger } from '../utils/logger';
 
 const db = firebase.firestore();
-
-export async function uploadMetadata(
-  mechaName: string,
-  tokenId: string,
-): Promise<void> {
-  const metadata = createTokenMetadata({
-    tokenId,
-    suit: Valiant,
-    thumbnailUrl: '',
-    url: '',
-  });
-  logger.info('Uploading metadata', { tokenId, metadata });
-
-  const blob = hsBucket.file(`versions/${tokenId}.json`);
-  const blobStream = blob.createWriteStream();
-
-  const promise = new Promise((resolve, reject) => {
-    blobStream.on('error', (error) => {
-      logger.error(error);
-      reject(error);
-    });
-    blobStream.on('finish', () => resolve(true));
-    blobStream.end(Buffer.from(JSON.stringify(metadata)));
-  });
-
-  await promise;
-}
 
 export const manufactureSuit = functions
   .runWith({

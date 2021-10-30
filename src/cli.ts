@@ -1,11 +1,15 @@
 import { strict as assert } from 'assert';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
-import { uploadMetadata } from './functions/manufactureSuit';
 import { mergeModels } from './gltf/mergeModels';
-import { BodyNode, ModelManifest } from './gltf/ModelManifest';
+import { ModelManifest } from './gltf/ModelManifest';
 import { uploadModel } from './gltf/uploadModel';
-import { createTokenAttributes } from './nft/createTokenMetadata';
+import {
+  createTokenAttributes,
+  createTokenMetadata
+} from './nft/createTokenMetadata';
+import { uploadTokenMetadata } from './nft/updateTokenMetadata';
+import { BodyNode } from './shared/BodyNode';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 
 async function runMergeModels(assetName: string): Promise<void> {
@@ -38,33 +42,40 @@ export async function run(): Promise<void> {
         });
       },
     )
-    .command(
-      'meta [tokenId] [mechaName]',
-      'upload metadata to Google Storage',
-      (yargs) => {
-        return yargs
-          .positional('tokenId', {
-            type: 'string',
-          })
-          .positional('mechaName', {
-            type: 'string',
-          });
-      },
-    )
     .command('merge [assetName]', 'merge multiple mecha assets', (yargs) => {
       return yargs.positional('assetName', {
         type: 'string',
       });
     })
     .command('suit', 'Generate random suit')
+    .command('mint [tokenId] [suitName]', 'Mint a new suit', (yargs) => {
+      return yargs
+        .positional('tokenId', {
+          type: 'string',
+        })
+        .positional('suitName', {
+          type: 'string',
+        });
+    })
     .parse();
 
   const command = args._[0];
 
   switch (command) {
-    case 'meta': {
-      assert(args.mechaName && args.tokenId);
-      await uploadMetadata(args.mechaName, args.tokenId);
+    case 'mint': {
+      assert(args.suitName && args.tokenId);
+      const suit = generateRandomSuit(args.suitName, SuitLibrary);
+      await mergeModels(args.tokenId, suit.toManifests());
+      const { thumbnailUrl, url } = await uploadModel(args.tokenId);
+
+      const metadata = createTokenMetadata({
+        externalUrl: `http://heavysuit.com/suit/${args.tokenId}`,
+        suit,
+        thumbnailUrl,
+        url,
+      });
+
+      await uploadTokenMetadata(metadata, args.tokenId);
       break;
     }
     case 'upload': {
@@ -78,7 +89,7 @@ export async function run(): Promise<void> {
       break;
     }
     case 'suit': {
-      const suit = generateRandomSuit(SuitLibrary);
+      const suit = generateRandomSuit('Testing', SuitLibrary);
       const attributes = createTokenAttributes(suit);
       console.log(attributes);
       console.log(suit.toManifests());

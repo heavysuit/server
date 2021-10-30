@@ -1,11 +1,11 @@
 import { strict as assert } from 'assert';
 import { sample as fairSample } from 'lodash';
+import { Slot } from '../shared/Trait';
 import { Valiant } from './M1-Valiant';
 import { Haganenoken } from './M2-Haganenoken';
 import { MoWang } from './M3-MoWang';
 import { Inferno } from './M4-Inferno';
 import { Suit } from './Suit';
-import { Slot } from './Trait';
 
 export const SuitLibrary: Suit[] = [Valiant, Haganenoken, MoWang, Inferno];
 
@@ -54,6 +54,7 @@ class Sampler<T> {
 }
 
 export function generateRandomSuit(
+  name: string,
   suits: Suit[] = SuitLibrary,
   chances: number[] = [],
 ): Suit {
@@ -92,7 +93,7 @@ export function generateRandomSuit(
     ) / 100;
 
   const newSuit = new Suit({
-    name: '',
+    name,
     parts: Object.keys(sources)
       .map((k) => k as Slot)
       .map((s) => {
