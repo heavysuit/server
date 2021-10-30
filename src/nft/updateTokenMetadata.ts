@@ -21,4 +21,6 @@ export async function uploadTokenMetadata(
   });
 
   await promise;
+
+  logger.info('Metadata', { url: blob.publicUrl() });
 }
