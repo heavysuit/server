@@ -31,6 +31,7 @@ export function copyTransform(from: Node, to: Node): void {
     b.position.fromArray(parent.getWorldTranslation());
     b.quaternion.fromArray(parent.getWorldRotation());
     b.scale.fromArray(parent.getWorldScale());
+    b.updateMatrixWorld();
 
     b.attach(a);
     a.updateMatrix();
@@ -48,7 +49,7 @@ export function getJointNodeForBodyNode(bodyNode: BodyNode): JointNode | null {
       return JointNode.ShoulderR;
     case BodyNode.Head:
       return JointNode.Neck;
-    case BodyNode.Torso:
+    case BodyNode.Legs:
       return JointNode.Hip;
     default:
       return null;

@@ -71,8 +71,10 @@ export async function mergeModels(
 
       const targetJoint = getJointNodeForBodyNode(nodeName);
       if (!targetJoint) {
+        console.error('Missing joint', nodeName, model.assetId);
         continue;
       }
+      console.log('Positioning', targetJoint, model.assetId);
 
       const from = getNode(mainDoc, targetJoint);
       const to = getNode(doc, targetJoint);
