@@ -1,8 +1,8 @@
 import { strict as assert } from 'assert';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
-import { mergeModels } from './gltf/mergeModels';
 import { ModelManifest } from './gltf/ModelManifest';
+import { ModelMerger } from './gltf/ModelMerger';
 import { uploadModel } from './gltf/uploadModel';
 import {
   createTokenAttributes,
@@ -10,6 +10,9 @@ import {
 } from './nft/createTokenMetadata';
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
+import { Valiant } from './suits/M1-Valiant';
+import { Haganenoken } from './suits/M2-Haganenoken';
+import { Inferno } from './suits/M4-Inferno';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 
 async function runMergeModels(assetName: string): Promise<void> {
@@ -28,7 +31,9 @@ async function runMergeModels(assetName: string): Promise<void> {
     },
   ];
 
-  await mergeModels(assetName, manifests);
+  const merger = new ModelMerger(assetName, manifests);
+  merger.repositionJoints();
+  await merger.mergeAndWrite();
 }
 
 export async function run(): Promise<void> {
@@ -64,8 +69,14 @@ export async function run(): Promise<void> {
   switch (command) {
     case 'mint': {
       assert(args.suitName && args.tokenId);
-      const suit = generateRandomSuit(args.suitName, SuitLibrary);
-      await mergeModels(args.tokenId, suit.toManifests());
+      const suit = generateRandomSuit(args.suitName, [
+        Valiant,
+        Haganenoken,
+        Inferno,
+      ]);
+      const merger = new ModelMerger(args.tokenId, suit.toManifests());
+      merger.repositionJoints();
+      await merger.mergeAndWrite();
       const { thumbnailUrl, url } = await uploadModel(args.tokenId);
 
       const metadata = createTokenMetadata({

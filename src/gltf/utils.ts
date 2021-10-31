@@ -7,7 +7,6 @@ import path from 'path';
 import { Object3D } from 'three';
 import { hsBucket } from '../GCP';
 import { BodyNode } from '../shared/BodyNode';
-import { JointNode } from '../shared/JointNode';
 import { logger } from '../utils/logger';
 
 export function renameChildren(doc: Document, prefix: string): void {
@@ -24,8 +23,8 @@ export function copyTransform(from: Node, to: Node): void {
   if (parent instanceof Node) {
     const a = new Object3D();
     a.position.fromArray(from.getWorldTranslation());
-    a.quaternion.fromArray(from.getWorldRotation());
-    a.scale.fromArray(from.getWorldScale());
+    a.quaternion.fromArray(to.getWorldRotation());
+    a.scale.fromArray(to.getWorldScale());
     a.updateMatrixWorld();
 
     const b = new Object3D();
@@ -39,21 +38,6 @@ export function copyTransform(from: Node, to: Node): void {
     to.setMatrix(a.matrix.toArray());
   } else {
     to.setMatrix(from.getWorldMatrix());
-  }
-}
-
-export function getJointNodeForBodyNode(bodyNode: BodyNode): JointNode | null {
-  switch (bodyNode) {
-    case BodyNode.ArmL:
-      return JointNode.ShoulderL;
-    case BodyNode.ArmR:
-      return JointNode.ShoulderR;
-    case BodyNode.Head:
-      return JointNode.Neck;
-    case BodyNode.Legs:
-      return JointNode.Hip;
-    default:
-      return null;
   }
 }
 
