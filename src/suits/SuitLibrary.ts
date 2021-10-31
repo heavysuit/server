@@ -5,9 +5,10 @@ import { Valiant } from './M1-Valiant';
 import { Haganenoken } from './M2-Haganenoken';
 import { MoWang } from './M3-MoWang';
 import { Inferno } from './M4-Inferno';
+import { Centurion } from './M5-Centurion';
 import { Suit } from './Suit';
 
-export const SuitLibrary: Suit[] = [Valiant, Haganenoken, MoWang, Inferno];
+export const SuitLibrary: Suit[] = [Valiant, Haganenoken, MoWang, Inferno, Centurion];
 
 class UnfairDie {
   chances: number[];
