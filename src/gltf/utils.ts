@@ -11,10 +11,14 @@ import { logger } from '../utils/logger';
 
 export function renameChildren(doc: Document, prefix: string): void {
   for (const n of doc.getRoot().listNodes()) {
-    n.setName(`${prefix}-${n.getName()}`);
+    if (!n.getName().startsWith(prefix)) {
+      n.setName(`${prefix}-${n.getName()}`);
+    }
   }
   for (const s of doc.getRoot().listSkins()) {
-    s.setName(`${prefix}-${s.getName()}`);
+    if (!s.getName().startsWith(prefix)) {
+      s.setName(`${prefix}-${s.getName()}`);
+    }
   }
 }
 

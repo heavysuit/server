@@ -18,15 +18,19 @@ import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 async function runMergeModels(assetName: string): Promise<void> {
   const manifests: ModelManifest[] = [
     {
-      assetId: 'M1',
-      nodes: [BodyNode.Torso, BodyNode.ArmR],
+      assetId: 'M2',
+      nodes: [BodyNode.Torso],
     },
     {
-      assetId: 'M2',
+      assetId: 'M1',
       nodes: [BodyNode.ArmL],
     },
     {
       assetId: 'M3',
+      nodes: [BodyNode.Head, BodyNode.ArmR],
+    },
+    {
+      assetId: 'M4',
       nodes: [BodyNode.Legs],
     },
   ];

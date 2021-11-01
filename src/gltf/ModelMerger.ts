@@ -7,7 +7,7 @@ import { BodyNode } from '../shared/BodyNode';
 import { JointNode } from '../shared/JointNode';
 import { AssetLibraryID, AssetName, getLocalPath } from './AssetLibrary';
 import { ModelManifest } from './ModelManifest';
-import { copyTransform, getNode, pruneNodes } from './utils';
+import { copyTransform, getNode, pruneNodes, renameChildren } from './utils';
 
 export class ModelMerger {
   parts: {
@@ -98,8 +98,10 @@ export class ModelMerger {
   merge(): Document {
     const doc = new Document();
 
-    for (const d of Object.values(this._docs)) {
+    for (const k in this._docs) {
+      const d = this._docs[k as AssetLibraryID];
       assert(d);
+      renameChildren(d, k);
       doc.merge(d);
     }
 
