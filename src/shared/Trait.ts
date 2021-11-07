@@ -25,6 +25,7 @@ export enum Boost {
   CloseQuarters = 'Close Quarters',
   ReflectiveArmor = 'Reflective Armor',
   ReactiveArmor = 'Reactive Armor',
+  ArmorPenetration = 'Armor Penetration',
 }
 
 export enum OtherTrait {

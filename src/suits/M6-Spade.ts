@@ -45,12 +45,15 @@ const legs: SuitPart = {
 };
 
 const leftArm: SuitPart = {
-  name: 'Spade C2 Minigun',
+  name: 'Spade C2 Offspring Co. ArmPen Minigun',
   slot: Slot.LeftArm,
   stats: {
     [Stat.Firepower]: _(30, 40),
     [Stat.EnergyDemand]: _(10),
     [Stat.Weight]: _(leftArmRatio * totalWeight),
+  },
+  boosts: {
+    [Boost.ArmorPenetration]: _(10, 20, 0.2),
   },
   assetId: 'M6',
 };
