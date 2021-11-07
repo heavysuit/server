@@ -11,9 +11,8 @@ import {
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
 import { Valiant } from './suits/M1-Valiant';
-import { Haganenoken } from './suits/M2-Haganenoken';
-import { Inferno } from './suits/M4-Inferno';
-import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
+import { MoWang } from './suits/M3-MoWang';
+import { generateRandomSuit } from './suits/SuitLibrary';
 
 async function runMergeModels(assetName: string): Promise<void> {
   const manifests: ModelManifest[] = [
@@ -74,9 +73,7 @@ export async function run(): Promise<void> {
     case 'mint': {
       assert(args.suitName && args.tokenId);
       const suit = generateRandomSuit(args.suitName, [
-        Valiant,
-        Haganenoken,
-        Inferno,
+        Valiant
       ]);
       const merger = new ModelMerger(args.tokenId, suit.toManifests());
       merger.repositionJoints();
@@ -104,7 +101,7 @@ export async function run(): Promise<void> {
       break;
     }
     case 'suit': {
-      const suit = generateRandomSuit('Testing', SuitLibrary);
+      const suit = generateRandomSuit('Testing', [MoWang]);
       const attributes = createTokenAttributes(suit);
       console.log(attributes);
       console.log(suit.toManifests());
