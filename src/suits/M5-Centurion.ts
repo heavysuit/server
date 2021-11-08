@@ -67,7 +67,7 @@ const rightArm: SuitPart = {
 export const Centurion = new Suit({
   name: 'Centurion',
   parts: [torso, legs, leftArm, rightArm],
-  height: 9.02,
+  height: 7.22,
   dom: _(new Date('2179/01/01').getTime(), new Date('2195/11/01').getTime()),
   pom: [
     'Essen, European Federation',

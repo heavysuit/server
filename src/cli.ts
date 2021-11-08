@@ -11,26 +11,26 @@ import {
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
 import { Valiant } from './suits/M1-Valiant';
-import { MoWang } from './suits/M3-MoWang';
+import { Haganenoken } from './suits/M2-Haganenoken';
+import { Inferno } from './suits/M4-Inferno';
+import { Centurion } from './suits/M5-Centurion';
 import { generateRandomSuit } from './suits/SuitLibrary';
+
+const SUITS = [Valiant, Haganenoken, Centurion, Inferno];
 
 async function runMergeModels(assetName: string): Promise<void> {
   const manifests: ModelManifest[] = [
     {
-      assetId: 'M2',
-      nodes: [BodyNode.Torso],
+      assetId: 'M3',
+      nodes: [BodyNode.ArmR],
+    },
+    {
+      assetId: 'M5',
+      nodes: [BodyNode.Legs],
     },
     {
       assetId: 'M1',
-      nodes: [BodyNode.ArmL],
-    },
-    {
-      assetId: 'M3',
-      nodes: [BodyNode.Head, BodyNode.ArmR],
-    },
-    {
-      assetId: 'M4',
-      nodes: [BodyNode.Legs],
+      nodes: [BodyNode.Torso, BodyNode.ArmL],
     },
   ];
 
@@ -72,9 +72,7 @@ export async function run(): Promise<void> {
   switch (command) {
     case 'mint': {
       assert(args.suitName && args.tokenId);
-      const suit = generateRandomSuit(args.suitName, [
-        Valiant
-      ]);
+      const suit = generateRandomSuit(args.suitName, SUITS);
       const merger = new ModelMerger(args.tokenId, suit.toManifests());
       merger.repositionJoints();
       await merger.mergeAndWrite();
@@ -101,7 +99,7 @@ export async function run(): Promise<void> {
       break;
     }
     case 'suit': {
-      const suit = generateRandomSuit('Testing', [MoWang]);
+      const suit = generateRandomSuit('Testing', SUITS);
       const attributes = createTokenAttributes(suit);
       console.log(attributes);
       console.log(suit.toManifests());

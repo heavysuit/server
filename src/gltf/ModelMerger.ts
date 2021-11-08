@@ -24,6 +24,12 @@ export class ModelMerger {
     this.parts = {};
     this.assetName = assetName;
 
+    const seen: Set<string> = new Set();
+    for (const { assetId } of manifests) {
+      assert(!seen.has(assetId), 'Duplicated asset in manifest');
+      seen.add(assetId);
+    }
+
     for (const node of [
       BodyNode.Torso,
       BodyNode.Legs,
@@ -41,6 +47,8 @@ export class ModelMerger {
         continue;
       }
 
+      console.log(node, manifest.assetId);
+
       this.parts[node] = this.read(manifest);
     }
   }
@@ -55,6 +63,11 @@ export class ModelMerger {
 
       const rig = getNode(doc, 'Rig');
       assert(rig, `${assetId} is missing Rig node`);
+
+      for (const node of nodes) {
+        const n = getNode(doc, node);
+        assert(n, `${assetId} is missing ${node}`);
+      }
 
       // Remove Mesh nodes that are not marked as required from this model
       pruneNodes(assetId, rig, nodes);
@@ -74,6 +87,24 @@ export class ModelMerger {
 
     let from = getNode(legDoc, JointNode.Spine);
     let to = getNode(torsoDoc, JointNode.Spine);
+    assert(from && to);
+    copyTransform(from, to);
+
+    from = getNode(torsoDoc, JointNode.ShoulderL);
+    to = getNode(armLeftDoc, JointNode.ShoulderL);
+    assert(from && to);
+    copyTransform(from, to);
+
+    from = getNode(torsoDoc, JointNode.ShoulderR);
+    to = getNode(armRightDoc, JointNode.ShoulderR);
+    assert(from && to);
+    copyTransform(from, to);
+
+    from = getNode(torsoDoc, JointNode.Neck);
+    to = getNode(armLeftDoc, JointNode.Neck);
+    assert(from && to);
+    copyTransform(from, to);
+    to = getNode(armRightDoc, JointNode.Neck);
     assert(from && to);
     copyTransform(from, to);
 
