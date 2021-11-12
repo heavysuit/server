@@ -21,16 +21,12 @@ const SUITS = [Valiant, Haganenoken, Centurion, Inferno];
 async function runMergeModels(assetName: string): Promise<void> {
   const manifests: ModelManifest[] = [
     {
-      assetId: 'M3',
-      nodes: [BodyNode.ArmR],
-    },
-    {
       assetId: 'M5',
-      nodes: [BodyNode.Legs],
+      nodes: [BodyNode.ArmR, BodyNode.ArmL],
     },
     {
       assetId: 'M1',
-      nodes: [BodyNode.Torso, BodyNode.ArmL],
+      nodes: [BodyNode.Legs, BodyNode.Torso],
     },
   ];
 

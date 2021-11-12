@@ -85,18 +85,13 @@ export class ModelMerger {
     const torsoDoc = this.parts[BodyNode.Torso];
     assert(legDoc && torsoDoc && armLeftDoc && armRightDoc);
 
-    let from = getNode(legDoc, JointNode.Spine);
-    let to = getNode(torsoDoc, JointNode.Spine);
+    let from = getNode(legDoc, JointNode.Hip);
+    let to = getNode(torsoDoc, JointNode.Hip);
     assert(from && to);
     copyTransform(from, to);
 
-    from = getNode(torsoDoc, JointNode.ShoulderL);
-    to = getNode(armLeftDoc, JointNode.ShoulderL);
-    assert(from && to);
-    copyTransform(from, to);
-
-    from = getNode(torsoDoc, JointNode.ShoulderR);
-    to = getNode(armRightDoc, JointNode.ShoulderR);
+    from = getNode(legDoc, JointNode.Spine);
+    to = getNode(torsoDoc, JointNode.Spine);
     assert(from && to);
     copyTransform(from, to);
 
@@ -105,6 +100,23 @@ export class ModelMerger {
     assert(from && to);
     copyTransform(from, to);
     to = getNode(armRightDoc, JointNode.Neck);
+    assert(from && to);
+    copyTransform(from, to);
+
+    if (headDoc) {
+      from = getNode(torsoDoc, JointNode.Neck);
+      to = getNode(headDoc, JointNode.Neck);
+      assert(from && to);
+      copyTransform(from, to);
+    }
+
+    from = getNode(torsoDoc, JointNode.ShoulderL);
+    to = getNode(armLeftDoc, JointNode.ShoulderL);
+    assert(from && to);
+    copyTransform(from, to);
+
+    from = getNode(torsoDoc, JointNode.ShoulderR);
+    to = getNode(armRightDoc, JointNode.ShoulderR);
     assert(from && to);
     copyTransform(from, to);
 
@@ -117,13 +129,6 @@ export class ModelMerger {
     to = getNode(armRightDoc, JointNode.UpperArmR);
     assert(from && to);
     copyTransform(from, to);
-
-    if (headDoc) {
-      from = getNode(torsoDoc, JointNode.Neck);
-      to = getNode(headDoc, JointNode.Neck);
-      assert(from && to);
-      copyTransform(from, to);
-    }
   }
 
   merge(): Document {
@@ -145,6 +150,11 @@ export class ModelMerger {
         scene.addChild(n);
       }
       s.dispose();
+    }
+
+    const animations = doc.getRoot().listAnimations();
+    for (const animation of animations) {
+      animation.dispose();
     }
 
     // // Optional: Merge binary resources to a single buffer.
