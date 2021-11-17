@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { BodyNode } from '../shared/BodyNode';
 import { JointNode } from '../shared/JointNode';
+import { PAINT_DIR } from '../utils/globals';
 import { AssetLibraryID, AssetName, getLocalPath } from './AssetLibrary';
 import { ModelManifest } from './ModelManifest';
 import { copyTransform, getNode, pruneNodes, renameChildren } from './utils';
@@ -178,7 +179,7 @@ export class ModelMerger {
     await doc.transform(dedup(), prune());
 
     const outputPath = getLocalPath(this.assetName);
-    await fs.promises.mkdir(path.join(path.dirname(outputPath), 'jc1'), { recursive: true });
+    await fs.promises.mkdir(path.join(path.dirname(outputPath), PAINT_DIR), { recursive: true });
     this._io.write(outputPath, doc);
 
     return outputPath;
