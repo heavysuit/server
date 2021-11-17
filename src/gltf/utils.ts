@@ -112,7 +112,9 @@ export async function uploadResourceFile(
   const file = hsBucket.file(bucketPath);
   logger.info(`Uploading ${localPath} to ${bucketPath}`);
 
-  const localHash = generateHash((await fs.promises.readFile(localPath)).buffer)
+  const localHash = generateHash(
+    (await fs.promises.readFile(localPath)).buffer,
+  );
   logger.info(`localHash: ${localHash}`);
 
   const exists = await file.exists();
@@ -142,38 +144,65 @@ export async function generateRandomName(name: string = ''): Promise<string> {
   if (!name) {
     name = _names.pop() || '';
   }
-  
+
   if (!name) {
-    const response = await axios.get<{ data: {name:string}[]}>('https://story-shack-cdn-v2.glitch.me/generators/mecha-name-generator?count=100');
+    const response = await axios.get<{ data: { name: string }[] }>(
+      'https://story-shack-cdn-v2.glitch.me/generators/mecha-name-generator?count=100',
+    );
     const results = response.data;
     _names = results.data.map((r) => r.name);
     name = _names.pop() || '';
     assert(name);
   }
 
-  const letterA = String.fromCharCode(65+Math.floor(Math.random() * 26));
-  const letterB = Math.random() > 0.7 ? String.fromCharCode(65+Math.floor(Math.random() * 26)) : '';
+  const letterA = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+  const letterB =
+    Math.random() > 0.7
+      ? String.fromCharCode(65 + Math.floor(Math.random() * 26))
+      : '';
   const number = Math.round(Math.random() * 150);
 
   return `${name} ${letterA}${letterB}-${number}`;
 }
 
-export async function saveHashes(tokenId: string, metaHash: string, gltfHash: string): Promise<void> {
+type IDCache = Record<
+  string,
+  { name: string; metaHash?: string; gltfHash?: string }
+>;
+
+export async function loadCache(): Promise<IDCache> {
   const tokenPath = path.join(__dirname, './usedtokenIds.json');
   const content = await fs.promises.readFile(tokenPath);
   const ids = JSON.parse(content.toString());
+  return ids;
+}
+
+export async function saveCache(ids: IDCache): Promise<void> {
+  const tokenPath = path.join(__dirname, './usedtokenIds.json');
+  await fs.promises.writeFile(tokenPath, JSON.stringify(ids, undefined, 2));
+}
+
+export async function saveHashes(
+  tokenId: string,
+  metaHash: string,
+  gltfHash: string,
+): Promise<void> {
+  const ids = await loadCache();
 
   assert(tokenId in ids);
   ids[tokenId].gltfHash = gltfHash;
   ids[tokenId].metaHash = metaHash;
 
-  await fs.promises.writeFile(tokenPath, JSON.stringify(ids, undefined, 2));
+  await saveCache(ids);
+}
+
+export async function countCache(): Promise<number> {
+  const ids = await loadCache();
+  return Object.keys(ids).length;
 }
 
 export async function generateTokenId(name: string): Promise<string> {
-  const tokenPath = path.join(__dirname, './usedtokenIds.json');
-  const content = await fs.promises.readFile(tokenPath);
-  const ids = JSON.parse(content.toString());
+  const ids = await loadCache();
 
   let id = 0;
   while (id in ids) {
@@ -181,14 +210,11 @@ export async function generateTokenId(name: string): Promise<string> {
   }
 
   ids[id] = { name };
-  await fs.promises.writeFile(tokenPath, JSON.stringify(ids, undefined, 2));
+  await saveCache(ids);
 
   return id.toString();
 }
 
 export function generateHash(content: ArrayBufferLike): string {
-  return crypto
-  .createHash('md5')
-  .update(Buffer.from(content))
-  .digest('base64');
+  return crypto.createHash('md5').update(Buffer.from(content)).digest('base64');
 }

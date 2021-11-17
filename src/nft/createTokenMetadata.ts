@@ -64,7 +64,7 @@ export function createTokenAttributes(suit: Suit): Attribute[] {
     ...boostAttributes,
     {
       trait_type: Trait.Paint,
-      value: 'Jungle Warfare',
+      value: 'Unit-01',
     },
   ];
 

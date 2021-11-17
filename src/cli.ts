@@ -4,7 +4,7 @@ import yargs from 'yargs/yargs';
 import { ModelManifest } from './gltf/ModelManifest';
 import { ModelMerger } from './gltf/ModelMerger';
 import { uploadModel } from './gltf/uploadModel';
-import { generateRandomName, generateTokenId, saveHashes } from './gltf/utils';
+import { countCache, generateRandomName, generateTokenId, saveHashes } from './gltf/utils';
 import {
   createTokenAttributes,
   createTokenMetadata
@@ -87,6 +87,11 @@ export async function run(): Promise<void> {
   const command = args._[0];
 
   switch (command) {
+    case 'count': {
+      const count = await countCache();
+      console.log(count);
+      break;
+    }
     case 'name': {
       for (let i = 0; i < 20; i++) {
         const name = await generateRandomName();
