@@ -2,27 +2,16 @@ import { Boost, Slot, Stat } from '../shared/Trait';
 import { createStatGenerator as _, Suit, SuitPart } from './Suit';
 
 const totalWeight = 49.5;
-const headRatio = 0.1;
 const torsoRatio = 0.4;
 const leftArmRatio = 0.1;
 const rightArmRatio = 0.3;
-const legsRatio = 1 - headRatio - torsoRatio - leftArmRatio - rightArmRatio;
-
-const head: SuitPart = {
-  name: 'Spade C2 Cyclopic Wide-band Detector',
-  slot: Slot.Head,
-  stats: {
-    [Stat.ECM]: _(10, 20),
-    [Stat.EnergyDemand]: _(10),
-    [Stat.Weight]: _(headRatio * totalWeight),
-  },
-  assetId: 'M6',
-};
+const legsRatio = 1 - torsoRatio - leftArmRatio - rightArmRatio;
 
 const torso: SuitPart = {
   name: 'Spade C2 Fusion Reactor',
   slot: Slot.Torso,
   stats: {
+    [Stat.ECM]: _(10, 20),
     [Stat.Armor]: _(10, 20),
     [Stat.Weight]: _(torsoRatio * totalWeight),
     [Stat.EnergyDemand]: _(-50, -20),
@@ -75,7 +64,7 @@ const rightArm: SuitPart = {
 
 export const SpadeC2 = new Suit({
   name: 'Spade C2',
-  parts: [head, torso, legs, leftArm, rightArm],
+  parts: [torso, legs, leftArm, rightArm],
   height: 19.49,
   dom: _(new Date('2198/05/01').getTime(), new Date('2213/01/21').getTime()),
   pom: [

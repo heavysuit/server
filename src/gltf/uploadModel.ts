@@ -6,6 +6,7 @@ import { logger } from '../utils/logger';
 import { AssetName, getLocalPath } from './AssetLibrary';
 import { createScreenshot } from './createScreenshot';
 import {
+  generateHash,
   getBufferBucketPath,
   getGLTFBucketPath,
   getTextureBucketPath,
@@ -19,6 +20,7 @@ export async function uploadModel(
 ): Promise<{
   url: string;
   thumbnailUrl: string;
+  gltfHash: string;
 }> {
   const io = new NodeIO();
   const localPath = getLocalPath(assetName);
@@ -63,7 +65,8 @@ export async function uploadModel(
   const tmpDir = await fs.promises.mkdtemp('/tmp/');
   const gltfPath = `${tmpDir}/${assetName}.gltf`;
 
-  await fs.promises.writeFile(gltfPath, JSON.stringify(json, null, 2));
+  const gltfContent = JSON.stringify(json, null, 2);
+  await fs.promises.writeFile(gltfPath, gltfContent);
 
   const destination = getGLTFBucketPath(assetName);
   logger.info(`Uploading GLTF to: ${destination}`);
@@ -82,5 +85,6 @@ export async function uploadModel(
   return {
     url: file.publicUrl(),
     thumbnailUrl: thumbnailFile.publicUrl(),
+    gltfHash: generateHash(Buffer.from(gltfContent)),
   };
 }

@@ -112,10 +112,7 @@ export async function uploadResourceFile(
   const file = hsBucket.file(bucketPath);
   logger.info(`Uploading ${localPath} to ${bucketPath}`);
 
-  const localHash = crypto
-    .createHash('md5')
-    .update(Buffer.from((await fs.promises.readFile(localPath)).buffer))
-    .digest('base64');
+  const localHash = generateHash((await fs.promises.readFile(localPath)).buffer)
   logger.info(`localHash: ${localHash}`);
 
   const exists = await file.exists();
@@ -161,6 +158,18 @@ export async function generateRandomName(name: string = ''): Promise<string> {
   return `${name} ${letterA}${letterB}-${number}`;
 }
 
+export async function saveHashes(tokenId: string, metaHash: string, gltfHash: string): Promise<void> {
+  const tokenPath = path.join(__dirname, './usedtokenIds.json');
+  const content = await fs.promises.readFile(tokenPath);
+  const ids = JSON.parse(content.toString());
+
+  assert(tokenId in ids);
+  ids[tokenId].gltfHash = gltfHash;
+  ids[tokenId].metaHash = metaHash;
+
+  await fs.promises.writeFile(tokenPath, JSON.stringify(ids, undefined, 2));
+}
+
 export async function generateTokenId(name: string): Promise<string> {
   const tokenPath = path.join(__dirname, './usedtokenIds.json');
   const content = await fs.promises.readFile(tokenPath);
@@ -171,8 +180,15 @@ export async function generateTokenId(name: string): Promise<string> {
     id = _.random(0, 7777, false);
   }
 
-  ids[id] = name;
-  fs.promises.writeFile(tokenPath, JSON.stringify(ids, undefined, 2));
+  ids[id] = { name };
+  await fs.promises.writeFile(tokenPath, JSON.stringify(ids, undefined, 2));
 
   return id.toString();
+}
+
+export function generateHash(content: ArrayBufferLike): string {
+  return crypto
+  .createHash('md5')
+  .update(Buffer.from(content))
+  .digest('base64');
 }

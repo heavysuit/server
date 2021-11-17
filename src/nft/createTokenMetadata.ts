@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import {
   Attribute,
   BoostAttribute,
@@ -71,7 +72,7 @@ export function createTokenAttributes(suit: Suit): Attribute[] {
 }
 
 export function createTokenMetadata({
-  description = 'This is one of 7777 Heavy Suits.',
+  description,
   suit,
   externalUrl,
   thumbnailUrl,
@@ -93,9 +94,20 @@ export function createTokenMetadata({
     ...createTokenAttributes(suit),
   ];
 
+  const pom = attributes.find((a) => a.trait_type === Trait.POM);
+  const place = pom ? pom.value : 'a classified location';
+  const dom = attributes.find((a) => a.trait_type === Trait.DOM);
+  const date = dom
+    ? format(new Date(dom.value), 'MMMM Io, y G')
+    : 'an unknown date';
+
+  const des =
+    description ||
+    `The ${suit.name} was assembled in ${place} on ${date}. It is one of 7777 unique Heavy Suits.`;
+
   return {
     name: suit.name,
-    description,
+    description: des,
     external_url: externalUrl,
     image: thumbnailUrl,
     animation_url: url,

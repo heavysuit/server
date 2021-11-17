@@ -1,12 +1,15 @@
 import { hsBucket } from '../GCP';
+import { generateHash } from '../gltf/utils';
 import { TokenMetadata } from '../shared/TokenMetadata';
 import { logger } from '../utils/logger';
 
 export async function uploadTokenMetadata(
   metadata: TokenMetadata,
   version: string,
-): Promise<void> {
+): Promise<string> {
   logger.info('Uploading metadata', { metadata });
+  const content = Buffer.from(JSON.stringify(metadata));
+  const metaHash = generateHash(content);
 
   const blob = hsBucket.file(`production/${version}.json`);
   const blobStream = blob.createWriteStream();
@@ -17,10 +20,11 @@ export async function uploadTokenMetadata(
       reject(error);
     });
     blobStream.on('finish', () => resolve(true));
-    blobStream.end(Buffer.from(JSON.stringify(metadata)));
+    blobStream.end(content);
   });
 
   await promise;
 
   logger.info('Metadata', { url: blob.publicUrl() });
+  return metaHash;
 }

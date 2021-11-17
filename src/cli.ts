@@ -4,7 +4,7 @@ import yargs from 'yargs/yargs';
 import { ModelManifest } from './gltf/ModelManifest';
 import { ModelMerger } from './gltf/ModelMerger';
 import { uploadModel } from './gltf/uploadModel';
-import { generateRandomName, generateTokenId } from './gltf/utils';
+import { generateRandomName, generateTokenId, saveHashes } from './gltf/utils';
 import {
   createTokenAttributes,
   createTokenMetadata
@@ -14,14 +14,14 @@ import { BodyNode } from './shared/BodyNode';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 
 async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
-  const suitName = _suitName || await generateRandomName();
-  const tokenId = _tokenId || await generateTokenId(suitName);
+  const suitName = _suitName || (await generateRandomName());
+  const tokenId = _tokenId || (await generateTokenId(suitName));
   console.log(suitName, tokenId);
   const suit = generateRandomSuit(suitName, SuitLibrary);
   const merger = new ModelMerger(tokenId, suit.toManifests());
   merger.repositionJoints();
   await merger.mergeAndWrite();
-  const { thumbnailUrl, url } = await uploadModel(tokenId);
+  const { thumbnailUrl, url, gltfHash } = await uploadModel(tokenId);
 
   const metadata = createTokenMetadata({
     externalUrl: `http://heavysuit.com/version/${tokenId}`,
@@ -30,7 +30,8 @@ async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
     url,
   });
 
-  await uploadTokenMetadata(metadata, tokenId);
+  const metaHash = await uploadTokenMetadata(metadata, tokenId);
+  await saveHashes(tokenId, metaHash, gltfHash);
 }
 
 async function runMergeModels(assetName: string): Promise<void> {
@@ -40,7 +41,7 @@ async function runMergeModels(assetName: string): Promise<void> {
       nodes: [BodyNode.ArmR, BodyNode.ArmL],
     },
     {
-      assetId: 'M10',
+      assetId: 'M3',
       nodes: [BodyNode.Legs, BodyNode.Torso],
     },
   ];
@@ -67,6 +68,11 @@ export async function run(): Promise<void> {
       });
     })
     .command('suit', 'Generate random suit')
+    .command('mass [count]', 'Mint multiple suits', (yargs) => {
+      return yargs.positional('count', {
+        type: 'number',
+      });
+    })
     .command('mint [tokenId] [suitName]', 'Mint a new suit', (yargs) => {
       return yargs
         .positional('tokenId', {
@@ -89,7 +95,8 @@ export async function run(): Promise<void> {
       break;
     }
     case 'mass': {
-      for (let i = 0; i < 180; i++) {
+      assert(args.count);
+      for (let i = 0; i < args.count; i++) {
         await runMint();
       }
       break;
