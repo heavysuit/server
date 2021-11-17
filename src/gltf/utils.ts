@@ -1,8 +1,10 @@
 import { Document, Node } from '@gltf-transform/core';
 import { File } from '@google-cloud/storage';
 import { strict as assert } from 'assert';
+import axios from 'axios';
 import crypto from 'crypto';
 import fs from 'fs';
+import _ from 'lodash';
 import path from 'path';
 import { Object3D } from 'three';
 import { hsBucket } from '../GCP';
@@ -77,15 +79,16 @@ export function shouldUploadToBucket(uri: string): boolean {
   return !ignore;
 }
 
-export const gltfDir = 'gltf';
-export const thumbnailDir = 'gltf/thumbnails';
-export const bufferDir = 'gltf/buffers';
-export const textureDir = 'gltf/textures';
+export const gltfDir = 'alpha';
+export const thumbnailDir = 'alpha/thumbnails';
+export const bufferDir = 'alpha/buffers';
+export const textureDir = 'alpha/textures';
 
 export function getTextureBucketPath(uri: string): string {
   assert(shouldUploadToBucket(uri), 'URI is not a local file');
   const filename = path.basename(uri);
-  return `${textureDir}/${filename}`;
+  const folders = path.dirname(uri).split('/');
+  return `${textureDir}/${folders[folders.length - 1]}/${filename}`;
 }
 
 export function getBufferBucketPath(uri: string): string {
@@ -134,4 +137,42 @@ export async function uploadResourceFile(
   }
 
   return file;
+}
+
+let _names: string[] = [];
+
+export async function generateRandomName(name: string = ''): Promise<string> {
+  if (!name) {
+    name = _names.pop() || '';
+  }
+  
+  if (!name) {
+    const response = await axios.get<{ data: {name:string}[]}>('https://story-shack-cdn-v2.glitch.me/generators/mecha-name-generator?count=100');
+    const results = response.data;
+    _names = results.data.map((r) => r.name);
+    name = _names.pop() || '';
+    assert(name);
+  }
+
+  const letterA = String.fromCharCode(65+Math.floor(Math.random() * 26));
+  const letterB = Math.random() > 0.7 ? String.fromCharCode(65+Math.floor(Math.random() * 26)) : '';
+  const number = Math.round(Math.random() * 150);
+
+  return `${name} ${letterA}${letterB}-${number}`;
+}
+
+export async function generateTokenId(name: string): Promise<string> {
+  const tokenPath = path.join(__dirname, './usedtokenIds.json');
+  const content = await fs.promises.readFile(tokenPath);
+  const ids = JSON.parse(content.toString());
+
+  let id = 0;
+  while (id in ids) {
+    id = _.random(0, 7777, false);
+  }
+
+  ids[id] = name;
+  fs.promises.writeFile(tokenPath, JSON.stringify(ids, undefined, 2));
+
+  return id.toString();
 }

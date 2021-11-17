@@ -8,7 +8,7 @@ export async function uploadTokenMetadata(
 ): Promise<void> {
   logger.info('Uploading metadata', { metadata });
 
-  const blob = hsBucket.file(`versions/${version}.json`);
+  const blob = hsBucket.file(`production/${version}.json`);
   const blobStream = blob.createWriteStream();
 
   const promise = new Promise((resolve, reject) => {

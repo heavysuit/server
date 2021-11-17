@@ -14,9 +14,6 @@ import {
   uploadResourceFile
 } from './utils';
 
-export const binDir = 'bin';
-export const textureDir = 'textures';
-
 export async function uploadModel(
   assetName: AssetName,
 ): Promise<{

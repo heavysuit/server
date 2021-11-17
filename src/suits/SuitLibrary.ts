@@ -6,9 +6,13 @@ import { Haganenoken } from './M2-Haganenoken';
 import { MoWang } from './M3-MoWang';
 import { Inferno } from './M4-Inferno';
 import { Centurion } from './M5-Centurion';
+import { SpadeC2 } from './M6-Spade';
+import { Kingsman } from './M7-Kingsman';
+import { Falcon } from './M8-Falcon';
+import { Shaka } from './M9-Shaka';
 import { Suit } from './Suit';
 
-export const SuitLibrary: Suit[] = [Valiant, Haganenoken, MoWang, Inferno, Centurion];
+export const SuitLibrary: Suit[] = [Valiant, Haganenoken, MoWang, Inferno, Centurion, SpadeC2, Kingsman, Falcon, Shaka];
 
 class UnfairDie {
   chances: number[];

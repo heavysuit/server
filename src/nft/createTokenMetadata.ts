@@ -61,13 +61,17 @@ export function createTokenAttributes(suit: Suit): Attribute[] {
     ...slotAttributes,
     ...rankAttributes,
     ...boostAttributes,
+    {
+      trait_type: Trait.Paint,
+      value: 'Jungle Warfare',
+    },
   ];
 
   return attributes;
 }
 
 export function createTokenMetadata({
-  description = 'This is a Heavy Suit.',
+  description = 'This is one of 7777 Heavy Suits.',
   suit,
   externalUrl,
   thumbnailUrl,

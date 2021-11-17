@@ -79,7 +79,7 @@ export class Suit implements SuitProps {
         s += s_;
       }
     }
-    return s;
+    return Math.round(s * 100) / 100;
   }
 
   getStats(): Record<Stat, number> {

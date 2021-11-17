@@ -21,6 +21,7 @@
     "@gltf-transform/functions": "^1.0.0",
     "@google-cloud/storage": "^5.15.3",
     "@types/cors": "^2.8.12",
+    "axios": "^0.24.0",
     "cors": "^2.8.5",
     "ethers": "^5.4.7",
     "firebase-admin": "^9.0.0",
