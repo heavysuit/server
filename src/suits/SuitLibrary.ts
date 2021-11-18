@@ -2,6 +2,7 @@ import { strict as assert } from 'assert';
 import { sample as fairSample } from 'lodash';
 import { Slot } from '../shared/Trait';
 import { Valiant } from './M1-Valiant';
+import { Maestro } from './M10-Maestro';
 import { Haganenoken } from './M2-Haganenoken';
 import { Inferno } from './M4-Inferno';
 import { Centurion } from './M5-Centurion';
@@ -11,7 +12,17 @@ import { Falcon } from './M8-Falcon';
 import { Shaka } from './M9-Shaka';
 import { Suit } from './Suit';
 
-export const SuitLibrary: Suit[] = [Valiant, Haganenoken, Inferno, Centurion, SpadeC2, Kingsman, Falcon, Shaka];
+export const SuitLibrary: Suit[] = [
+  Valiant,
+  Haganenoken,
+  Inferno,
+  Centurion,
+  SpadeC2,
+  Kingsman,
+  Falcon,
+  Shaka,
+  Maestro,
+];
 
 class UnfairDie {
   chances: number[];

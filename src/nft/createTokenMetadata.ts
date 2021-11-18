@@ -99,7 +99,7 @@ export function createTokenMetadata({
   const place = pom ? pom.value : 'a classified location';
   const dom = attributes.find((a) => a.trait_type === Trait.DOM);
   const date = dom
-    ? format(new Date(dom.value), 'MMMM Io, y G')
+    ? format(new Date(dom.value), 'MMMM do, y G')
     : 'an unknown date';
 
   const des =

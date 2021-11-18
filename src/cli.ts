@@ -41,7 +41,7 @@ async function runMergeModels(assetName: string): Promise<void> {
       nodes: [BodyNode.ArmR, BodyNode.ArmL],
     },
     {
-      assetId: 'M3',
+      assetId: 'M10',
       nodes: [BodyNode.Legs, BodyNode.Torso],
     },
   ];

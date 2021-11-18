@@ -1,2 +1,2 @@
-export const PAINT_COLOR = 'Unit-1';
-export const PAINT_DIR = 'unit01';
+export const PAINT_COLOR = 'Hunter\'s Edge';
+export const PAINT_DIR = 'jc2';
