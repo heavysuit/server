@@ -72,5 +72,12 @@ export const MoWang = new Suit({
   parts: [head, torso, legs, leftArm, rightArm],
   height: 8.71,
   dom: _(new Date('2212/02/01').getTime(), new Date('2227/02/01').getTime()),
-  pom: ['Hanzhou, China', 'Shanghai, China', 'Nanjing, China', 'Beijing, China', 'Hefei, China', 'Tianjin, China'],
+  pom: [
+    'Hanzhou, China',
+    'Shanghai, China',
+    'Nanjing, China',
+    'Beijing, China',
+    'Hefei, China',
+    'Tianjin, China',
+  ],
 });

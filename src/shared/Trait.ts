@@ -1,4 +1,4 @@
-import { BodyNode } from "./BodyNode";
+import { BodyNode } from './BodyNode';
 
 export enum Slot {
   Legs = 'Legs',

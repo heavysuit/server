@@ -4,10 +4,15 @@ import yargs from 'yargs/yargs';
 import { ModelManifest } from './gltf/ModelManifest';
 import { ModelMerger } from './gltf/ModelMerger';
 import { uploadModel } from './gltf/uploadModel';
-import { countCache, generateRandomName, generateTokenId, saveHashes } from './gltf/utils';
+import {
+  countCache,
+  generateRandomName,
+  generateTokenId,
+  saveHashes,
+} from './gltf/utils';
 import {
   createTokenAttributes,
-  createTokenMetadata
+  createTokenMetadata,
 } from './nft/createTokenMetadata';
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';

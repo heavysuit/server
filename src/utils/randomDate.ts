@@ -1,4 +1,4 @@
-import { gaussianRand } from "./gaussianRand";
+import { gaussianRand } from './gaussianRand';
 
 export function randomDate(start: Date, end: Date): Date {
   return new Date(

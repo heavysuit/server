@@ -12,12 +12,10 @@ import {
   getTextureBucketPath,
   getThumbnailBucketPath,
   shouldUploadToBucket,
-  uploadResourceFile
+  uploadResourceFile,
 } from './utils';
 
-export async function uploadModel(
-  assetName: AssetName,
-): Promise<{
+export async function uploadModel(assetName: AssetName): Promise<{
   url: string;
   thumbnailUrl: string;
   gltfHash: string;

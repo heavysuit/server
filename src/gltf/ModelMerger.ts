@@ -179,7 +179,9 @@ export class ModelMerger {
     await doc.transform(dedup(), prune());
 
     const outputPath = getLocalPath(this.assetName);
-    await fs.promises.mkdir(path.join(path.dirname(outputPath), PAINT_DIR), { recursive: true });
+    await fs.promises.mkdir(path.join(path.dirname(outputPath), PAINT_DIR), {
+      recursive: true,
+    });
     this._io.write(outputPath, doc);
 
     return outputPath;

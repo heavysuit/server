@@ -7,7 +7,6 @@ const leftArmRatio = 0.1;
 const rightArmRatio = 0.1;
 const legsRatio = 1 - torsoRatio - leftArmRatio - rightArmRatio;
 
-
 const torso: SuitPart = {
   name: 'Maestro Battery Platform',
   slot: Slot.Torso,
