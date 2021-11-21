@@ -1,2 +1,2 @@
-export const PAINT_COLOR = 'Digital Woodlands';
-export const PAINT_DIR = 'jc3';
+export const PAINT_COLOR = 'Wandering Muad\'Dib';
+export const PAINT_DIR = 'jc4';
