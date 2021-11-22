@@ -1,3 +1,3 @@
-export const PAINT_COLOR = "Wandering Muad'Dib";
-export const PAINT_DIR = 'jc4';
-export const BATCH = 'gamma';
+export const PAINT_COLOR = "Unit-01";
+export const PAINT_DIR = 'unit01';
+export const BATCH = 'delta';

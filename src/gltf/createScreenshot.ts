@@ -28,8 +28,9 @@ const htmlTemplate = (modelURL: string) => {
             position: fixed;
             bottom: 0;
             right: 0;
-            height: 40px;
-            margin: 4px;
+            height: 36px;
+            padding: 2px 4px;
+            background: rgba(0, 0, 0, 0.3);
           }
         </style>
       </head>
@@ -38,7 +39,6 @@ const htmlTemplate = (modelURL: string) => {
           background-color=""
           camera-orbit="-30deg 75deg auto"
           camera-target="auto auto auto"
-          field-of-view="45deg"
           environment-image="neutral"
           exposure="0.9"
           id="gltf-viewer"

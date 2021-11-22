@@ -4,6 +4,7 @@ import { Slot } from '../shared/Trait';
 import { Valiant } from './M1-Valiant';
 import { Maestro } from './M10-Maestro';
 import { Haganenoken } from './M2-Haganenoken';
+import { MoWang } from './M3-MoWang';
 import { Inferno } from './M4-Inferno';
 import { Centurion } from './M5-Centurion';
 import { SpadeC2 } from './M6-Spade';
@@ -15,6 +16,7 @@ import { Suit } from './Suit';
 export const SuitLibrary: Suit[] = [
   Valiant,
   Haganenoken,
+  MoWang,
   Inferno,
   Centurion,
   SpadeC2,
