@@ -9,6 +9,7 @@ import path from 'path';
 import { Object3D } from 'three';
 import { hsBucket } from '../GCP';
 import { BodyNode } from '../shared/BodyNode';
+import { BATCH } from '../utils/globals';
 import { logger } from '../utils/logger';
 
 export function renameChildren(doc: Document, prefix: string): void {
@@ -48,16 +49,20 @@ export function copyTransform(from: Node, to: Node): void {
 }
 
 export function pruneNodes(
+  doc: Document,
   modelName: string,
-  rig: Node,
   nodesToKeep: BodyNode[],
 ): void {
+  const rig = getNode(doc, 'Rig');
+  assert(rig, `${modelName} is missing Rig node`);
+
   for (const n of rig.listChildren()) {
     let deleted = false;
     if (n.getMesh() && !nodesToKeep.includes(n.getName() as BodyNode)) {
       n.dispose();
       deleted = true;
     }
+
     console.log(modelName, n.getName(), deleted ? '' : 'kept');
   }
 }
@@ -79,10 +84,10 @@ export function shouldUploadToBucket(uri: string): boolean {
   return !ignore;
 }
 
-export const gltfDir = 'alpha';
-export const thumbnailDir = 'alpha/thumbnails';
-export const bufferDir = 'alpha/buffers';
-export const textureDir = 'alpha/textures';
+export const gltfDir = `${BATCH}/gltf`;
+export const thumbnailDir = `${BATCH}/thumbnails`;
+export const bufferDir = `${BATCH}/buffers`;
+export const textureDir = 'textures';
 
 export function getTextureBucketPath(uri: string): string {
   assert(shouldUploadToBucket(uri), 'URI is not a local file');

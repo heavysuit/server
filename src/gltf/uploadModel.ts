@@ -27,20 +27,23 @@ export async function uploadModel(assetName: AssetName): Promise<{
   // Reformat the file and buffers to match @gltf-transform's expectations
   io.write(localPath, doc);
 
-  for (const t of doc.getRoot().listTextures()) {
-    const uri = t.getURI();
-    if (!shouldUploadToBucket(uri)) {
-      logger.info(`Ignoring: ${uri}`);
-      continue;
+  if (true) {
+    // manual toggle if textures fully uploaded
+    for (const t of doc.getRoot().listTextures()) {
+      const uri = t.getURI();
+      if (!shouldUploadToBucket(uri)) {
+        logger.info(`Ignoring: ${uri}`);
+        continue;
+      }
+
+      const imagePath = path.join(path.dirname(localPath), uri);
+      const bucketPath = getTextureBucketPath(uri);
+
+      const file = await uploadResourceFile(imagePath, bucketPath);
+      logger.info(`${file.publicUrl()}\n`);
+
+      t.setURI(file.publicUrl());
     }
-
-    const imagePath = path.join(path.dirname(localPath), uri);
-    const bucketPath = getTextureBucketPath(uri);
-
-    const file = await uploadResourceFile(imagePath, bucketPath);
-    logger.info(`${file.publicUrl()}\n`);
-
-    t.setURI(file.publicUrl());
   }
 
   for (const b of doc.getRoot().listBuffers()) {
@@ -72,7 +75,7 @@ export async function uploadModel(assetName: AssetName): Promise<{
     destination: hsBucket.file(destination),
   });
 
-  const screenshotPath = `${tmpDir}/screenshot.png`;
+  const screenshotPath = path.join(path.dirname(localPath), 'screenshot.png');
   await createScreenshot(file.publicUrl(), screenshotPath);
   const thumbnail = hsBucket.file(getThumbnailBucketPath(assetName));
   logger.info(`Uploading thumbnail to: ${thumbnail.publicUrl()}`);

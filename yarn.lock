@@ -495,29 +495,29 @@
   dependencies:
     tslib "^2.1.0"
 
-"@gltf-transform/core@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-1.0.0.tgz#7831ddb4d6c3cf747b77c59941a412b8864716a8"
-  integrity sha512-TApTAM1U3wokML0JaMn6Lo4WcFRfHkMXfs5cuJc7Y2mDwfIZbxuvNtD4BjGWQN1uyOPbwJDYbjD6Ni9DrmU37Q==
+"@gltf-transform/core@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-1.2.1.tgz#0e00141d16fee1587a4a4da93645b7305f42b7d4"
+  integrity sha512-KbAzBbcW31RcaAtMKTQkTczkloNsj/x7KOT7sDpTsJpoEcp/3irdlDy9drwLF3gtCXPQPKox54cksNJDSacsUQ==
   dependencies:
-    gl-matrix "~3.3.0"
+    gl-matrix "~3.4.3"
 
-"@gltf-transform/extensions@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@gltf-transform/extensions/-/extensions-1.0.0.tgz#ed2862197d736221a159b3e532fbdc3f0d04bade"
-  integrity sha512-iae75MZ9pdj05PlghQZnnXrvZZsV8BI+pwyOfk0mDZt+FbIGk4ll4XSKaRZiWZBe9f3KlWRr8avOg4XP1cbo9A==
+"@gltf-transform/extensions@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@gltf-transform/extensions/-/extensions-1.2.1.tgz#0b6f3300c04dbd28a5025a501815289a287fa54a"
+  integrity sha512-p2MEnH/Sy+EnXWTUPcNaehULlwSxHpzwIb+pT7HkgBmwViICAdO37yFmiRmh4kh1YvM+hwfdWcivypGIRXo5dw==
   dependencies:
-    "@gltf-transform/core" "^1.0.0"
+    "@gltf-transform/core" "^1.2.1"
     ktx-parse "^0.2.1"
 
-"@gltf-transform/functions@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@gltf-transform/functions/-/functions-1.0.0.tgz#484056b05412bba42a05f0a301c5442fcf3b5e91"
-  integrity sha512-iGHl2krsCI+P1TzG4UuPlmSp7z5lQMJAw3PSJGmmBVdj0E1CoOnMj9uYk3Y3L0oopNEOj725AwQhG4PlCeKLTw==
+"@gltf-transform/functions@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@gltf-transform/functions/-/functions-1.2.1.tgz#0072afc0ccbd86a36d75d9451b25ab8eff0ffc77"
+  integrity sha512-jRtoh2voMqkjwvSct0NznrAt9BhpJ/ahD9Z8GR/at/6yUwlkqnap/jV4E7t1UAHSkLy5Rx3AbDJR9frCd/tfsg==
   dependencies:
-    "@gltf-transform/core" "^1.0.0"
-    "@gltf-transform/extensions" "^1.0.0"
-    gl-matrix "~3.3.0"
+    "@gltf-transform/core" "^1.2.1"
+    "@gltf-transform/extensions" "^1.2.1"
+    gl-matrix "~3.4.3"
     ndarray "^1.0.19"
     ndarray-lanczos "^0.1.2"
     ndarray-pixels "^1.0.0"
@@ -2221,15 +2221,10 @@ gif-encoder@~0.4.1:
   dependencies:
     readable-stream "~1.1.9"
 
-gl-matrix@^3.4.3:
+gl-matrix@^3.4.3, gl-matrix@~3.4.3:
   version "3.4.3"
   resolved "https://registry.yarnpkg.com/gl-matrix/-/gl-matrix-3.4.3.tgz#fc1191e8320009fd4d20e9339595c6041ddc22c9"
   integrity sha512-wcCp8vu8FT22BnvKVPjXa/ICBWRq/zjFfdofZy1WSpQZpphblv12/bOQLBC1rMM7SGOFS9ltVmKOHil5+Ml7gA==
-
-gl-matrix@~3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/gl-matrix/-/gl-matrix-3.3.0.tgz#232eef60b1c8b30a28cbbe75b2caf6c48fd6358b"
-  integrity sha512-COb7LDz+SXaHtl/h4LeaFcNdJdAQSDeVqjiIihSXNrkWObZLhDI4hIkZC11Aeqp7bcE72clzB0BnDXr2SmslRA==
 
 glob-parent@^5.1.2:
   version "5.1.2"
@@ -2976,6 +2971,11 @@ merge-descriptors@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/merge-descriptors/-/merge-descriptors-1.0.1.tgz#b00aaa556dd8b44568150ec9d1b953f3f90cbb61"
   integrity sha1-sAqqVW3YtEVoFQ7J0blT8/kMu2E=
+
+meshoptimizer@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/meshoptimizer/-/meshoptimizer-0.17.0.tgz#fe3169ea86a05ea373a35797648af884e6470c5a"
+  integrity sha512-OFPiDc8DvoiD8jqMtwqqo+0+21I6eQb/5+xCAT1+Li+w0ezLa5Vp21FIIUYnQCPwEiGw/ir0pMlapZChSSLe6w==
 
 methods@~1.1.2:
   version "1.1.2"

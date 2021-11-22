@@ -1,6 +1,10 @@
+import fs from 'fs';
+import path from 'path';
 import { hsBucket } from '../GCP';
+import { getLocalPath } from '../gltf/AssetLibrary';
 import { generateHash } from '../gltf/utils';
 import { TokenMetadata } from '../shared/TokenMetadata';
+import { BATCH } from '../utils/globals';
 import { logger } from '../utils/logger';
 
 export async function uploadTokenMetadata(
@@ -11,7 +15,13 @@ export async function uploadTokenMetadata(
   const content = Buffer.from(JSON.stringify(metadata));
   const metaHash = generateHash(content);
 
-  const blob = hsBucket.file(`production/${version}.json`);
+  const localPath = getLocalPath(version);
+  await fs.promises.writeFile(
+    path.join(path.dirname(localPath), 'metadata.json'),
+    content,
+  );
+
+  const blob = hsBucket.file(`${BATCH}/${version}.json`);
   const blobStream = blob.createWriteStream();
 
   const promise = new Promise((resolve, reject) => {

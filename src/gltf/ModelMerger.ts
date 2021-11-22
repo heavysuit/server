@@ -1,7 +1,8 @@
 import { Document, NodeIO } from '@gltf-transform/core';
-import { dedup, prune } from '@gltf-transform/functions';
+import { dedup, prune, reorder } from '@gltf-transform/functions';
 import { strict as assert } from 'assert';
 import fs from 'fs';
+import { MeshoptEncoder } from 'meshoptimizer';
 import path from 'path';
 import { BodyNode } from '../shared/BodyNode';
 import { JointNode } from '../shared/JointNode';
@@ -62,16 +63,13 @@ export class ModelMerger {
     } else {
       doc = this._io.read(getLocalPath(assetId));
 
-      const rig = getNode(doc, 'Rig');
-      assert(rig, `${assetId} is missing Rig node`);
-
       for (const node of nodes) {
         const n = getNode(doc, node);
         assert(n, `${assetId} is missing ${node}`);
       }
 
       // Remove Mesh nodes that are not marked as required from this model
-      pruneNodes(assetId, rig, nodes);
+      pruneNodes(doc, assetId, nodes);
 
       this._docs[assetId] = doc;
       return doc;
@@ -84,52 +82,66 @@ export class ModelMerger {
     const headDoc = this.parts[BodyNode.Head];
     const legDoc = this.parts[BodyNode.Legs];
     const torsoDoc = this.parts[BodyNode.Torso];
+    const docs: Document[] = Object.values(this._docs).filter(Boolean) as any[];
     assert(legDoc && torsoDoc && armLeftDoc && armRightDoc);
 
     let from = getNode(legDoc, JointNode.Hip);
-    let to = getNode(torsoDoc, JointNode.Hip);
-    assert(from && to);
-    copyTransform(from, to);
+    docs.forEach((doc) => {
+      const to = getNode(doc, JointNode.Hip);
+      assert(from && to);
+      copyTransform(from, to);
+    });
 
     from = getNode(legDoc, JointNode.Spine);
-    to = getNode(torsoDoc, JointNode.Spine);
-    assert(from && to);
-    copyTransform(from, to);
+    docs.forEach((doc) => {
+      const to = getNode(doc, JointNode.Spine);
+      assert(from && to);
+      copyTransform(from, to);
+    });
 
     from = getNode(torsoDoc, JointNode.Neck);
-    to = getNode(armLeftDoc, JointNode.Neck);
-    assert(from && to);
-    copyTransform(from, to);
-    to = getNode(armRightDoc, JointNode.Neck);
-    assert(from && to);
-    copyTransform(from, to);
+    docs.forEach((doc) => {
+      const to = getNode(doc, JointNode.Neck);
+      assert(from && to);
+      copyTransform(from, to);
+    });
 
     if (headDoc) {
       from = getNode(torsoDoc, JointNode.Neck);
-      to = getNode(headDoc, JointNode.Neck);
-      assert(from && to);
-      copyTransform(from, to);
+      docs.forEach((doc) => {
+        const to = getNode(doc, JointNode.Neck);
+        assert(from && to);
+        copyTransform(from, to);
+      });
     }
 
     from = getNode(torsoDoc, JointNode.ShoulderL);
-    to = getNode(armLeftDoc, JointNode.ShoulderL);
-    assert(from && to);
-    copyTransform(from, to);
+    docs.forEach((doc) => {
+      const to = getNode(doc, JointNode.ShoulderL);
+      assert(from && to);
+      copyTransform(from, to);
+    });
 
     from = getNode(torsoDoc, JointNode.ShoulderR);
-    to = getNode(armRightDoc, JointNode.ShoulderR);
-    assert(from && to);
-    copyTransform(from, to);
+    docs.forEach((doc) => {
+      const to = getNode(doc, JointNode.ShoulderR);
+      assert(from && to);
+      copyTransform(from, to);
+    });
 
     from = getNode(torsoDoc, JointNode.UpperArmL);
-    to = getNode(armLeftDoc, JointNode.UpperArmL);
-    assert(from && to);
-    copyTransform(from, to);
+    docs.forEach((doc) => {
+      const to = getNode(doc, JointNode.UpperArmL);
+      assert(from && to);
+      copyTransform(from, to);
+    });
 
     from = getNode(torsoDoc, JointNode.UpperArmR);
-    to = getNode(armRightDoc, JointNode.UpperArmR);
-    assert(from && to);
-    copyTransform(from, to);
+    docs.forEach((doc) => {
+      const to = getNode(doc, JointNode.UpperArmR);
+      assert(from && to);
+      copyTransform(from, to);
+    });
   }
 
   merge(): Document {
@@ -176,7 +188,7 @@ export class ModelMerger {
   async mergeAndWrite(): Promise<string> {
     const doc = this.merge();
 
-    await doc.transform(dedup(), prune());
+    await doc.transform(dedup(), prune(), reorder({ encoder: MeshoptEncoder }));
 
     const outputPath = getLocalPath(this.assetName);
     await fs.promises.mkdir(path.join(path.dirname(outputPath), PAINT_DIR), {

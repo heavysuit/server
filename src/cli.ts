@@ -23,7 +23,8 @@ async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
   const tokenId = _tokenId || (await generateTokenId(suitName));
   console.log(suitName, tokenId);
   const suit = generateRandomSuit(suitName, SuitLibrary);
-  const merger = new ModelMerger(tokenId, suit.toManifests());
+  const manifest = suit.toManifests();
+  const merger = new ModelMerger(tokenId, manifest);
   merger.repositionJoints();
   await merger.mergeAndWrite();
   const { thumbnailUrl, url, gltfHash } = await uploadModel(tokenId);
@@ -34,7 +35,6 @@ async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
     thumbnailUrl,
     url,
   });
-
   const metaHash = await uploadTokenMetadata(metadata, tokenId);
   await saveHashes(tokenId, metaHash, gltfHash);
 }
@@ -42,12 +42,16 @@ async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
 async function runMergeModels(assetName: string): Promise<void> {
   const manifests: ModelManifest[] = [
     {
-      assetId: 'M8',
+      assetId: 'M1',
       nodes: [BodyNode.ArmR, BodyNode.ArmL],
     },
     {
-      assetId: 'M10',
-      nodes: [BodyNode.Legs, BodyNode.Torso],
+      assetId: 'M2',
+      nodes: [BodyNode.Head, BodyNode.Torso],
+    },
+    {
+      assetId: 'M5',
+      nodes: [BodyNode.Legs],
     },
   ];
 
