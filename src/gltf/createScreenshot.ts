@@ -137,7 +137,9 @@ export async function createScreenshot(
                 if (maxTimeInSec > 0) {
                   clearTimeout(timeout);
                 }
-                resolve();
+                setTimeout(() => {
+                  resolve();
+                }, 500);
               });
             });
           });

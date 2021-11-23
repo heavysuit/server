@@ -1,3 +1,3 @@
-export const PAINT_COLOR = 'Urban Digital';
-export const PAINT_DIR = 'jc5';
+export const PAINT_COLOR = 'Urban Tactical Camo';
+export const PAINT_DIR = 'jc6';
 export const BATCH = 'delta';
