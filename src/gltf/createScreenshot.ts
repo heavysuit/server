@@ -37,8 +37,8 @@ const htmlTemplate = (modelURL: string) => {
       <body>
         <model-viewer
           background-color=""
-          camera-orbit="-30deg 75deg 27m"
-          camera-target="auto auto auto"
+          camera-orbit="-30deg 75deg 30m"
+          camera-target="0 auto 0"
           field-of-view="1deg"
           max-camera-orbit="Infinity 157.5deg 200m"	
           environment-image="neutral"

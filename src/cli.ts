@@ -1,4 +1,6 @@
 import { strict as assert } from 'assert';
+import fs from 'fs';
+import path from 'path';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 import { ModelManifest } from './gltf/ModelManifest';
@@ -17,24 +19,6 @@ import {
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
-
-const UPLOADS = [
-  328,
-  1601,
-  1875,
-  2209,
-  2595,
-  2922,
-  4162,
-  4369,
-  4663,
-  4829,
-  5403,
-  5682,
-  6101,
-  6700,
-  7767,
-];
 
 async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
   const suitName = _suitName || (await generateRandomName());
@@ -141,8 +125,14 @@ export async function run(): Promise<void> {
       if (args.assetName) {
         await uploadModel(args.assetName);
       } else {
-        for (const assetName of UPLOADS) {
-          await uploadModel(`${assetName}`);
+
+        const files = await fs.promises.readdir(path.join(__dirname, '../assets'));
+        files.sort();
+        console.log(files);
+        for (const assetName of files) {
+          if (!assetName.startsWith('M')) {
+            await uploadModel(assetName);
+          }
         }
       }
 
