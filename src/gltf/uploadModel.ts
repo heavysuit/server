@@ -12,7 +12,7 @@ import {
   getTextureBucketPath,
   getThumbnailBucketPath,
   shouldUploadToBucket,
-  uploadResourceFile
+  uploadResourceFile,
 } from './utils';
 
 export async function uploadModel(assetName: AssetName): Promise<{
@@ -29,21 +29,24 @@ export async function uploadModel(assetName: AssetName): Promise<{
 
   if (true) {
     // manual toggle if textures fully uploaded
-    const promises = doc.getRoot().listTextures().map(async (t) => {
-      const uri = t.getURI();
-      if (!shouldUploadToBucket(uri)) {
-        logger.info(`Ignoring: ${uri}`);
-        return;
-      }
+    const promises = doc
+      .getRoot()
+      .listTextures()
+      .map(async (t) => {
+        const uri = t.getURI();
+        if (!shouldUploadToBucket(uri)) {
+          logger.info(`Ignoring: ${uri}`);
+          return;
+        }
 
-      const imagePath = path.join(path.dirname(localPath), uri);
-      const bucketPath = getTextureBucketPath(uri);
+        const imagePath = path.join(path.dirname(localPath), uri);
+        const bucketPath = getTextureBucketPath(uri);
 
-      const file = await uploadResourceFile(imagePath, bucketPath);
-      logger.info(`${file.publicUrl()}\n`);
+        const file = await uploadResourceFile(imagePath, bucketPath);
+        logger.info(`${file.publicUrl()}\n`);
 
-      t.setURI(file.publicUrl());
-    });
+        t.setURI(file.publicUrl());
+      });
     await Promise.all(promises);
   }
 

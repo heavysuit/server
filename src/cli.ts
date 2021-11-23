@@ -8,50 +8,20 @@ import {
   countCache,
   generateRandomName,
   generateTokenId,
-  saveHashes
+  saveHashes,
 } from './gltf/utils';
 import {
   createTokenAttributes,
-  createTokenMetadata
+  createTokenMetadata,
 } from './nft/createTokenMetadata';
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 
 const UPLOADS = [
-  2622,
-  2680,
-  2727,
-  2955,
-  2971,
-  2990,
-  3457,
-  3471,
-  3889,
-  4072,
-  4120,
-  4201,
-  4299,
-  4342,
-  4318,
-  4395,
-  4602,
-  4481,
-  4746,
-  4810,
-  4828,
-  4887,
-  5089,
-  5104,
-  5273,
-  5328,
-  5372,
-  5441,
-  5693,
-  6647,
-  6528,
-  6877,
-]
+  2387, 2487, 2715, 2897, 3433, 3551, 3800, 3966, 4575, 5107, 5206, 5668, 5990,
+  5989, 6109, 6581, 6696, 6910, 7142, 7235,
+];
 
 async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
   const suitName = _suitName || (await generateRandomName());
@@ -162,7 +132,7 @@ export async function run(): Promise<void> {
           await uploadModel(`${assetName}`);
         }
       }
-      
+
       break;
     }
     case 'merge': {
