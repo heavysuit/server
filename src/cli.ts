@@ -8,19 +8,32 @@ import {
   countCache,
   generateRandomName,
   generateTokenId,
-  saveHashes,
+  saveHashes
 } from './gltf/utils';
 import {
   createTokenAttributes,
-  createTokenMetadata,
+  createTokenMetadata
 } from './nft/createTokenMetadata';
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 
 const UPLOADS = [
-  2387, 2487, 2715, 2897, 3433, 3551, 3800, 3966, 4575, 5107, 5206, 5668, 5990,
-  5989, 6109, 6581, 6696, 6910, 7142, 7235,
+  328,
+  1601,
+  1875,
+  2209,
+  2595,
+  2922,
+  4162,
+  4369,
+  4663,
+  4829,
+  5403,
+  5682,
+  6101,
+  6700,
+  7767,
 ];
 
 async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
