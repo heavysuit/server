@@ -1,3 +1,3 @@
-export const PAINT_COLOR = 'Fire and Ice';
-export const PAINT_DIR = 'gdr5';
+export const PAINT_COLOR = 'Ayanami Blue';
+export const PAINT_DIR = 'unit00';
 export const BATCH = 'delta';
