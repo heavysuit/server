@@ -46,7 +46,7 @@ const htmlTemplate = (modelURL: string) => {
           id="gltf-viewer"
           interaction-prompt="none"
           seamless-poster
-          shadow-intensity="0.5"
+          shadow-intensity="0.8"
           shadow-softness="0.5"
           src="${modelURL}"
           style="background-color: #3F3F3F;"
