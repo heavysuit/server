@@ -13,6 +13,7 @@ import {
   getThumbnailBucketPath,
   shouldUploadToBucket,
   uploadResourceFile,
+  uploadScreenshot
 } from './utils';
 
 export async function uploadModel(assetName: AssetName): Promise<{
@@ -81,15 +82,11 @@ export async function uploadModel(assetName: AssetName): Promise<{
 
   const screenshotPath = path.join(path.dirname(localPath), 'screenshot.png');
   await createScreenshot(file.publicUrl(), screenshotPath);
-  const thumbnail = hsBucket.file(getThumbnailBucketPath(assetName));
-  logger.info(`Uploading thumbnail to: ${thumbnail.publicUrl()}`);
-  const [thumbnailFile] = await hsBucket.upload(screenshotPath, {
-    destination: thumbnail,
-  });
+  const thumbnail = await uploadScreenshot(screenshotPath, getThumbnailBucketPath(assetName))
 
   return {
     url: file.publicUrl(),
-    thumbnailUrl: thumbnailFile.publicUrl(),
+    thumbnailUrl: thumbnail.publicUrl(),
     gltfHash: generateHash(Buffer.from(gltfContent)),
   };
 }
