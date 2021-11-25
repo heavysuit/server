@@ -1,5 +1,6 @@
 import { performance } from 'perf_hooks';
 import puppeteer from 'puppeteer';
+import { logger } from '../utils/logger';
 
 const WIDTH = 350;
 const HEIGHT = 350;
@@ -37,12 +38,12 @@ const htmlTemplate = (modelURL: string) => {
       <body>
         <model-viewer
           background-color=""
-          camera-orbit="-30deg 75deg 30m"
+          camera-orbit="-30deg 75deg 32m"
           camera-target="0 auto 0"
           field-of-view="1deg"
           max-camera-orbit="Infinity 157.5deg 200m"	
-          environment-image="neutral"
-          exposure="0.9"
+          environment-image="https://storage.googleapis.com/hs-metadata/hdr/studio_small_08_1k.hdr"
+          exposure="1.0"
           id="gltf-viewer"
           interaction-prompt="none"
           seamless-poster
@@ -61,6 +62,7 @@ export async function createScreenshot(
   modelURL: string,
   outputPath: string,
 ): Promise<void> {
+  logger.info(`Capturing ${outputPath}`);
   const browserT0 = performance.now();
 
   const browser = await puppeteer.launch({
@@ -91,7 +93,7 @@ export async function createScreenshot(
 
   const browserT1 = performance.now();
 
-  console.log(`🚀 Launched browser (${timeDelta(browserT0, browserT1)}s)`);
+  logger.debug(`🚀 Launched browser (${timeDelta(browserT0, browserT1)}s)`);
 
   const contentT0 = performance.now();
 
@@ -101,7 +103,7 @@ export async function createScreenshot(
 
   const contentT1 = performance.now();
 
-  console.log(
+  logger.debug(
     `🗺  Loading template to DOMContentLoaded (${timeDelta(
       contentT0,
       contentT1,
@@ -157,12 +159,12 @@ export async function createScreenshot(
   }, 30);
 
   const renderT1 = performance.now();
-  console.log(
+  logger.debug(
     `🖌  Rendering screenshot of model (${timeDelta(renderT0, renderT1)}s)`,
   );
 
   if (evaluateError) {
-    console.log(evaluateError);
+    logger.error(evaluateError);
     await browser.close();
     throw new Error(evaluateError);
   }
@@ -177,7 +179,7 @@ export async function createScreenshot(
 
   const screenshotT1 = performance.now();
 
-  console.log(
+  logger.debug(
     `🖼  Captured screenshot (${timeDelta(screenshotT0, screenshotT1)}s)`,
   );
 

@@ -3,6 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
+import { hsBucket } from './GCP';
+import { createScreenshot } from './gltf/createScreenshot';
 import { ModelManifest } from './gltf/ModelManifest';
 import { ModelMerger } from './gltf/ModelMerger';
 import { uploadModel } from './gltf/uploadModel';
@@ -10,6 +12,9 @@ import {
   countCache,
   generateRandomName,
   generateTokenId,
+  getGLTFBucketPath,
+  getThumbnailBucketPath,
+  listCache,
   saveHashes
 } from './gltf/utils';
 import {
@@ -19,6 +24,7 @@ import {
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
+import { logger } from './utils/logger';
 
 async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
   const suitName = _suitName || (await generateRandomName());
@@ -60,6 +66,22 @@ async function runMergeModels(assetName: string): Promise<void> {
   const merger = new ModelMerger(assetName, manifests);
   merger.repositionJoints();
   await merger.mergeAndWrite();
+}
+
+async function createBatchScreenshots(tokenIds: (number | string)[]) {
+  const dir = path.join(__dirname, '../assets/screenshots');
+  for (const tokenId of tokenIds) {
+    const assetName = tokenId.toString();
+    const localPath = path.join(dir, `${tokenId}.png`);
+    const assetPath = getGLTFBucketPath(assetName);
+    const assetUri = `https://storage.googleapis.com/hs-metadata/${assetPath}`;
+    await createScreenshot(assetUri, localPath);
+    const thumbnail = hsBucket.file(getThumbnailBucketPath(assetName));
+    const [thumbnailFile] = await hsBucket.upload(localPath, {
+      destination: thumbnail,
+    });
+    logger.info(`URL: ${thumbnailFile.publicUrl()}`);
+  }
 }
 
 export async function run(): Promise<void> {
@@ -115,6 +137,11 @@ export async function run(): Promise<void> {
       for (let i = 0; i < args.count; i++) {
         await runMint();
       }
+      break;
+    }
+    case 'thumbs': {
+      const ids = await listCache();
+      await createBatchScreenshots(ids);
       break;
     }
     case 'mint': {

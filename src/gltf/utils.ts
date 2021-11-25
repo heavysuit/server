@@ -202,8 +202,12 @@ export async function saveHashes(
 }
 
 export async function countCache(): Promise<number> {
+  return (await listCache()).length;
+}
+
+export async function listCache(): Promise<string[]> {
   const ids = await loadCache();
-  return Object.keys(ids).length;
+  return Object.keys(ids);
 }
 
 export async function generateTokenId(name: string): Promise<string> {
