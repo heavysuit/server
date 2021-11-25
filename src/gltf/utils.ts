@@ -212,7 +212,7 @@ export async function listCache(): Promise<string[]> {
   return Object.keys(ids);
 }
 
-export async function generateTokenId(name: string): Promise<string> {
+export async function generateTokenId(): Promise<string> {
   const ids = await loadCache();
 
   let id = 0;
@@ -220,10 +220,13 @@ export async function generateTokenId(name: string): Promise<string> {
     id = _.random(0, 7777, false);
   }
 
-  ids[id] = { name };
-  await saveCache(ids);
-
   return id.toString();
+}
+
+export async function cacheTokenId(tokenId: string, name: string): Promise<void> {
+  const ids = await loadCache();
+  ids[tokenId] = { name };
+  await saveCache(ids);
 }
 
 export function generateHash(content: ArrayBufferLike): string {

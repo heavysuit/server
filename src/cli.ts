@@ -7,20 +7,22 @@ import { ModelManifest } from './gltf/ModelManifest';
 import { ModelMerger } from './gltf/ModelMerger';
 import { uploadModel } from './gltf/uploadModel';
 import {
+  cacheTokenId,
   countCache,
   createBatchScreenshots,
   generateRandomName,
   generateTokenId,
   listCache,
   saveHashes,
-  uploadBatchScreenshots,
+  uploadBatchScreenshots
 } from './gltf/utils';
 import {
   createTokenAttributes,
-  createTokenMetadata,
+  createTokenMetadata
 } from './nft/createTokenMetadata';
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
+import { SpadeC2 } from './suits/M6-Spade';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 import { logger } from './utils/logger';
 
@@ -28,17 +30,20 @@ logger.level = 'debug';
 
 async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
   const suitName = _suitName || (await generateRandomName());
-  const tokenId = _tokenId || (await generateTokenId(suitName));
+  const tokenId = _tokenId || (await generateTokenId());
   console.log(suitName, tokenId);
-  const suit = generateRandomSuit(suitName, SuitLibrary);
+
+  const suit = generateRandomSuit(suitName, [SpadeC2]);
   const manifest = suit.toManifests();
   const merger = new ModelMerger(tokenId, manifest);
   merger.repositionJoints();
   await merger.mergeAndWrite();
   const { thumbnailUrl, url, gltfHash } = await uploadModel(tokenId);
+  await cacheTokenId(tokenId, suitName);
 
   const metadata = createTokenMetadata({
     externalUrl: `http://heavysuit.com/version/${tokenId}`,
+    description: `The Spade C2 was manufactured in limited quantities at the Offspring Company's secret research facility around the turn of the 23rd century. Significantly larger than the typical Heavy Suit, the Spade has a massive right arm known as the "Powerfist" that can deal a powerful blow.`,
     suit,
     thumbnailUrl,
     url,
@@ -139,7 +144,7 @@ export async function run(): Promise<void> {
       break;
     }
     case 'mint': {
-      runMint(args.tokenId, args.suitName);
+      await runMint(args.tokenId, args.suitName);
       break;
     }
     case 'upload': {

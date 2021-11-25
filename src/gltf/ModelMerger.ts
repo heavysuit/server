@@ -2,11 +2,11 @@ import { Document, NodeIO } from '@gltf-transform/core';
 import { dedup, prune, reorder } from '@gltf-transform/functions';
 import { strict as assert } from 'assert';
 import fs from 'fs';
+import _ from 'lodash';
 import { MeshoptEncoder } from 'meshoptimizer';
 import path from 'path';
 import { BodyNode } from '../shared/BodyNode';
 import { JointNode } from '../shared/JointNode';
-import { PAINT_DIR } from '../utils/globals';
 import { AssetLibraryID, AssetName, getLocalPath } from './AssetLibrary';
 import { ModelManifest } from './ModelManifest';
 import { copyTransform, getNode, pruneNodes, renameChildren } from './utils';
@@ -190,10 +190,19 @@ export class ModelMerger {
 
     await doc.transform(dedup(), prune(), reorder({ encoder: MeshoptEncoder }));
 
+    const folders = _.uniq(doc.getRoot().listTextures().map((t) => {
+      const folders = path.dirname(t.getURI()).split('/');
+      return folders[folders.length - 1];
+    }));
+
     const outputPath = getLocalPath(this.assetName);
-    await fs.promises.mkdir(path.join(path.dirname(outputPath), PAINT_DIR), {
-      recursive: true,
-    });
+
+    for (const folder of folders) {
+      await fs.promises.mkdir(path.join(path.dirname(outputPath), folder), {
+        recursive: true,
+      });
+    }
+
     this._io.write(outputPath, doc);
 
     return outputPath;
