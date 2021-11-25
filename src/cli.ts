@@ -3,28 +3,28 @@ import fs from 'fs';
 import path from 'path';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
-import { hsBucket } from './GCP';
-import { createScreenshot } from './gltf/createScreenshot';
 import { ModelManifest } from './gltf/ModelManifest';
 import { ModelMerger } from './gltf/ModelMerger';
 import { uploadModel } from './gltf/uploadModel';
 import {
   countCache,
+  createBatchScreenshots,
   generateRandomName,
   generateTokenId,
-  getGLTFBucketPath,
-  getThumbnailBucketPath,
   listCache,
-  saveHashes
+  saveHashes,
+  uploadBatchScreenshots,
 } from './gltf/utils';
 import {
   createTokenAttributes,
-  createTokenMetadata
+  createTokenMetadata,
 } from './nft/createTokenMetadata';
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 import { logger } from './utils/logger';
+
+logger.level = 'debug';
 
 async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
   const suitName = _suitName || (await generateRandomName());
@@ -68,22 +68,6 @@ async function runMergeModels(assetName: string): Promise<void> {
   await merger.mergeAndWrite();
 }
 
-async function createBatchScreenshots(tokenIds: (number | string)[]) {
-  const dir = path.join(__dirname, '../assets/screenshots');
-  for (const tokenId of tokenIds) {
-    const assetName = tokenId.toString();
-    const localPath = path.join(dir, `${tokenId}.png`);
-    const assetPath = getGLTFBucketPath(assetName);
-    const assetUri = `https://storage.googleapis.com/hs-metadata/${assetPath}`;
-    await createScreenshot(assetUri, localPath);
-    const thumbnail = hsBucket.file(getThumbnailBucketPath(assetName));
-    const [thumbnailFile] = await hsBucket.upload(localPath, {
-      destination: thumbnail,
-    });
-    logger.info(`URL: ${thumbnailFile.publicUrl()}`);
-  }
-}
-
 export async function run(): Promise<void> {
   const args = await yargs(hideBin(process.argv))
     .command(
@@ -96,6 +80,11 @@ export async function run(): Promise<void> {
       },
     )
     .command('merge [assetName]', 'merge multiple mecha assets', (yargs) => {
+      return yargs.positional('assetName', {
+        type: 'string',
+      });
+    })
+    .command('thumbs [assetName]', 'merge multiple mecha assets', (yargs) => {
       return yargs.positional('assetName', {
         type: 'string',
       });
@@ -140,8 +129,13 @@ export async function run(): Promise<void> {
       break;
     }
     case 'thumbs': {
+      if (args.assetName === 'upload') {
+        await uploadBatchScreenshots();
+        break;
+      }
+
       const ids = await listCache();
-      await createBatchScreenshots(ids);
+      await createBatchScreenshots(args.assetName ? [args.assetName] : ids);
       break;
     }
     case 'mint': {
@@ -152,8 +146,9 @@ export async function run(): Promise<void> {
       if (args.assetName) {
         await uploadModel(args.assetName);
       } else {
-
-        const files = await fs.promises.readdir(path.join(__dirname, '../assets'));
+        const files = await fs.promises.readdir(
+          path.join(__dirname, '../assets'),
+        );
         files.sort();
         console.log(files);
         for (const assetName of files) {

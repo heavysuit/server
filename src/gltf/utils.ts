@@ -9,8 +9,10 @@ import path from 'path';
 import { Object3D } from 'three';
 import { hsBucket } from '../GCP';
 import { BodyNode } from '../shared/BodyNode';
+import { batchPromises } from '../utils/batchPromises';
 import { BATCH } from '../utils/globals';
 import { logger } from '../utils/logger';
+import { createScreenshot } from './createScreenshot';
 
 export function renameChildren(doc: Document, prefix: string): void {
   for (const n of doc.getRoot().listNodes()) {
@@ -226,4 +228,46 @@ export async function generateTokenId(name: string): Promise<string> {
 
 export function generateHash(content: ArrayBufferLike): string {
   return crypto.createHash('md5').update(Buffer.from(content)).digest('base64');
+}
+
+export async function uploadScreenshot(localPath: string, bucketPath: string) {
+  const destination = hsBucket.file(bucketPath);
+  const [thumbnail] = await hsBucket.upload(localPath, {
+    destination,
+  });
+  logger.info(`Uploaded to: ${thumbnail.publicUrl()}`);
+  return thumbnail;
+}
+
+export async function uploadBatchScreenshots() {
+  const dir = path.join(__dirname, '../../assets/screenshots');
+  const files = await fs.promises.readdir(dir);
+  const uploads = files.map((f) => {
+    const assetName = f.split('.')[0];
+    const localPath = path.join(dir, f);
+    return uploadScreenshot(localPath, getThumbnailBucketPath(assetName));
+  });
+  const results = await batchPromises(uploads, 5);
+  logger.info(`${results.length} uploaded`);
+}
+
+export async function createBatchScreenshots(tokenIds: (number | string)[]) {
+  const dir = path.join(__dirname, '../../assets/screenshots');
+  const failed: string[] = [];
+  for (const tokenId of tokenIds) {
+    const assetName = tokenId.toString();
+    if (parseInt(assetName) < 3563) {
+      continue;
+    }
+    const localPath = path.join(dir, `${tokenId}.png`);
+    const assetPath = getGLTFBucketPath(assetName);
+    const assetUri = `https://storage.googleapis.com/hs-metadata/${assetPath}`;
+    try {
+      await createScreenshot(assetUri, localPath);
+    } catch (error) {
+      logger.error(error);
+      failed.push(assetName);
+    }
+  }
+  logger.warn(failed.join(', '));
 }

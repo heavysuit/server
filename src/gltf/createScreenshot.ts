@@ -42,7 +42,7 @@ const htmlTemplate = (modelURL: string) => {
           camera-target="0 auto 0"
           field-of-view="1deg"
           max-camera-orbit="Infinity 157.5deg 200m"	
-          environment-image="https://storage.googleapis.com/hs-metadata/hdr/studio_small_08_1k.hdr"
+          environment-image="neutral"
           exposure="1.0"
           id="gltf-viewer"
           interaction-prompt="none"
@@ -58,6 +58,8 @@ const htmlTemplate = (modelURL: string) => {
   `;
 };
 
+let sharedBrowser: puppeteer.Browser | null;
+
 export async function createScreenshot(
   modelURL: string,
   outputPath: string,
@@ -65,15 +67,18 @@ export async function createScreenshot(
   logger.info(`Capturing ${outputPath}`);
   const browserT0 = performance.now();
 
-  const browser = await puppeteer.launch({
-    args: ['--no-sandbox'],
-    defaultViewport: {
-      width: WIDTH,
-      height: HEIGHT,
-      deviceScaleFactor: DEVICE_PIXEL_RATIO,
-    },
-    headless: true,
-  });
+  const browser =
+    sharedBrowser ||
+    (await puppeteer.launch({
+      args: ['--no-sandbox'],
+      defaultViewport: {
+        width: WIDTH,
+        height: HEIGHT,
+        deviceScaleFactor: DEVICE_PIXEL_RATIO,
+      },
+      headless: true,
+    }));
+  sharedBrowser = browser;
 
   const page = await browser.newPage();
 
@@ -165,7 +170,8 @@ export async function createScreenshot(
 
   if (evaluateError) {
     logger.error(evaluateError);
-    await browser.close();
+    // await browser.close();
+    await page.close();
     throw new Error(evaluateError);
   }
 
@@ -183,5 +189,7 @@ export async function createScreenshot(
     `🖼  Captured screenshot (${timeDelta(screenshotT0, screenshotT1)}s)`,
   );
 
-  await browser.close();
+  await page.close();
+
+  // await browser.close();
 }
