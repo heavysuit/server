@@ -1,14 +1,16 @@
 import { strict as assert } from 'assert';
 import fs from 'fs';
 import path from 'path';
+import { performance } from 'perf_hooks';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
+import { timeDelta } from './gltf/createScreenshot';
 import { ModelManifest } from './gltf/ModelManifest';
 import { ModelMerger } from './gltf/ModelMerger';
+import { PaintName, TextureName } from './gltf/PaintName';
 import { uploadModel } from './gltf/uploadModel';
 import {
   cacheTokenId,
-  countCache,
   countParts,
   createBatchScreenshots,
   downloadData,
@@ -31,15 +33,23 @@ import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 import { TEXTURES } from './utils/globals';
 import { logger } from './utils/logger';
 
-logger.level = 'debug';
+logger.level = 'info';
 
-async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
+async function runMint(
+  _tokenId?: string,
+  _suitName?: string,
+  textures: TextureName[] = TEXTURES,
+): Promise<void> {
   const suitName = _suitName || (await generateRandomName());
   const tokenId = _tokenId || (await generateTokenId());
-  console.log(suitName, tokenId);
+  logger.info('🤖 Mint', { suitName, tokenId });
 
-  await randomizeTextures(TEXTURES);
+  await randomizeTextures(textures);
+  const paintName =
+    textures.length > 1 ? 'Rainbow Mix' : PaintName[textures[0]];
 
+  const genT0 = performance.now();
+  let t = 1;
   let suit = generateRandomSuit(suitName, SuitLibrary);
   while (true) {
     const metadata = createTokenMetadata({
@@ -49,9 +59,16 @@ async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
       url: '',
     });
     if (!seenMetadata(metadata)) {
+      const genT1 = performance.now();
+      suit.paint = paintName;
+      logger.info(`Generation took ${timeDelta(genT0, genT1)}`);
+      if (t > 1) {
+        logger.warn(`Took ${t} tries`);
+      }
       break;
     }
     suit = generateRandomSuit(suitName, SuitLibrary);
+    t++;
   }
 
   const manifest = suit.toManifests();
@@ -69,6 +86,7 @@ async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
   });
   const metaHash = await uploadTokenMetadata(metadata, tokenId);
   await saveHashes(tokenId, metaHash, gltfHash);
+  console.log('');
 }
 
 async function runMergeModels(assetName: string): Promise<void> {
@@ -134,8 +152,7 @@ export async function run(): Promise<void> {
 
   switch (command) {
     case 'count': {
-      const count = await countCache();
-      console.log(count);
+      await countParts();
       break;
     }
     case 'name': {
@@ -148,9 +165,12 @@ export async function run(): Promise<void> {
     case 'mass': {
       assert(args.count);
       await countParts();
+      const start = performance.now();
       for (let i = 0; i < args.count; i++) {
         await runMint();
       }
+      const delta = timeDelta(start, performance.now());
+      console.log(args.count, 'in', delta, 's');
       break;
     }
     case 'thumbs': {
@@ -195,10 +215,6 @@ export async function run(): Promise<void> {
       const attributes = createTokenAttributes(suit);
       console.log(attributes);
       console.log(suit.toManifests());
-      break;
-    }
-    case 'parts': {
-      await countParts();
       break;
     }
     case 'data': {

@@ -1,6 +1,7 @@
-import { Document, NodeIO } from '@gltf-transform/core';
+import { Document, Logger, NodeIO } from '@gltf-transform/core';
 import { dedup, prune, reorder } from '@gltf-transform/functions';
 import { strict as assert } from 'assert';
+import { logger } from 'ethers';
 import fs from 'fs';
 import _ from 'lodash';
 import { MeshoptEncoder } from 'meshoptimizer';
@@ -25,6 +26,7 @@ export class ModelMerger {
     // private textureNames: string[] = [],
   ) {
     this._io = new NodeIO();
+    this._io.setLogger(new Logger(Logger.Verbosity.WARN));
     this._docs = {};
     this.parts = {};
     this.assetName = assetName;
@@ -34,6 +36,8 @@ export class ModelMerger {
       assert(!seen.has(assetId), 'Duplicated asset in manifest');
       seen.add(assetId);
     }
+
+    logger.debug(assetName, { manifests });
 
     for (const node of [
       BodyNode.Torso,
@@ -51,9 +55,6 @@ export class ModelMerger {
       if (!manifest) {
         continue;
       }
-
-      console.log(node, manifest.assetId);
-
       this.parts[node] = this.read(manifest);
     }
   }

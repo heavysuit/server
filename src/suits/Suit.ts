@@ -54,6 +54,7 @@ export class Suit implements SuitProps {
   height: number = 0;
   dom: StatGenerator = new StatGenerator(0);
   pom: string[] = [];
+  paint: string = '';
 
   constructor(props: SuitProps) {
     Object.assign(this, props);

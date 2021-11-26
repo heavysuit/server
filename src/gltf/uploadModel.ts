@@ -36,7 +36,7 @@ export async function uploadModel(assetName: AssetName): Promise<{
       .map(async (t) => {
         const uri = t.getURI();
         if (!shouldUploadToBucket(uri)) {
-          logger.info(`Ignoring: ${uri}`);
+          logger.debug(`Ignoring: ${uri}`);
           return;
         }
 
@@ -44,7 +44,7 @@ export async function uploadModel(assetName: AssetName): Promise<{
         const bucketPath = getTextureBucketPath(uri);
 
         const file = await uploadResourceFile(imagePath, bucketPath);
-        logger.info(`${file.publicUrl()}\n`);
+        logger.debug(`${file.publicUrl()}\n`);
 
         t.setURI(file.publicUrl());
       });
@@ -54,7 +54,7 @@ export async function uploadModel(assetName: AssetName): Promise<{
   for (const b of doc.getRoot().listBuffers()) {
     const uri = b.getURI();
     if (!shouldUploadToBucket(uri)) {
-      logger.info(`Ignoring: ${uri}`);
+      logger.debug(`Ignoring: ${uri}`);
       continue;
     }
 
@@ -62,7 +62,7 @@ export async function uploadModel(assetName: AssetName): Promise<{
     const bucketPath = getBufferBucketPath(uri);
 
     const file = await uploadResourceFile(bufferPath, bucketPath);
-    logger.info(`${file.publicUrl()}\n`);
+    logger.debug(`${file.publicUrl()}\n`);
 
     b.setURI(file.publicUrl());
   }
@@ -75,7 +75,7 @@ export async function uploadModel(assetName: AssetName): Promise<{
   await fs.promises.writeFile(gltfPath, gltfContent);
 
   const destination = getGLTFBucketPath(assetName);
-  logger.info(`Uploading GLTF to: ${destination}`);
+  logger.debug(`Uploading GLTF to: ${destination}`);
   const [file] = await hsBucket.upload(gltfPath, {
     destination: hsBucket.file(destination),
   });

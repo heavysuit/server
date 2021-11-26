@@ -11,7 +11,7 @@ export async function uploadTokenMetadata(
   metadata: TokenMetadata,
   version: string,
 ): Promise<string> {
-  logger.info('Uploading metadata', { metadata });
+  logger.debug('Uploading metadata', { metadata });
   const content = Buffer.from(JSON.stringify(metadata));
   const metaHash = generateHash(content);
 

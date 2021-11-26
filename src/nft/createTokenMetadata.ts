@@ -8,7 +8,6 @@ import {
 } from '../shared/TokenMetadata';
 import { Boost, Stat, Trait } from '../shared/Trait';
 import { Suit } from '../suits/Suit';
-import { PAINT_COLOR } from '../utils/globals';
 
 interface CreateTokenMetadataInputs {
   description?: string;
@@ -65,7 +64,7 @@ export function createTokenAttributes(suit: Suit): Attribute[] {
     ...boostAttributes,
     {
       trait_type: Trait.Paint,
-      value: PAINT_COLOR,
+      value: suit.paint,
     },
   ];
 

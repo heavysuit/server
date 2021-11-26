@@ -69,7 +69,7 @@ export function pruneNodes(
       deleted = true;
     }
 
-    console.log(modelName, n.getName(), deleted ? '' : 'kept');
+    logger.debug(`${modelName} ${n.getName()} ${deleted ? '' : 'kept'}`);
   }
 }
 
@@ -121,12 +121,12 @@ export async function uploadResourceFile(
   bucketPath: string,
 ): Promise<File> {
   const file = hsBucket.file(bucketPath);
-  logger.info(`Uploading ${localPath} to ${bucketPath}`);
+  logger.debug(`Uploading ${localPath} to ${bucketPath}`);
 
   const localHash = generateHash(
     (await fs.promises.readFile(localPath)).buffer,
   );
-  logger.info(`localHash: ${localHash}`);
+  logger.debug(`localHash: ${localHash}`);
 
   const exists = await file.exists();
   if (exists[0]) {
@@ -134,12 +134,12 @@ export async function uploadResourceFile(
     const metadata = response[0];
     const remoteHash = metadata.md5Hash;
 
-    logger.info(`remoteHash: ${remoteHash}`);
+    logger.debug(`remoteHash: ${remoteHash}`);
 
     if (remoteHash === localHash) {
-      logger.info('Skipping duplicate hash');
+      logger.debug('Skipping duplicate hash');
     } else {
-      logger.warn('Overwriting previous version');
+      logger.warn(`Overwriting previous version at ${bucketPath}`);
       await hsBucket.upload(localPath, { destination: file });
     }
   } else {
@@ -205,10 +205,6 @@ export async function saveHashes(
   ids[tokenId].metaHash = metaHash;
 
   await saveCache(ids);
-}
-
-export async function countCache(): Promise<number> {
-  return (await listCache()).length;
 }
 
 export async function listCache(): Promise<string[]> {
@@ -300,11 +296,11 @@ export async function downloadData() {
   const cache = await loadCache();
   const promises = Object.keys(cache).map((key, i) => {
     return new Promise<TokenMetadata | null>((resolve, reject) => {
-      logger.info(key);
       setTimeout(() => {
         axios
           .get(`https://meta.heavysuit.com/delta/${key}.json`)
           .then(({ data }) => {
+            logger.info(key);
             return fs.promises
               .writeFile(
                 path.join(dir, `${key}.json`),
@@ -316,7 +312,7 @@ export async function downloadData() {
             resolve(null);
             logger.error(key, error);
           });
-      }, 40 * i);
+      }, 20 * i);
     });
   });
   await Promise.all(promises);
@@ -346,17 +342,16 @@ const colorCounts: Record<string, number> = {};
 const parts: Record<string, string[]> = {};
 
 export async function countParts() {
+  const ids = await loadCache();
   const dir = path.join(__dirname, '../../assets/metadata');
-  const files = await fs.promises.readdir(dir);
-  const promises = files.map((file) => {
+  const promises = Object.keys(ids).map((tokenId) => {
     return new Promise<TokenMetadata>((resolve) => {
-      fs.promises.readFile(path.join(dir, file)).then((buffer) => {
+      fs.promises.readFile(path.join(dir, `${tokenId}.json`)).then((buffer) => {
         resolve(JSON.parse(buffer.toString()) as any);
       });
     });
   });
   const results = await batchPromises<TokenMetadata | null>(promises, 10);
-  logger.info(results.length);
 
   results.forEach((data) => {
     if (!data) {
@@ -373,15 +368,18 @@ export async function countParts() {
   });
   logger.info(JSON.stringify(colorCounts, undefined, 2));
 
-  let counter = 0;
+  let count = 0;
   Object.entries(parts).forEach(([hash, value]) => {
     if (value.length > 1) {
       logger.info(hash);
       console.log(value);
-      counter++;
+      count++;
     }
   });
-  logger.warn(counter);
+  if (count > 0) {
+    logger.warn('Duplicates', { count });
+  }
+  logger.info(results.length);
 
   return parts;
 }

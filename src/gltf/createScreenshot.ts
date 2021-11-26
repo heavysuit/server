@@ -6,7 +6,7 @@ const WIDTH = 350;
 const HEIGHT = 350;
 const DEVICE_PIXEL_RATIO = 1.0;
 
-const timeDelta = (start: number, end: number) => {
+export const timeDelta = (start: number, end: number) => {
   return ((end - start) / 1000).toPrecision(3);
 };
 
@@ -64,7 +64,7 @@ export async function createScreenshot(
   modelURL: string,
   outputPath: string,
 ): Promise<void> {
-  logger.info(`Capturing ${outputPath}`);
+  logger.debug(`Capturing ${outputPath}`);
   const browserT0 = performance.now();
 
   const browser =
