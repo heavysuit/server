@@ -194,6 +194,7 @@ export async function saveCache(ids: IDCache): Promise<void> {
 }
 
 export async function saveHashes(
+  suitName: string,
   tokenId: string,
   metaHash: string,
   gltfHash: string,
@@ -201,9 +202,12 @@ export async function saveHashes(
 ): Promise<void> {
   const ids = await loadCache();
 
-  ids[tokenId].gltfHash = gltfHash;
-  ids[tokenId].metaHash = metaHash;
-  ids[tokenId].paint = paintName;
+  ids[tokenId] = {
+    name: suitName,
+    gltfHash,
+    metaHash,
+    paint: paintName,
+  };
 
   await saveCache(ids);
 }
@@ -361,8 +365,6 @@ export async function countParts() {
     parts[hash] = parts[hash] || [];
     parts[hash].push(data.image);
   });
-
-  await saveCache(ids);
 
   logger.info(JSON.stringify(paintCounts, undefined, 2));
 

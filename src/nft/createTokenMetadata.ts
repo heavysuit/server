@@ -1,10 +1,11 @@
+import { assert } from 'console';
 import { format } from 'date-fns';
 import {
   Attribute,
   BoostAttribute,
   RankAttribute,
   TextAttribute,
-  TokenMetadata,
+  TokenMetadata
 } from '../shared/TokenMetadata';
 import { Boost, Stat, Trait } from '../shared/Trait';
 import { Suit } from '../suits/Suit';
@@ -20,6 +21,7 @@ interface CreateTokenMetadataInputs {
 }
 
 export function createTokenAttributes(suit: Suit): Attribute[] {
+  assert(suit.paint, 'Paint not set');
   const slotAttributes = suit.parts.map(
     (p): TextAttribute => ({
       trait_type: p.slot,

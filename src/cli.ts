@@ -32,7 +32,7 @@ import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 import { TEXTURES } from './utils/globals';
 import { logger } from './utils/logger';
 
-logger.level = 'debug';
+logger.level = 'info';
 
 async function runMint(
   _tokenId?: string,
@@ -70,6 +70,7 @@ async function runMint(
       break;
     }
     suit = generateRandomSuit(suitName, SuitLibrary);
+    suit.paint = paintName;
     t++;
   }
 
@@ -86,7 +87,7 @@ async function runMint(
     url,
   });
   const metaHash = await uploadTokenMetadata(metadata, tokenId);
-  await saveHashes(tokenId, metaHash, gltfHash, paintName);
+  await saveHashes(suitName, tokenId, metaHash, gltfHash, paintName);
   console.log('');
 }
 
@@ -147,9 +148,18 @@ export async function run(): Promise<void> {
           type: 'string',
         });
     })
+    .option('verbose', {
+      alias: 'v',
+      type: 'boolean',
+      description: 'Run with verbose logging'
+    })
     .parse();
 
   const command = args._[0];
+
+  if (args.verbose) {
+    logger.level = 'debug';
+  }
 
   switch (command) {
     case 'count': {

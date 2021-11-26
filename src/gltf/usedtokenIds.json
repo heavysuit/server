@@ -5021,6 +5021,12 @@
     "metaHash": "yJM1uzmBUdmPEC2TdLgbFA==",
     "paint": "Digital Woodlands"
   },
+  "1212": {
+    "name": "Cobra Leviathan Z-78",
+    "gltfHash": "EmrNum0df4kOxOekORDpKg==",
+    "metaHash": "rrR66otjxYNM4eWk5iAR4A==",
+    "paint": "Ocean Green"
+  },
   "1213": {
     "name": "Coyote ZV-79",
     "gltfHash": "RRZ/SymrDMf7vlQWzo/1HQ==",
@@ -6076,6 +6082,12 @@
     "gltfHash": "q8iQrKBIXccXwIc8VaqO/w==",
     "metaHash": "OV/iZexdBZtw2cnZEuNFwQ==",
     "paint": "Urban Tactical Camo"
+  },
+  "1471": {
+    "name": "Broad Dreadnought K-90",
+    "gltfHash": "o6RuWzDhkTiV+PzIQkeOBw==",
+    "metaHash": "7g0N0NY4LVgq09v813UwJQ==",
+    "paint": "Ocean Green"
   },
   "1472": {
     "name": "Savage Command Suit T-119",
@@ -7612,6 +7624,12 @@
     "gltfHash": "WoJIE3TKSNwQ5A7lRHHw8g==",
     "metaHash": "90pUnJhYHfu6h4lOV9Q3Zw==",
     "paint": "Urban Tactical Camo"
+  },
+  "1873": {
+    "name": "Cobra Angel P-69",
+    "gltfHash": "uIqwzB7a8EbNPY7OoJc+4g==",
+    "metaHash": "muyNzNVlWKaGw/pgANEbGw==",
+    "paint": "Ocean Green"
   },
   "1875": {
     "name": "Wolverine Mech X-117",
@@ -9688,6 +9706,12 @@
     "gltfHash": "0Q5/BPJDaRCCOybDKFshng==",
     "metaHash": "jO1IE0gw4UDD7H9jzD4OEA==",
     "paint": "Rainbow Mix"
+  },
+  "2425": {
+    "name": "Tortoise B-38",
+    "gltfHash": "q/keZkyep5Z2yli1znU6Bg==",
+    "metaHash": "5MoiqrMti12q96aicJlg9g==",
+    "paint": "Ocean Green"
   },
   "2427": {
     "name": "Cobra Jaeger ZY-43",
@@ -19649,6 +19673,12 @@
     "metaHash": "O1unkmiKBM2aTeMMqPabEg==",
     "paint": "Ocean Green"
   },
+  "5060": {
+    "name": "Hero Command Suit T-74",
+    "gltfHash": "6wnB8CUUPsUDEdhfyHfL7A==",
+    "metaHash": "7aLcELT6YuKXK+vVHA1Ceg==",
+    "paint": "Ocean Green"
+  },
   "5061": {
     "name": "High Agility Decimator I-90",
     "gltfHash": "mLY5Kldut6mtmBpABQBiNA==",
@@ -20338,6 +20368,12 @@
     "gltfHash": "d3Ri9jZXBVbWLaZKEVRnyQ==",
     "metaHash": "1lCdE7e437bLRHXnwwF83Q==",
     "paint": "Unit-00"
+  },
+  "5272": {
+    "name": "Armageddon Fortress ZO-55",
+    "gltfHash": "piM3V0Lw6Hl+PoAy8TaYpw==",
+    "metaHash": "xBjVVT9lKsSKzOPro/+vOw==",
+    "paint": "Ocean Green"
   },
   "5273": {
     "name": "Gauntlet KD-87",
@@ -21659,6 +21695,12 @@
     "metaHash": "EmBXPUd+Kb6IZlC2fIC5VQ==",
     "paint": "Synthwave Overdrive"
   },
+  "5625": {
+    "name": "Prometheus J-11",
+    "gltfHash": "DbcuPLw7L+LShpAo1iIaFg==",
+    "metaHash": "Hf6DJ7XkQFTfMzAuPQCo/Q==",
+    "paint": "Ocean Green"
+  },
   "5626": {
     "name": "Mayhem Fortress X-61",
     "gltfHash": "LLb1q962hu1VKK6NhMa04g==",
@@ -22498,6 +22540,12 @@
     "gltfHash": "m7SLzp4OEoUJbuOv45fk+g==",
     "metaHash": "bpfB3Yxd4GR571RuXRQ/NA==",
     "paint": "Wandering Muad'Dib"
+  },
+  "5849": {
+    "name": "All Terrain Stalker W-83",
+    "gltfHash": "XXQFT3iVQ/0KM1cfa9XhoQ==",
+    "metaHash": "gU7JHn5SLbcqgk8tikXUYg==",
+    "paint": "Ocean Green"
   },
   "5850": {
     "name": "Loki T-77",
@@ -24863,6 +24911,12 @@
     "metaHash": "yLTDHhYt6TfYBqrJgjbeIQ==",
     "paint": "Fire and Ice"
   },
+  "6536": {
+    "name": "Tempest Master NS-137",
+    "gltfHash": "Ty+Qkn5awpbqAcEY6Ad8VQ==",
+    "metaHash": "YzOz1Av3TY1KqpEDVzdPWw==",
+    "paint": "Ocean Green"
+  },
   "6537": {
     "name": "Robust Gun System NJ-93",
     "gltfHash": "3/oETAAgklRfPBB1ID2Wtw==",
@@ -26363,6 +26417,12 @@
     "metaHash": "aKMUbbwhdSo02VPun/RBKA==",
     "paint": "Unit-01"
   },
+  "6963": {
+    "name": "Grand Runner U-24",
+    "gltfHash": "8OQQ7SKGEVi0HQRfY+Jr9A==",
+    "metaHash": "KZZhAvb1Rbw+jG12MO34bg==",
+    "paint": "Ocean Green"
+  },
   "6964": {
     "name": "Battle Command Suit YL-69",
     "gltfHash": "TN8Zbiou+DQxE11ZIMw9dA==",
@@ -27718,6 +27778,12 @@
     "gltfHash": "AilMdR8G177jggSQFupxCw==",
     "metaHash": "MAI49FzeqCynlbtGMX60uw==",
     "paint": "Synthwave Overdrive"
+  },
+  "7366": {
+    "name": "Orbital Unit V-35",
+    "gltfHash": "brVwTikLcpyquGYLIExYGw==",
+    "metaHash": "PUf6fWA+KCO8uiAPRYOboA==",
+    "paint": "Ocean Green"
   },
   "7372": {
     "name": "Night Angel V-93",
