@@ -39,18 +39,21 @@ async function runMint(
   _tokenId?: string,
   _suitName?: string,
   textures: TextureName[] = TEXTURES,
+  paintName?: string,
 ): Promise<void> {
   const suitName = _suitName || (await generateRandomName());
   const tokenId = _tokenId || (await generateTokenId());
-  logger.info('🤖 Mint', { suitName, tokenId });
+  if (!paintName) {
+    paintName = textures.length > 1 ? 'Rainbow Mix' : PaintName[textures[0]];
+  }
+  logger.info('🤖 Mint', { suitName, tokenId, paintName });
 
   await randomizeTextures(textures);
-  const paintName =
-    textures.length > 1 ? 'Rainbow Mix' : PaintName[textures[0]];
 
   const genT0 = performance.now();
   let t = 1;
   let suit = generateRandomSuit(suitName, SuitLibrary);
+  suit.paint = paintName;
   while (true) {
     const metadata = createTokenMetadata({
       externalUrl: '',
@@ -60,7 +63,6 @@ async function runMint(
     });
     if (!seenMetadata(metadata)) {
       const genT1 = performance.now();
-      suit.paint = paintName;
       logger.info(`Generation took ${timeDelta(genT0, genT1)}`);
       if (t > 1) {
         logger.warn(`Took ${t} tries`);
@@ -171,6 +173,32 @@ export async function run(): Promise<void> {
       }
       const delta = timeDelta(start, performance.now());
       console.log(args.count, 'in', delta, 's');
+      break;
+    }
+    case 'mass2': {
+      await countParts();
+      const targets = {
+        jc1: 41,
+        jc2: 36,
+        jc3: 1,
+        jc4: 0,
+        jc5: 0,
+        jc6: 0,
+        gdr1: 41,
+        gdr2: 35,
+        gdr3: 0,
+        gdr4: 43,
+        gdr5: 0,
+        unit00: 0,
+        unit01: 0,
+        unit02: 0,
+        'unit00-2': 0,
+      };
+      for (const [t, c] of Object.entries(targets)) {
+        for (let i = 0; i < c; i++) {
+          await runMint(undefined, undefined, [t as TextureName]);
+        }
+      }
       break;
     }
     case 'thumbs': {

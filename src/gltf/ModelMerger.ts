@@ -26,7 +26,7 @@ export class ModelMerger {
     // private textureNames: string[] = [],
   ) {
     this._io = new NodeIO();
-    this._io.setLogger(new Logger(Logger.Verbosity.WARN));
+    this._io.setLogger(new Logger(Logger.Verbosity.SILENT));
     this._docs = {};
     this.parts = {};
     this.assetName = assetName;

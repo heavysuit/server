@@ -335,7 +335,9 @@ export function getMetadataHash(data: TokenMetadata) {
 
 export function seenMetadata(data: TokenMetadata): boolean {
   const hash = getMetadataHash(data);
-  return hash in parts;
+  const seen = hash in parts;
+  parts[hash] = parts[hash] || ['new'];
+  return seen;
 }
 
 const colorCounts: Record<string, number> = {};
