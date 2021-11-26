@@ -178,7 +178,7 @@ export async function generateRandomName(name: string = ''): Promise<string> {
 
 type IDCache = Record<
   string,
-  { name: string; metaHash?: string; gltfHash?: string }
+  { name: string; metaHash?: string; gltfHash?: string; paint?: string }
 >;
 
 export async function loadCache(): Promise<IDCache> {
@@ -197,12 +197,13 @@ export async function saveHashes(
   tokenId: string,
   metaHash: string,
   gltfHash: string,
+  paintName: string,
 ): Promise<void> {
   const ids = await loadCache();
 
-  assert(tokenId in ids);
   ids[tokenId].gltfHash = gltfHash;
   ids[tokenId].metaHash = metaHash;
+  ids[tokenId].paint = paintName;
 
   await saveCache(ids);
 }
@@ -221,15 +222,6 @@ export async function generateTokenId(): Promise<string> {
   }
 
   return id.toString();
-}
-
-export async function cacheTokenId(
-  tokenId: string,
-  name: string,
-): Promise<void> {
-  const ids = await loadCache();
-  ids[tokenId] = { name };
-  await saveCache(ids);
 }
 
 export function generateHash(content: ArrayBufferLike): string {
@@ -261,6 +253,7 @@ export async function createBatchScreenshots(tokenIds: (number | string)[]) {
   const dir = path.join(__dirname, '../../assets/screenshots');
   const failed: string[] = [];
   for (const tokenId of tokenIds) {
+    logger.info(`📷 ${tokenId}`);
     const assetName = tokenId.toString();
     // if (parseInt(assetName) < 3563) {
     //   continue;
@@ -340,7 +333,7 @@ export function seenMetadata(data: TokenMetadata): boolean {
   return seen;
 }
 
-const colorCounts: Record<string, number> = {};
+const paintCounts: Record<string, number> = {};
 const parts: Record<string, string[]> = {};
 
 export async function countParts() {
@@ -360,15 +353,18 @@ export async function countParts() {
       return;
     }
     let attribute = data.attributes.find((a) => a.trait_type === Trait.Paint);
-    const color = attribute?.value || '';
-    colorCounts[color] = colorCounts[color] || 0;
-    colorCounts[color]++;
+    const paint = (attribute?.value || '').toString();
+    paintCounts[paint] = paintCounts[paint] || 0;
+    paintCounts[paint]++;
 
     const hash = getMetadataHash(data);
     parts[hash] = parts[hash] || [];
     parts[hash].push(data.image);
   });
-  logger.info(JSON.stringify(colorCounts, undefined, 2));
+
+  await saveCache(ids);
+
+  logger.info(JSON.stringify(paintCounts, undefined, 2));
 
   let count = 0;
   Object.entries(parts).forEach(([hash, value]) => {
@@ -386,21 +382,35 @@ export async function countParts() {
   return parts;
 }
 
+function getIdFromURI(uri: string): string {
+  const parts = uri.split('/');
+  const id = parts[parts.length - 1].split('.')[0];
+  return id;
+}
+
 export async function removeStaleMetadata() {
   const parts = await countParts();
   const ids = await loadCache();
 
+  let deleted = 0;
   Object.entries(parts).forEach(([key, value]) => {
     if (value.length > 1) {
       for (let i = 1; i < value.length; i++) {
-        const parts = value[i].split('/');
-        const id = parts[parts.length - 1].split('.')[0];
+        const id = getIdFromURI(value[i]);
         delete ids[id];
+        deleted++;
+      }
+    } else {
+      const id = getIdFromURI(value[0]);
+      if (!ids[id].paint) {
+        delete ids[id];
+        deleted++;
       }
     }
   });
 
   await saveCache(ids);
+  logger.warn(`Deleted ${deleted} entries`);
 
   const dir = path.join(__dirname, '../../assets/metadata');
   const files = await fs.promises.readdir(dir);

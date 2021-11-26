@@ -26,7 +26,7 @@ export const PaintName: Record<TextureName, string> = {
   gdr1: 'Ocean Green',
   gdr2: 'Halloween Dusk',
   gdr3: 'Synthwave Overdrive',
-  gdr4: 'Yellow Menance',
+  gdr4: 'Yellow Menace',
   gdr5: 'Fire and Ice',
   unit00: 'Ayanami Blue',
   'unit00-2': 'Unit-00',

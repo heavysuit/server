@@ -10,7 +10,6 @@ import { ModelMerger } from './gltf/ModelMerger';
 import { PaintName, TextureName } from './gltf/PaintName';
 import { uploadModel } from './gltf/uploadModel';
 import {
-  cacheTokenId,
   countParts,
   createBatchScreenshots,
   downloadData,
@@ -21,11 +20,11 @@ import {
   removeStaleMetadata,
   saveHashes,
   seenMetadata,
-  uploadBatchScreenshots,
+  uploadBatchScreenshots
 } from './gltf/utils';
 import {
   createTokenAttributes,
-  createTokenMetadata,
+  createTokenMetadata
 } from './nft/createTokenMetadata';
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
@@ -33,7 +32,7 @@ import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
 import { TEXTURES } from './utils/globals';
 import { logger } from './utils/logger';
 
-logger.level = 'info';
+logger.level = 'debug';
 
 async function runMint(
   _tokenId?: string,
@@ -47,6 +46,7 @@ async function runMint(
     paintName = textures.length > 1 ? 'Rainbow Mix' : PaintName[textures[0]];
   }
   logger.info('🤖 Mint', { suitName, tokenId, paintName });
+  assert(paintName, textures[0]);
 
   await randomizeTextures(textures);
 
@@ -78,7 +78,6 @@ async function runMint(
   merger.repositionJoints();
   await merger.mergeAndWrite();
   const { thumbnailUrl, url, gltfHash } = await uploadModel(tokenId);
-  await cacheTokenId(tokenId, suitName);
 
   const metadata = createTokenMetadata({
     externalUrl: `http://heavysuit.com/version/${tokenId}`,
@@ -87,7 +86,7 @@ async function runMint(
     url,
   });
   const metaHash = await uploadTokenMetadata(metadata, tokenId);
-  await saveHashes(tokenId, metaHash, gltfHash);
+  await saveHashes(tokenId, metaHash, gltfHash, paintName);
   console.log('');
 }
 
@@ -178,16 +177,16 @@ export async function run(): Promise<void> {
     case 'mass2': {
       await countParts();
       const targets = {
-        jc1: 41,
-        jc2: 36,
-        jc3: 1,
+        jc1: 0,
+        jc2: 0,
+        jc3: 0,
         jc4: 0,
         jc5: 0,
         jc6: 0,
-        gdr1: 41,
-        gdr2: 35,
+        gdr1: 11,
+        gdr2: 0,
         gdr3: 0,
-        gdr4: 43,
+        gdr4: 0,
         gdr5: 0,
         unit00: 0,
         unit01: 0,
@@ -196,7 +195,11 @@ export async function run(): Promise<void> {
       };
       for (const [t, c] of Object.entries(targets)) {
         for (let i = 0; i < c; i++) {
-          await runMint(undefined, undefined, [t as TextureName]);
+          try {
+            await runMint(undefined, undefined, [t as TextureName]);
+          } catch (error) {
+            logger.error(error);
+          }
         }
       }
       break;
