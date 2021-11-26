@@ -68,6 +68,8 @@ node_modules/
 /build
 /lib
 /assets
+/metadata
+/screenshots
 
 # Compiled JavaScript files
 lib/**/*.js

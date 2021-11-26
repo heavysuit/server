@@ -17,6 +17,7 @@ import {
   generateTokenId,
   listCache,
   randomizeTextures,
+  removeStaleAssets,
   removeStaleMetadata,
   saveHashes,
   seenMetadata,
@@ -29,7 +30,7 @@ import {
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
-import { TEXTURES } from './utils/globals';
+import { GEN_TARGETS, TEXTURES } from './utils/globals';
 import { logger } from './utils/logger';
 
 logger.level = 'info';
@@ -186,24 +187,7 @@ export async function run(): Promise<void> {
     }
     case 'mass2': {
       await countParts();
-      const targets = {
-        jc1: 0,
-        jc2: 0,
-        jc3: 0,
-        jc4: 0,
-        jc5: 0,
-        jc6: 0,
-        gdr1: 11,
-        gdr2: 0,
-        gdr3: 0,
-        gdr4: 0,
-        gdr5: 0,
-        unit00: 0,
-        unit01: 0,
-        unit02: 0,
-        'unit00-2': 0,
-      };
-      for (const [t, c] of Object.entries(targets)) {
+      for (const [t, c] of Object.entries(GEN_TARGETS)) {
         for (let i = 0; i < c; i++) {
           try {
             await runMint(undefined, undefined, [t as TextureName]);
@@ -264,6 +248,7 @@ export async function run(): Promise<void> {
     }
     case 'cleanup': {
       await removeStaleMetadata();
+      await removeStaleAssets();
       break;
     }
   }

@@ -242,7 +242,7 @@ export async function uploadScreenshot(localPath: string, bucketPath: string) {
 }
 
 export async function uploadBatchScreenshots() {
-  const dir = path.join(__dirname, '../../assets/screenshots');
+  const dir = path.join(__dirname, '../../screenshots');
   const files = await fs.promises.readdir(dir);
   const uploads = files.map((f) => {
     const assetName = f.split('.')[0];
@@ -254,7 +254,7 @@ export async function uploadBatchScreenshots() {
 }
 
 export async function createBatchScreenshots(tokenIds: (number | string)[]) {
-  const dir = path.join(__dirname, '../../assets/screenshots');
+  const dir = path.join(__dirname, '../../screenshots');
   const failed: string[] = [];
   for (const tokenId of tokenIds) {
     logger.info(`📷 ${tokenId}`);
@@ -289,7 +289,7 @@ export async function randomizeTextures(textureNames: string[]): Promise<void> {
 }
 
 export async function downloadData() {
-  const dir = path.join(__dirname, '../../assets/metadata');
+  const dir = path.join(__dirname, '../../metadata');
   const cache = await loadCache();
   const promises = Object.keys(cache).map((key, i) => {
     return new Promise<TokenMetadata | null>((resolve, reject) => {
@@ -342,7 +342,7 @@ const parts: Record<string, string[]> = {};
 
 export async function countParts() {
   const ids = await loadCache();
-  const dir = path.join(__dirname, '../../assets/metadata');
+  const dir = path.join(__dirname, '../../metadata');
   const promises = Object.keys(ids).map((tokenId) => {
     return new Promise<TokenMetadata>((resolve) => {
       fs.promises.readFile(path.join(dir, `${tokenId}.json`)).then((buffer) => {
@@ -414,12 +414,29 @@ export async function removeStaleMetadata() {
   await saveCache(ids);
   logger.warn(`Deleted ${deleted} entries`);
 
-  const dir = path.join(__dirname, '../../assets/metadata');
+  const dir = path.join(__dirname, '../../metadata');
   const files = await fs.promises.readdir(dir);
 
   for (const f of files) {
     if (!(f.split('.')[0] in ids)) {
       await fs.promises.rm(path.join(dir, f));
+    }
+  }
+}
+
+export async function removeStaleAssets() {
+  const ids = await loadCache();
+  const dir = path.join(__dirname, '../../assets');
+  const files = await fs.promises.readdir(dir);
+
+  for (const f of files) {
+    if (f.startsWith('M')) {
+      continue;
+    }
+
+    if (!(f in ids)) {
+      logger.info(`Deleting ${f}`);
+      await fs.promises.rmdir(path.join(dir, f), { recursive: true });
     }
   }
 }

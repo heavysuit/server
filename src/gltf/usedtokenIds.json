@@ -1937,6 +1937,12 @@
     "metaHash": "tKN5VfxqecDpXWxi5hI9UA==",
     "paint": "Synthwave Overdrive"
   },
+  "457": {
+    "name": "Heavy Combatant A-102",
+    "gltfHash": "a7YzBqstfLknw53M6uZk2w==",
+    "metaHash": "csn3pTUiyQbvJwYSU1VK4A==",
+    "paint": "Unit-02"
+  },
   "458": {
     "name": "Myriad Walker A-60",
     "gltfHash": "LuzXP3u1H7D9STfq/AgcoA==",
@@ -2561,6 +2567,12 @@
     "metaHash": "SCjXg5HnVaXPhTJVysS/AA==",
     "paint": "Urban Digital"
   },
+  "612": {
+    "name": "Apex Jaeger K-26",
+    "gltfHash": "6VvP/N1mToqaREO6zvB71g==",
+    "metaHash": "NjfbUTL1dQbZIc4LmYzWzA==",
+    "paint": "Unit-02"
+  },
   "613": {
     "name": "Night Panzer L-115",
     "gltfHash": "sMijSufGBlOt/gm/YQUwvQ==",
@@ -2998,6 +3010,12 @@
     "gltfHash": "/bHOEbJt0d3tBkd91tghwQ==",
     "metaHash": "fScm2bQYeRwLHe7hvV8SQA==",
     "paint": "Digital Woodlands"
+  },
+  "723": {
+    "name": "Silent Command Suit W-78",
+    "gltfHash": "JYV+AGc3jvVFt0ehzp4dNg==",
+    "metaHash": "oQQexyymryQpLBMOUMmnLw==",
+    "paint": "Unit-00"
   },
   "725": {
     "name": "Variable Battler BN-5",
@@ -3682,6 +3700,12 @@
     "gltfHash": "Bgetzy/1DgvVh7nv5+Bf+A==",
     "metaHash": "K2DBvzbdAKpqxUenWYh17g==",
     "paint": "Unit-00"
+  },
+  "895": {
+    "name": "Paragon Gun System A-124",
+    "gltfHash": "Gi0MeNJMXZjKx0f5IIrc1g==",
+    "metaHash": "pdZsFtQxx7LRwffgFN16Vg==",
+    "paint": "Urban Tactical Camo"
   },
   "896": {
     "name": "Vital Machine C-112",
@@ -4571,6 +4595,12 @@
     "metaHash": "YI1xq3nFpgYeJpkOgtnjgw==",
     "paint": "Ayanami Blue"
   },
+  "1090": {
+    "name": "Thunder Unit FO-119",
+    "gltfHash": "Tpq8/iwUVqKrCdNCmEVpyA==",
+    "metaHash": "qQsyJpR1OW9SH5fXwIycLw==",
+    "paint": "Unit-00"
+  },
   "1092": {
     "name": "Vulture U-24",
     "gltfHash": "k1L29Tcrrq0B/dpE8HkLTg==",
@@ -4672,6 +4702,12 @@
     "gltfHash": "YXf6AVn2KvEvTYIBfDqIJg==",
     "metaHash": "VfjQ3OxMe9ygJf0FQ1shzQ==",
     "paint": "Unit-01"
+  },
+  "1125": {
+    "name": "Ripper DP-39",
+    "gltfHash": "8Dh1dKaQCGP6aIEOWokw7w==",
+    "metaHash": "raeVAnJfiVGmiB435OOW0Q==",
+    "paint": "Unit-00"
   },
   "1128": {
     "name": "Orbital Unit NJ-56",
@@ -4805,6 +4841,12 @@
     "metaHash": "PgtqVqDPnqe3xSoIP0LfmA==",
     "paint": "Wandering Muad'Dib"
   },
+  "1156": {
+    "name": "Spider Transport Y-71",
+    "gltfHash": "H4q0/InhZaLJKHpMW/JI/g==",
+    "metaHash": "xzj9qKiAcX8+y62afx9HWA==",
+    "paint": "Jungle Warfare"
+  },
   "1157": {
     "name": "Shade Transport B-29",
     "gltfHash": "13HaGE//I3OwmDgWs3xk/w==",
@@ -4925,6 +4967,18 @@
     "metaHash": "6lnZoXb3TI25NA13tBcOoQ==",
     "paint": "Urban Tactical Camo"
   },
+  "1183": {
+    "name": "Cobra Sentinel B-0",
+    "gltfHash": "+UDloEzgMwCawtYW/XGWaA==",
+    "metaHash": "rAmj2BRWwId/5nKQtQoO4w==",
+    "paint": "Unit-01"
+  },
+  "1184": {
+    "name": "Storming Scouter M-82",
+    "gltfHash": "NfzECmjbrKrQuDyRCdLhbg==",
+    "metaHash": "4R/cuSZXvRE4epA+3wgqzA==",
+    "paint": "Halloween Dusk"
+  },
   "1185": {
     "name": "Wandering Battler D-35",
     "gltfHash": "88spKVVs0JUC+smQ86QcHg==",
@@ -4960,6 +5014,12 @@
     "gltfHash": "pd53OWlOjpxlNZa8AF3IRA==",
     "metaHash": "iqTRvbVBzziOQeB93OnQ3Q==",
     "paint": "Rainbow Mix"
+  },
+  "1194": {
+    "name": "Shadow Suit H-118",
+    "gltfHash": "/B+GQZEsjzcfk0+bcXlW9w==",
+    "metaHash": "D1KOnqb6JCIn1J+ycRWIpQ==",
+    "paint": "Ayanami Blue"
   },
   "1195": {
     "name": "Myrmidon G-51",
@@ -5867,6 +5927,12 @@
     "metaHash": "NyrnW9VrMIIVz5x1qcj8/w==",
     "paint": "Unit-01"
   },
+  "1421": {
+    "name": "Front Line Buster V-9",
+    "gltfHash": "TIZs+/viqU68j42ZksT/sg==",
+    "metaHash": "9z7Z5B1v/QvRR8QI9IywDw==",
+    "paint": "Urban Tactical Camo"
+  },
   "1423": {
     "name": "Bio Walker B-80",
     "gltfHash": "kBweikF9GTim4CT8babpxw==",
@@ -6191,6 +6257,12 @@
     "metaHash": "3YDMVYI24zoDa8jOESL8+g==",
     "paint": "Unit-00"
   },
+  "1496": {
+    "name": "Flock Battler W-121",
+    "gltfHash": "dQ1Yp0fW0QmUH00WFgzl2Q==",
+    "metaHash": "C5hCc204aRCI5vJBLsewzQ==",
+    "paint": "Hunter's Acumen"
+  },
   "1498": {
     "name": "Widow Maker R-128",
     "gltfHash": "y6SFEYj6BXb0r4rG9Tp+qA==",
@@ -6418,6 +6490,12 @@
     "gltfHash": "vrghj5SdtxrMMWNRBkPwtQ==",
     "metaHash": "pvIrNlqsz6qAh2kq72JXJQ==",
     "paint": "Fire and Ice"
+  },
+  "1553": {
+    "name": "Elite Juggernaut Z-108",
+    "gltfHash": "0l3vV4y7+9azsnGJE51O0Q==",
+    "metaHash": "/yIEHU3YwqaLnGtgTHzbEw==",
+    "paint": "Halloween Dusk"
   },
   "1554": {
     "name": "Pioneer Command Suit BR-124",
@@ -7000,6 +7078,12 @@
     "gltfHash": "Z/W/f7YgcnWQNq+HN4zDXw==",
     "metaHash": "jpAXXyU4pwJqhp30EF1KyQ==",
     "paint": "Ocean Green"
+  },
+  "1713": {
+    "name": "Chrono Combatant Z-41",
+    "gltfHash": "azjxRWLx86hHwzOZOu7QYA==",
+    "metaHash": "Hv165oFKOjRugmdCteqkHw==",
+    "paint": "Halloween Dusk"
   },
   "1716": {
     "name": "Robust Engine E-39",
@@ -8315,6 +8399,12 @@
     "metaHash": "V+p8FjK3wL1SmZgciODLyQ==",
     "paint": "Fire and Ice"
   },
+  "2054": {
+    "name": "Crusader Buster R-82",
+    "gltfHash": "EKmAkh6nLm2Nvbey8znEFg==",
+    "metaHash": "Wl1n82zlOnZkmOZVJOiNTA==",
+    "paint": "Unit-00"
+  },
   "2059": {
     "name": "Variable Battler AC-43",
     "gltfHash": "C1IAlFsalnhZvcVYX2iTEw==",
@@ -8824,6 +8914,12 @@
     "gltfHash": "nvXIU1EE0LQsJhroknlR4g==",
     "metaHash": "q6Hlq9pZgsmZETkR3H73yQ==",
     "paint": "Urban Digital"
+  },
+  "2185": {
+    "name": "Grave Juggernaut G-49",
+    "gltfHash": "/Cj4k8Xu3qLqQfg7o7MRgw==",
+    "metaHash": "eRF7gtDHXQvs7tSUJ85hqA==",
+    "paint": "Hunter's Acumen"
   },
   "2186": {
     "name": "Vulture G-44",
@@ -9928,6 +10024,12 @@
     "gltfHash": "RcaMTrcZ02JI0313+CnS1Q==",
     "metaHash": "NxVMc3AXHOD6T+953ypfsg==",
     "paint": "Unit-01"
+  },
+  "2488": {
+    "name": "Vital Mech JI-94",
+    "gltfHash": "7j0AjMVYKahwItLQUx6S3g==",
+    "metaHash": "GfL9LX0MBtM2rPbzxW/QWg==",
+    "paint": "Jungle Warfare"
   },
   "2492": {
     "name": "Armageddon Master D-57",
@@ -11093,6 +11195,12 @@
     "metaHash": "kEPz3c5fswAQOJgF2J74mA==",
     "paint": "Urban Tactical Camo"
   },
+  "2789": {
+    "name": "First Assault Machine F-42",
+    "gltfHash": "ySXkKGL2sVL6VZmJsgFADg==",
+    "metaHash": "y1QNyeOfJ5Mp2lTNhhVevQ==",
+    "paint": "Urban Tactical Camo"
+  },
   "2791": {
     "name": "Cavalry Valkyrie YO-5",
     "gltfHash": "Ms4chATWOdR4UrApN3ZiCg==",
@@ -11837,6 +11945,12 @@
     "metaHash": "ZMOj/mRVrNFCepCogYqmOg==",
     "paint": "Wandering Muad'Dib"
   },
+  "2986": {
+    "name": "Psycho Command Unit Z-25",
+    "gltfHash": "rKxTMHu8sajsMODiedsMng==",
+    "metaHash": "d4rsK2vzIxLGcynDHUWtGw==",
+    "paint": "Halloween Dusk"
+  },
   "2988": {
     "name": "Champion Scouter L-147",
     "gltfHash": "wkfwYsXy2CQ3d1yhwonEnA==",
@@ -12389,6 +12503,12 @@
     "metaHash": "hKqpucQY40LHrJqpHfs69g==",
     "paint": "Ocean Green"
   },
+  "3139": {
+    "name": "Titan Scouter SI-90",
+    "gltfHash": "h5DUMKlbsa5LPb26Kpm7SA==",
+    "metaHash": "9JbZatxSVL3bx7Sz9uYdVw==",
+    "paint": "Unit-02"
+  },
   "3142": {
     "name": "Shock Guardian A-23",
     "gltfHash": "TSN04e+064bIY2MSVTFeIw==",
@@ -12935,6 +13055,12 @@
     "metaHash": "6jfkEawvoiZ/OT6yw2WIdQ==",
     "paint": "Hunter's Acumen"
   },
+  "3274": {
+    "name": "Urban Mech T-56",
+    "gltfHash": "37786c6Pc6+8Gtaq67CsQg==",
+    "metaHash": "FtO5RFGdewJQopbfaeyHAQ==",
+    "paint": "Unit-02"
+  },
   "3275": {
     "name": "Centurion A-79",
     "gltfHash": "aUCNJumEVmVoJvJ5T+paVQ==",
@@ -13060,6 +13186,12 @@
     "gltfHash": "iuV/78KbXuvCc7IrIdCYUw==",
     "metaHash": "UP4O5+SFPaaniNNSg6UBRQ==",
     "paint": "Hunter's Acumen"
+  },
+  "3311": {
+    "name": "Grim Scouter D-4",
+    "gltfHash": "A31rhUGm+vOtXMYrwCtFTw==",
+    "metaHash": "/e9aHZfyW8vcuflJsUIjPQ==",
+    "paint": "Ayanami Blue"
   },
   "3312": {
     "name": "Revered Leviathan X-138",
@@ -13456,6 +13588,12 @@
     "gltfHash": "YN0Gh2wJj4T7CgtG8qB1sg==",
     "metaHash": "iDXj521BMqrUyGOq88dOQA==",
     "paint": "Wandering Muad'Dib"
+  },
+  "3421": {
+    "name": "Round Unit IL-147",
+    "gltfHash": "+h3uFTeqzANAd0RzBc+OVg==",
+    "metaHash": "fg+fWaaQGFNjLQjfaRG/+w==",
+    "paint": "Jungle Warfare"
   },
   "3422": {
     "name": "Hero Strider WK-15",
@@ -14387,6 +14525,12 @@
     "metaHash": "8nOSJLXMuipruc7P2tqvUQ==",
     "paint": "Jungle Warfare"
   },
+  "3664": {
+    "name": "Offensive Transport O-55",
+    "gltfHash": "DHiAzUepRfTsB/gGMYEGhQ==",
+    "metaHash": "/W9Exd/0nVjq705BlTsTBA==",
+    "paint": "Halloween Dusk"
+  },
   "3665": {
     "name": "Shade Angel QR-113",
     "gltfHash": "cZpA/Qe9DhUZ1rf354nuvA==",
@@ -14494,6 +14638,12 @@
     "gltfHash": "nqbfUJYWevonBnOLQz0awA==",
     "metaHash": "6HRMVNhCSNWuJZSsPB4AHw==",
     "paint": "Halloween Dusk"
+  },
+  "3690": {
+    "name": "Front Line Fortress IW-16",
+    "gltfHash": "ygr/c+osTPRQxtFCaED2FQ==",
+    "metaHash": "BmgxD5Oe3jJdgrRchRzYRQ==",
+    "paint": "Unit-00"
   },
   "3694": {
     "name": "Dimensional Jaeger D-65",
@@ -14842,6 +14992,12 @@
     "gltfHash": "+aOFqfXHpwuPSxr7c74MFQ==",
     "metaHash": "8RKVEcKLQJi98Q0cOb8lBQ==",
     "paint": "Unit-02"
+  },
+  "3780": {
+    "name": "Vital Combatant HB-81",
+    "gltfHash": "9Z3auNIrjehhA/B0HD89Dw==",
+    "metaHash": "l5Y+TWqOMXd9gMAZM94Yug==",
+    "paint": "Yellow Menace"
   },
   "3781": {
     "name": "Buccaneer Master S-60",
@@ -15761,6 +15917,12 @@
     "metaHash": "VZLo4CahAJ8rjmaDuCRdVQ==",
     "paint": "Unit-01"
   },
+  "4012": {
+    "name": "Infernal Machine T-82",
+    "gltfHash": "d+2Bz893dKH44HuZBGgpMA==",
+    "metaHash": "W6zdtXJI7FgvMAdAdBJ8kg==",
+    "paint": "Hunter's Acumen"
+  },
   "4013": {
     "name": "Sonic Fighter F-140",
     "gltfHash": "5sBR2wJUGrAG17h02WtFDA==",
@@ -15952,6 +16114,12 @@
     "gltfHash": "KBZPUTya4aSyeCxIK2uF+Q==",
     "metaHash": "JcMNgdeRuBKbXBfn3U2ipQ==",
     "paint": "Jungle Warfare"
+  },
+  "4058": {
+    "name": "Variable Guardian YZ-25",
+    "gltfHash": "yVKENgTlHgkSNCXW2GOmMw==",
+    "metaHash": "rnZ+sj6plOI9OWE4cIK/ew==",
+    "paint": "Unit-00"
   },
   "4059": {
     "name": "Invasion Mech NE-5",
@@ -16589,6 +16757,12 @@
     "metaHash": "y8fpOn1aTwfy5cD1VkhfjA==",
     "paint": "Hunter's Acumen"
   },
+  "4226": {
+    "name": "High Agility Panzer Y-63",
+    "gltfHash": "zv9wmViqFJ+fqj3s+ydsfg==",
+    "metaHash": "69EuvtGm5hklZXA7HDNIeQ==",
+    "paint": "Ayanami Blue"
+  },
   "4228": {
     "name": "Compact Mech J-76",
     "gltfHash": "BBFSAb8e63//O7U92ZYsPA==",
@@ -16654,6 +16828,12 @@
     "gltfHash": "8VJ49BmtJpi2lcxMDFr0sQ==",
     "metaHash": "+ex3NSdianJrC0XovrBptA==",
     "paint": "Unit-02"
+  },
+  "4245": {
+    "name": "Grand Buster G-83",
+    "gltfHash": "Du1c4QYxmLrTQlvdTT6bXw==",
+    "metaHash": "FSlaUTw58BvhuBTuGHUs+A==",
+    "paint": "Urban Tactical Camo"
   },
   "4246": {
     "name": "Storming Sentinel V-6",
@@ -17435,6 +17615,12 @@
     "metaHash": "z0tUsbVsS5kFHdze8sb46w==",
     "paint": "Wandering Muad'Dib"
   },
+  "4454": {
+    "name": "Trauma Warmech ZP-82",
+    "gltfHash": "Gd1hZGC+Wu6rjUAfxrX/Qw==",
+    "metaHash": "4f0Mi7VeIaVsEdYy6FWKyQ==",
+    "paint": "Hunter's Acumen"
+  },
   "4455": {
     "name": "Grim Gear F-79",
     "gltfHash": "DnK9jDNm/I8EHP5rYdD97A==",
@@ -17620,6 +17806,12 @@
     "gltfHash": "i+Eut5MqmavVwkRl+HyN6Q==",
     "metaHash": "TquC3Ha4gIH9ZQ86kcyElg==",
     "paint": "Rainbow Mix"
+  },
+  "4499": {
+    "name": "Hurricane Fortress K-70",
+    "gltfHash": "T06/AS1uc3YfFvzJSqHvHA==",
+    "metaHash": "D8Wxx1CE7oCl9gXZUdr4kw==",
+    "paint": "Unit-02"
   },
   "4502": {
     "name": "Hummingbird IV-62",
@@ -17878,6 +18070,12 @@
     "gltfHash": "3TsLNcZ9pMVY13fdh8TZ7A==",
     "metaHash": "C4NzFb8kv/VfT1xzvptDVw==",
     "paint": "Wandering Muad'Dib"
+  },
+  "4569": {
+    "name": "Mist Engine TB-20",
+    "gltfHash": "aUni1m6LsoTpQdClTIsgEA==",
+    "metaHash": "7rWmIFUyqEYI9jSou+/kkA==",
+    "paint": "Urban Tactical Camo"
   },
   "4571": {
     "name": "Tactical Armor FP-8",
@@ -18226,6 +18424,12 @@
     "gltfHash": "u+MpY/V9ccZpUdyIzHJrLw==",
     "metaHash": "ykne4dXWrZgOYpa8qbUjsg==",
     "paint": "Unit-01"
+  },
+  "4672": {
+    "name": "Broad Scouter JR-24",
+    "gltfHash": "Z6H+Y0eIhj5Sa3OJdRJ7HA==",
+    "metaHash": "0LteSnqOfV9ZIZKG+18ZWg==",
+    "paint": "Jungle Warfare"
   },
   "4673": {
     "name": "Doom Command Unit Q-38",
@@ -21929,6 +22133,12 @@
     "metaHash": "99UwoxglpnnF2YRtW5cc5w==",
     "paint": "Yellow Menace"
   },
+  "5685": {
+    "name": "Calypso Q-52",
+    "gltfHash": "tHK+0YYilwiyCCHrKnNbCg==",
+    "metaHash": "lAxGyUjR051pu/PjNbo68A==",
+    "paint": "Halloween Dusk"
+  },
   "5687": {
     "name": "Savage Drone GF-137",
     "gltfHash": "N9oXFulhhOV9ec5dH6Pq0g==",
@@ -22535,6 +22745,12 @@
     "metaHash": "1uH4JLGZLQH39wSWZvdQzA==",
     "paint": "Unit-01"
   },
+  "5846": {
+    "name": "Battleground Valkyrie U-19",
+    "gltfHash": "CuQqhUK2yLove5PUFSXTjQ==",
+    "metaHash": "XG4IptPIlE/yGbDpb2FHbQ==",
+    "paint": "Halloween Dusk"
+  },
   "5848": {
     "name": "Big Momma F-38",
     "gltfHash": "m7SLzp4OEoUJbuOv45fk+g==",
@@ -22967,6 +23183,12 @@
     "metaHash": "OUGq/btRnoSdMO5GYnUTwQ==",
     "paint": "Synthwave Overdrive"
   },
+  "5969": {
+    "name": "Athens O-126",
+    "gltfHash": "/ba6bl8aF/xvcIiPK8ZYnA==",
+    "metaHash": "9g7uy+aJEVCfZqOtuxAcbw==",
+    "paint": "Ayanami Blue"
+  },
   "5973": {
     "name": "Bio Dreadnought Y-44",
     "gltfHash": "UzfERrRiZwu9yj1ii4Ci4w==",
@@ -23062,6 +23284,12 @@
     "gltfHash": "7VY75qdkO4mKW76ui/Jmwg==",
     "metaHash": "7in4eUNY4siZGdv5rJ37CA==",
     "paint": "Rainbow Mix"
+  },
+  "5998": {
+    "name": "Myriad Buster E-8",
+    "gltfHash": "eXQbfE7Z3nwvhjIWkTulWA==",
+    "metaHash": "w5H2tYev41fVUFz2wzoNHA==",
+    "paint": "Unit-01"
   },
   "6000": {
     "name": "Silver Transport SZ-118",
@@ -23891,6 +24119,12 @@
     "metaHash": "ACoe/rDIeNDif186fChGKg==",
     "paint": "Ocean Green"
   },
+  "6236": {
+    "name": "Badger K-76",
+    "gltfHash": "wsaChuM5gSljuJ9EEh01ng==",
+    "metaHash": "oXDt0//CiYa5Eluoydt8Jw==",
+    "paint": "Unit-00"
+  },
   "6237": {
     "name": "Avatar Juggernaut C-100",
     "gltfHash": "3EQN3ZiG0LhCWRD0eR/E6Q==",
@@ -24305,6 +24539,12 @@
     "metaHash": "GHP3iFe4zojWPXU3u9i6Pg==",
     "paint": "Urban Digital"
   },
+  "6353": {
+    "name": "Strategic Jaeger X-37",
+    "gltfHash": "my6I5a2Fes3SBxUtAfjhIA==",
+    "metaHash": "15SSbmrhi52b2VHFJSGqGg==",
+    "paint": "Urban Tactical Camo"
+  },
   "6356": {
     "name": "Thunder WD-143",
     "gltfHash": "yvlyOuCgOwKRz4mgYOH0Yg==",
@@ -24700,6 +24940,12 @@
     "gltfHash": "ygCpWi8iML2wvICDLmZhHg==",
     "metaHash": "Ac3D7LDs90pqe13FCohnzw==",
     "paint": "Urban Tactical Camo"
+  },
+  "6481": {
+    "name": "Dragoon Valkyrie ZK-102",
+    "gltfHash": "O7S77lWVIB1IVUMA5mS3oQ==",
+    "metaHash": "NhulGAUy+Dy/vFYrylzkGA==",
+    "paint": "Unit-02"
   },
   "6482": {
     "name": "Peacock SG-9",
@@ -25565,6 +25811,12 @@
     "metaHash": "U0VOLe2xgxYou/c2gP5lMA==",
     "paint": "Jungle Warfare"
   },
+  "6706": {
+    "name": "Sonic Jaeger Q-21",
+    "gltfHash": "GRMr8eQrsOx9KWnaaFMkqA==",
+    "metaHash": "MDGo9Ftf6aARV/KZ7AOnQA==",
+    "paint": "Urban Tactical Camo"
+  },
   "6707": {
     "name": "Termite DZ-97",
     "gltfHash": "wVlAYk4cgTjF+BQ5zH7t3g==",
@@ -26411,6 +26663,12 @@
     "metaHash": "zJjv6PoMJq7lemGQy24wLg==",
     "paint": "Jungle Warfare"
   },
+  "6957": {
+    "name": "Matador G-41",
+    "gltfHash": "546Mduf2ugXeA3mpswGKww==",
+    "metaHash": "3Nft9T6vJa5Ymf5ewkgXfw==",
+    "paint": "Digital Woodlands"
+  },
   "6959": {
     "name": "Stalker Armor Suit BY-79",
     "gltfHash": "g4Kj3w/xr8GoZgSAxVOanw==",
@@ -26547,6 +26805,12 @@
     "name": "Ripper P-122",
     "gltfHash": "lmzf+8TzuPbYRNSPTURwrQ==",
     "metaHash": "8rS34fuWi4oDCAlPgbU/sQ==",
+    "paint": "Yellow Menace"
+  },
+  "6995": {
+    "name": "Big Daddy Y-109",
+    "gltfHash": "W80gychdTgFIPMnYkxmvNg==",
+    "metaHash": "Ned7P1OjWqpSghJXkNAAkA==",
     "paint": "Yellow Menace"
   },
   "6996": {
@@ -27203,6 +27467,18 @@
     "metaHash": "2jobahGT7uoWGkFqZm50sQ==",
     "paint": "Jungle Warfare"
   },
+  "7181": {
+    "name": "Dragon Guardian Y-80",
+    "gltfHash": "Y5VqMCvV2qZePFFwxWO+Yg==",
+    "metaHash": "CBO9gic7yryniUKrEk3s5Q==",
+    "paint": "Jungle Warfare"
+  },
+  "7182": {
+    "name": "Silver Strider CC-56",
+    "gltfHash": "ellTU98PTX8Nl2AxCzBaeg==",
+    "metaHash": "xTXTl856/wCfyRUU16alrg==",
+    "paint": "Jungle Warfare"
+  },
   "7183": {
     "name": "Raid Transport R-131",
     "gltfHash": "Tm1tQtVkt/qLTpAKJYn+Zg==",
@@ -27471,6 +27747,12 @@
     "name": "Bio Dreadnought P-129",
     "gltfHash": "+1NB37+3Ufgxh5gWuJnDfA==",
     "metaHash": "GIYld4BkLGDHrRRnoVkmAQ==",
+    "paint": "Ayanami Blue"
+  },
+  "7264": {
+    "name": "Mist Unit Z-10",
+    "gltfHash": "jYXqB1iSMQT0JRX11OYu/Q==",
+    "metaHash": "bgKbDWmHrxGpp0pFIupgXA==",
     "paint": "Ayanami Blue"
   },
   "7268": {
@@ -27785,6 +28067,12 @@
     "metaHash": "PUf6fWA+KCO8uiAPRYOboA==",
     "paint": "Ocean Green"
   },
+  "7369": {
+    "name": "Ripper Z-114",
+    "gltfHash": "+9O7x9Wz30eaibsYEf/SkA==",
+    "metaHash": "NIL9mm0eu9P5TuSJyzulvw==",
+    "paint": "Unit-00"
+  },
   "7372": {
     "name": "Night Angel V-93",
     "gltfHash": "cZ46+FKzK4jyXCD5XwjYwg==",
@@ -27946,6 +28234,12 @@
     "gltfHash": "uMdmjsRGhBdTPxbxu0VKAw==",
     "metaHash": "oQvvNOqBwxji3AHrw/bEsg==",
     "paint": "Hunter's Acumen"
+  },
+  "7430": {
+    "name": "Arachnid Walker DP-80",
+    "gltfHash": "CoMHmWwAPOHC2U3kHQo2eA==",
+    "metaHash": "Aud0dc5phrgLQ/rDDROR6A==",
+    "paint": "Unit-01"
   },
   "7435": {
     "name": "Martial Stalker J-81",
@@ -28625,6 +28919,12 @@
     "metaHash": "6jBztvhcYWdgdt+AfXJmUA==",
     "paint": "Urban Digital"
   },
+  "7635": {
+    "name": "Doom Command Unit A-92",
+    "gltfHash": "xVV+bFMWwTs+pjBf7MlvQQ==",
+    "metaHash": "/NJl0Zkx+SHa4uzBn0XkrA==",
+    "paint": "Yellow Menace"
+  },
   "7638": {
     "name": "Wolverine Walker A-19",
     "gltfHash": "BzUScEssFUnc0k6jRyXUpg==",
@@ -28901,6 +29201,12 @@
     "metaHash": "Pp7cM1YLrPZEa9C2bgLNdw==",
     "paint": "Synthwave Overdrive"
   },
+  "7716": {
+    "name": "Phantom Gun System C-108",
+    "gltfHash": "tUwA7uLz2h/oENYdfOcwGQ==",
+    "metaHash": "8QQinwdt5OHQVNVyqf1czg==",
+    "paint": "Unit-00"
+  },
   "7719": {
     "name": "Proto Suit L-62",
     "gltfHash": "jfjU3lI8PB/W3JiBdN65Fg==",
@@ -29086,6 +29392,12 @@
     "gltfHash": "hG9x0OFNEk9kInRwn5Qjig==",
     "metaHash": "0rknMiE3hTVFlEw8KQCiUg==",
     "paint": "Wandering Muad'Dib"
+  },
+  "7771": {
+    "name": "Power Warmech U-69",
+    "gltfHash": "1fpU2GxDtzvehsGeWFef9w==",
+    "metaHash": "AKPoZY9jeSk2RZ5/G7LoLg==",
+    "paint": "Jungle Warfare"
   },
   "7772": {
     "name": "War Drone J-131",

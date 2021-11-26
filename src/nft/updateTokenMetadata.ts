@@ -21,7 +21,7 @@ export async function uploadTokenMetadata(
     content,
   );
   await fs.promises.writeFile(
-    path.join(path.dirname(localPath), `../metadata/${version}.json`),
+    path.join(path.dirname(localPath), `../../metadata/${version}.json`),
     content,
   );
 
