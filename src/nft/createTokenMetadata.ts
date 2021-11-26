@@ -5,7 +5,7 @@ import {
   BoostAttribute,
   RankAttribute,
   TextAttribute,
-  TokenMetadata
+  TokenMetadata,
 } from '../shared/TokenMetadata';
 import { Boost, Stat, Trait } from '../shared/Trait';
 import { Suit } from '../suits/Suit';

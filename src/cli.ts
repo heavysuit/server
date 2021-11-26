@@ -21,11 +21,11 @@ import {
   removeStaleMetadata,
   saveHashes,
   seenMetadata,
-  uploadBatchScreenshots
+  uploadBatchScreenshots,
 } from './gltf/utils';
 import {
   createTokenAttributes,
-  createTokenMetadata
+  createTokenMetadata,
 } from './nft/createTokenMetadata';
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
@@ -152,7 +152,7 @@ export async function run(): Promise<void> {
     .option('verbose', {
       alias: 'v',
       type: 'boolean',
-      description: 'Run with verbose logging'
+      description: 'Run with verbose logging',
     })
     .parse();
 
