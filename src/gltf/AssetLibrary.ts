@@ -16,4 +16,6 @@ export type AssetLibraryID =
   | 'M7'
   | 'M8'
   | 'M9'
-  | 'M10';
+  | 'M10'
+  | 'M11'
+  | 'M12';
