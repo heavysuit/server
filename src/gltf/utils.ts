@@ -9,9 +9,13 @@ import path from 'path';
 import { Object3D } from 'three';
 import { hsBucket } from '../GCP';
 import { BodyNode } from '../shared/BodyNode';
+import { TokenMetadata } from '../shared/TokenMetadata';
+import { Trait } from '../shared/Trait';
+import { SuitLibrary } from '../suits/SuitLibrary';
 import { batchPromises } from '../utils/batchPromises';
 import { BATCH } from '../utils/globals';
 import { logger } from '../utils/logger';
+import { getLocalPath } from './AssetLibrary';
 import { createScreenshot } from './createScreenshot';
 
 export function renameChildren(doc: Document, prefix: string): void {
@@ -223,7 +227,10 @@ export async function generateTokenId(): Promise<string> {
   return id.toString();
 }
 
-export async function cacheTokenId(tokenId: string, name: string): Promise<void> {
+export async function cacheTokenId(
+  tokenId: string,
+  name: string,
+): Promise<void> {
   const ids = await loadCache();
   ids[tokenId] = { name };
   await saveCache(ids);
@@ -259,9 +266,9 @@ export async function createBatchScreenshots(tokenIds: (number | string)[]) {
   const failed: string[] = [];
   for (const tokenId of tokenIds) {
     const assetName = tokenId.toString();
-    if (parseInt(assetName) < 3563) {
-      continue;
-    }
+    // if (parseInt(assetName) < 3563) {
+    //   continue;
+    // }
     const localPath = path.join(dir, `${tokenId}.png`);
     const assetPath = getGLTFBucketPath(assetName);
     const assetUri = `https://storage.googleapis.com/hs-metadata/${assetPath}`;
@@ -273,4 +280,134 @@ export async function createBatchScreenshots(tokenIds: (number | string)[]) {
     }
   }
   logger.warn(failed.join(', '));
+}
+
+export async function randomizeTextures(textureNames: string[]): Promise<void> {
+  const assets = SuitLibrary.map((s) => s.parts[0].assetId);
+  for (const a of assets) {
+    const textureName = _.sample(textureNames);
+    const gltfPath = getLocalPath(a);
+    const buffer = await fs.promises.readFile(gltfPath);
+    const output = buffer
+      .toString()
+      .replace(/"uri" : ".+\//g, `"uri" : "${textureName}/`);
+    await fs.promises.writeFile(gltfPath, output);
+  }
+}
+
+export async function downloadData() {
+  const dir = path.join(__dirname, '../../assets/metadata');
+  const cache = await loadCache();
+  const promises = Object.keys(cache).map((key, i) => {
+    return new Promise<TokenMetadata | null>((resolve, reject) => {
+      logger.info(key);
+      setTimeout(() => {
+        axios
+          .get(`https://meta.heavysuit.com/delta/${key}.json`)
+          .then(({ data }) => {
+            return fs.promises
+              .writeFile(
+                path.join(dir, `${key}.json`),
+                Buffer.from(JSON.stringify(data)),
+              )
+              .then(() => resolve(data));
+          })
+          .catch((error) => {
+            resolve(null);
+            logger.error(key, error);
+          });
+      }, 40 * i);
+    });
+  });
+  await Promise.all(promises);
+}
+
+export function getMetadataHash(data: TokenMetadata) {
+  const hash = [
+    // data.attributes.find((a) => a.trait_type === Trait.Paint)?.value,
+    data.attributes.find((a) => a.trait_type === Trait.Torso)?.value,
+    data.attributes.find((a) => a.trait_type === Trait.Legs)?.value,
+    data.attributes.find((a) => a.trait_type === Trait.LeftArm)?.value,
+    data.attributes.find((a) => a.trait_type === Trait.RightArm)?.value,
+    data.attributes.find((a) => a.trait_type === Trait.Head)?.value,
+  ]
+    .filter(Boolean)
+    .join(', ');
+
+  return hash;
+}
+
+export function seenMetadata(data: TokenMetadata): boolean {
+  const hash = getMetadataHash(data);
+  return hash in parts;
+}
+
+const colorCounts: Record<string, number> = {};
+const parts: Record<string, string[]> = {};
+
+export async function countParts() {
+  const dir = path.join(__dirname, '../../assets/metadata');
+  const files = await fs.promises.readdir(dir);
+  const promises = files.map((file) => {
+    return new Promise<TokenMetadata>((resolve) => {
+      fs.promises.readFile(path.join(dir, file)).then((buffer) => {
+        resolve(JSON.parse(buffer.toString()) as any);
+      });
+    });
+  });
+  const results = await batchPromises<TokenMetadata | null>(promises, 10);
+  logger.info(results.length);
+
+  results.forEach((data) => {
+    if (!data) {
+      return;
+    }
+    let attribute = data.attributes.find((a) => a.trait_type === Trait.Paint);
+    const color = attribute?.value || '';
+    colorCounts[color] = colorCounts[color] || 0;
+    colorCounts[color]++;
+
+    const hash = getMetadataHash(data);
+    parts[hash] = parts[hash] || [];
+    parts[hash].push(data.image);
+  });
+  logger.info(JSON.stringify(colorCounts, undefined, 2));
+
+  let counter = 0;
+  Object.entries(parts).forEach(([hash, value]) => {
+    if (value.length > 1) {
+      logger.info(hash);
+      console.log(value);
+      counter++;
+    }
+  });
+  logger.warn(counter);
+
+  return parts;
+}
+
+export async function removeStaleMetadata() {
+  const parts = await countParts();
+  const ids = await loadCache();
+
+  Object.entries(parts).forEach(([key, value]) => {
+    if (value.length > 1) {
+      for (let i = 1; i < value.length; i++) {
+        const parts = value[i].split('/');
+        const id = parts[parts.length - 1].split('.')[0];
+        delete ids[id];
+      }
+    }
+  });
+
+  await saveCache(ids);
+
+  const dir = path.join(__dirname, '../../assets/metadata');
+  const files = await fs.promises.readdir(dir);
+
+  for (const f of files) {
+    if (!(f.split('.')[0] in ids)) {
+      await fs.promises.rm(path.join(dir, f));
+    }
+  }
 }

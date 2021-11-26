@@ -13,7 +13,7 @@ import {
   getThumbnailBucketPath,
   shouldUploadToBucket,
   uploadResourceFile,
-  uploadScreenshot
+  uploadScreenshot,
 } from './utils';
 
 export async function uploadModel(assetName: AssetName): Promise<{
@@ -82,7 +82,10 @@ export async function uploadModel(assetName: AssetName): Promise<{
 
   const screenshotPath = path.join(path.dirname(localPath), 'screenshot.png');
   await createScreenshot(file.publicUrl(), screenshotPath);
-  const thumbnail = await uploadScreenshot(screenshotPath, getThumbnailBucketPath(assetName))
+  const thumbnail = await uploadScreenshot(
+    screenshotPath,
+    getThumbnailBucketPath(assetName),
+  );
 
   return {
     url: file.publicUrl(),

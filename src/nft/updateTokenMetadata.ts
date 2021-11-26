@@ -20,6 +20,10 @@ export async function uploadTokenMetadata(
     path.join(path.dirname(localPath), 'metadata.json'),
     content,
   );
+  await fs.promises.writeFile(
+    path.join(path.dirname(localPath), `../metadata/${version}.json`),
+    content,
+  );
 
   const blob = hsBucket.file(`${BATCH}/${version}.json`);
   const blobStream = blob.createWriteStream();

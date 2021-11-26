@@ -9,21 +9,26 @@ import { uploadModel } from './gltf/uploadModel';
 import {
   cacheTokenId,
   countCache,
+  countParts,
   createBatchScreenshots,
+  downloadData,
   generateRandomName,
   generateTokenId,
   listCache,
+  randomizeTextures,
+  removeStaleMetadata,
   saveHashes,
-  uploadBatchScreenshots
+  seenMetadata,
+  uploadBatchScreenshots,
 } from './gltf/utils';
 import {
   createTokenAttributes,
-  createTokenMetadata
+  createTokenMetadata,
 } from './nft/createTokenMetadata';
 import { uploadTokenMetadata } from './nft/updateTokenMetadata';
 import { BodyNode } from './shared/BodyNode';
-import { SpadeC2 } from './suits/M6-Spade';
 import { generateRandomSuit, SuitLibrary } from './suits/SuitLibrary';
+import { TEXTURES } from './utils/globals';
 import { logger } from './utils/logger';
 
 logger.level = 'debug';
@@ -33,7 +38,22 @@ async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
   const tokenId = _tokenId || (await generateTokenId());
   console.log(suitName, tokenId);
 
-  const suit = generateRandomSuit(suitName, [SpadeC2]);
+  await randomizeTextures(TEXTURES);
+
+  let suit = generateRandomSuit(suitName, SuitLibrary);
+  while (true) {
+    const metadata = createTokenMetadata({
+      externalUrl: '',
+      suit,
+      thumbnailUrl: '',
+      url: '',
+    });
+    if (!seenMetadata(metadata)) {
+      break;
+    }
+    suit = generateRandomSuit(suitName, SuitLibrary);
+  }
+
   const manifest = suit.toManifests();
   const merger = new ModelMerger(tokenId, manifest);
   merger.repositionJoints();
@@ -43,7 +63,6 @@ async function runMint(_tokenId?: string, _suitName?: string): Promise<void> {
 
   const metadata = createTokenMetadata({
     externalUrl: `http://heavysuit.com/version/${tokenId}`,
-    description: `The Spade C2 was manufactured in limited quantities at the Offspring Company's secret research facility around the turn of the 23rd century. Significantly larger than the typical Heavy Suit, the Spade has a massive right arm known as the "Powerfist" that can deal a powerful blow.`,
     suit,
     thumbnailUrl,
     url,
@@ -128,6 +147,7 @@ export async function run(): Promise<void> {
     }
     case 'mass': {
       assert(args.count);
+      await countParts();
       for (let i = 0; i < args.count; i++) {
         await runMint();
       }
@@ -175,6 +195,18 @@ export async function run(): Promise<void> {
       const attributes = createTokenAttributes(suit);
       console.log(attributes);
       console.log(suit.toManifests());
+      break;
+    }
+    case 'parts': {
+      await countParts();
+      break;
+    }
+    case 'data': {
+      await downloadData();
+      break;
+    }
+    case 'cleanup': {
+      await removeStaleMetadata();
       break;
     }
   }

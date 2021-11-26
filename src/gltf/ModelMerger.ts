@@ -15,12 +15,15 @@ export class ModelMerger {
   parts: {
     [K in BodyNode]?: Document;
   };
-  assetName: AssetName;
 
   _docs: { [K in AssetLibraryID]?: Document };
   _io: NodeIO;
 
-  constructor(assetName: AssetName, manifests: ModelManifest[]) {
+  constructor(
+    private assetName: AssetName,
+    manifests: ModelManifest[],
+    // private textureNames: string[] = [],
+  ) {
     this._io = new NodeIO();
     this._docs = {};
     this.parts = {};
@@ -70,6 +73,16 @@ export class ModelMerger {
 
       // Remove Mesh nodes that are not marked as required from this model
       pruneNodes(doc, assetId, nodes);
+
+      // if (this.textureNames.length > 0) {
+      //   const textureName = _.sample(this.textureNames);
+      //   for (const texture of doc.getRoot().listTextures()) {
+      //     const uri = texture.getURI();
+      //     const parts = uri.split('/');
+      //     parts[0] = textureName!;
+      //     texture.setURI(parts.join('/'));
+      //   }
+      // }
 
       this._docs[assetId] = doc;
       return doc;
@@ -190,10 +203,15 @@ export class ModelMerger {
 
     await doc.transform(dedup(), prune(), reorder({ encoder: MeshoptEncoder }));
 
-    const folders = _.uniq(doc.getRoot().listTextures().map((t) => {
-      const folders = path.dirname(t.getURI()).split('/');
-      return folders[folders.length - 1];
-    }));
+    const folders = _.uniq(
+      doc
+        .getRoot()
+        .listTextures()
+        .map((t) => {
+          const folders = path.dirname(t.getURI()).split('/');
+          return folders[folders.length - 1];
+        }),
+    );
 
     const outputPath = getLocalPath(this.assetName);
 
