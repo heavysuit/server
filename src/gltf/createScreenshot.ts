@@ -1,16 +1,18 @@
 import { performance } from 'perf_hooks';
 import puppeteer from 'puppeteer';
+import { PuppeteerScreenRecorder } from 'puppeteer-screen-recorder';
 import { logger } from '../utils/logger';
 
-const WIDTH = 350;
-const HEIGHT = 350;
+const WIDTH = 700;
+const HEIGHT = 700;
 const DEVICE_PIXEL_RATIO = 1.0;
+const VIDEO_DURATION = 10;
 
 export const timeDelta = (start: number, end: number) => {
   return ((end - start) / 1000).toPrecision(3);
 };
 
-const htmlTemplate = (modelURL: string) => {
+const htmlTemplate = (modelURL: string, autoRotate = false) => {
   return `
     <html>
       <head>
@@ -29,7 +31,7 @@ const htmlTemplate = (modelURL: string) => {
             position: fixed;
             bottom: 0;
             right: 0;
-            height: 36px;
+            height: 72px;
             padding: 2px 4px;
             background: rgba(0, 0, 0, 0.3);
           }
@@ -41,6 +43,7 @@ const htmlTemplate = (modelURL: string) => {
           camera-orbit="-30deg 75deg 32m"
           camera-target="0 auto 0"
           field-of-view="1deg"
+          ${autoRotate ? 'auto-rotate' : ''}
           max-camera-orbit="Infinity 157.5deg 200m"	
           environment-image="neutral"
           exposure="1.0"
@@ -63,8 +66,11 @@ let sharedBrowser: puppeteer.Browser | null;
 export async function createScreenshot(
   modelURL: string,
   outputPath: string,
+  includeVideo = false,
 ): Promise<void> {
   logger.debug(`Capturing ${outputPath}`);
+
+  const videoPath = outputPath.split('.')[0] + '.mp4';
   const browserT0 = performance.now();
 
   const browser =
@@ -81,6 +87,10 @@ export async function createScreenshot(
   sharedBrowser = browser;
 
   const page = await browser.newPage();
+  const recorder = new PuppeteerScreenRecorder(page, {
+    fps: 25,
+    recordDurationLimit: VIDEO_DURATION,
+  });
 
   page.on('error', (error) => {
     console.log(`🚨 ${error}`);
@@ -102,7 +112,7 @@ export async function createScreenshot(
 
   const contentT0 = performance.now();
 
-  await page.setContent(htmlTemplate(modelURL), {
+  await page.setContent(htmlTemplate(modelURL, includeVideo), {
     waitUntil: 'domcontentloaded',
   });
 
@@ -177,11 +187,33 @@ export async function createScreenshot(
 
   const screenshotT0 = performance.now();
 
-  await page.screenshot({
-    type: 'png',
-    path: outputPath,
-    omitBackground: true,
-  });
+  const promises = [
+    page.screenshot({
+      type: 'png',
+      path: outputPath,
+      omitBackground: true,
+    }),
+    includeVideo
+      ? new Promise(async (resolve, reject) => {
+          await recorder.start(videoPath);
+
+          const start = performance.now();
+          const interval = setInterval(() => {
+            logger.debug(
+              `Video elapsed: ${timeDelta(start, performance.now())}s`,
+            );
+          }, 1000);
+
+          setTimeout(async () => {
+            clearInterval(interval);
+            await recorder.stop();
+            resolve(true);
+          }, VIDEO_DURATION * 1100);
+        })
+      : Promise.resolve(),
+  ];
+
+  await Promise.all(promises);
 
   const screenshotT1 = performance.now();
 

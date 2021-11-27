@@ -253,7 +253,10 @@ export async function uploadBatchScreenshots() {
   logger.info(`${results.length} uploaded`);
 }
 
-export async function createBatchScreenshots(tokenIds: (number | string)[]) {
+export async function createBatchScreenshots(
+  tokenIds: (number | string)[],
+  includeVideos = false,
+) {
   const dir = path.join(__dirname, '../../screenshots');
   const failed: string[] = [];
   for (const tokenId of tokenIds) {
@@ -266,7 +269,7 @@ export async function createBatchScreenshots(tokenIds: (number | string)[]) {
     const assetPath = getGLTFBucketPath(assetName);
     const assetUri = `https://storage.googleapis.com/hs-metadata/${assetPath}`;
     try {
-      await createScreenshot(assetUri, localPath);
+      await createScreenshot(assetUri, localPath, includeVideos);
     } catch (error) {
       logger.error(error);
       failed.push(assetName);

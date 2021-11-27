@@ -32,6 +32,7 @@
     "lodash": "^4.17.21",
     "meshoptimizer": "^0.17.0",
     "puppeteer": "^10.4.0",
+    "puppeteer-screen-recorder": "^2.0.2",
     "three": "^0.133.1",
     "winston": "^3.3.3"
   },

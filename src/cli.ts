@@ -154,6 +154,10 @@ export async function run(): Promise<void> {
       type: 'boolean',
       description: 'Run with verbose logging',
     })
+    .option('video', {
+      type: 'boolean',
+      description: 'Create videos',
+    })
     .parse();
 
   const command = args._[0];
@@ -205,7 +209,10 @@ export async function run(): Promise<void> {
       }
 
       const ids = await listCache();
-      await createBatchScreenshots(args.assetName ? [args.assetName] : ids);
+      await createBatchScreenshots(
+        args.assetName ? [args.assetName] : ids,
+        args.video,
+      );
       break;
     }
     case 'mint': {
